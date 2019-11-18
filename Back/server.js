@@ -4,10 +4,8 @@ const app = express();
 const routes = require('./Routes/index');
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
-const port = 3000;
+const port = 4000;
 
-
-const connection = require('./conf')
 
 
 app.use(morgan('dev'))
@@ -22,6 +20,12 @@ app.get('/', (request, response) => {
   response.send('Bienvenue à l\'entrainement');
 });
 
+app.use('/resultat', routes.Resultats)
+app.use('/candidat', routes.Candidat)
+app.use('/test', routes.Tests)
+app.use('/Questions', routes.Questions)
+app.use('/Choice', routes.Choice)
+
 
 
 app.listen(port, (err) => {
@@ -31,5 +35,3 @@ app.listen(port, (err) => {
     console.log(`Server is listening on ${port}`);
   }
  })
-
-app.listen(port, console.log(`hhtp://localhost ${port}`))

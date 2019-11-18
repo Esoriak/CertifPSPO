@@ -1,6 +1,6 @@
 const express = require('express')
-const connection = require('../conf')
-// const VerifyToken = require('../auth/VerifyToken');
+const connection = require('./conf')
+
 
 const router = express.Router()
 

@@ -1,6 +1,5 @@
 const express = require('express')
-const connection = require('../conf')
-const VerifyToken = require('../auth/VerifyToken');
+const connection = require('./conf')
 
 const router = express.Router()
 
@@ -40,7 +39,7 @@ router.put('/candidat/:id', (req, res) => {
 
 
 // Suppression d'un candidat
-router.delete('/candidat/:id', VerifyToken, (req, res) => {
+router.delete('/candidat/:id', (req, res) => {
   const idCandidat = req.params.idCandidat
   connection.query('DELETE FROM Candidat WHERE idCandidat = ?', idCandidat, err => {
     if (err)

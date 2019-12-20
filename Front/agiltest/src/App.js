@@ -1,6 +1,9 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import axios from 'axios'
+import Header from './Components/Header';
+import Tests from './Components/Tests';
 
 function App() {
   return (
@@ -11,6 +14,8 @@ function App() {
           Entraînement certif PSPO
         </p>
       </header>
+      <Header />
+      <Tests />
     </div>
   );
 }

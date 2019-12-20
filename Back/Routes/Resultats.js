@@ -1,11 +1,10 @@
 const express = require('express')
-const connection = require('./conf')
-
+const connection = require('../conf')
 const router = express.Router()
 
 
 // Récupération des résultats
-router.get('/resultat', (req, res) => {
+router.get('/resultats', (req, res) => {
   connection.query('SELECT * FROM Resultats', (err, results) => {
     if (err)
       res.status(500).send('Erreur lors de la récupération des résultats')
@@ -15,7 +14,7 @@ router.get('/resultat', (req, res) => {
 })
 
 // Ajout d'un nouveau résultat
-router.post('/resultat', (req, res) => {
+router.post('/resultats', (req, res) => {
   const formData = req.body
   connection.query('INSERT INTO Resultats SET ?', formData, err => {
     if (err)
@@ -27,7 +26,7 @@ router.post('/resultat', (req, res) => {
 
 
 // Suppression d'un choix
-router.delete('/resultat/:id', (req, res) => {
+router.delete('/resultats/:id', (req, res) => {
   const idResultat = req.params.idResultat
   connection.query('DELETE FROM Resultat WHERE idResultat = ?', idResultat, err => {
     if (err)

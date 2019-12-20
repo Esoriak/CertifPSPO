@@ -1,11 +1,11 @@
 const express = require('express')
-const connection = require('./conf')
+const connection = require('../conf')
 
 const router = express.Router()
 
 
 // Récupération des choix liés aux questions
-router.get('/choice', (req, res) => {
+router.get('/choices', (req, res) => {
   connection.query('SELECT * FROM choice', (err, results) => {
     if (err)
       res.status(500).send('Erreur lors de la récupération des choix')
@@ -15,7 +15,7 @@ router.get('/choice', (req, res) => {
 })
 
 // Ajout d'un nouveau choix
-router.post('/choice', (req, res) => {
+router.post('/choices', (req, res) => {
   const formData = req.body
   connection.query('INSERT INTO Choice SET ?', formData, err => {
     if (err)
@@ -26,7 +26,7 @@ router.post('/choice', (req, res) => {
 })
 
 // Modification d'un choix
-router.put('/choice/:id', (req, res) => {
+router.put('/choices/:id', (req, res) => {
   const idChoice = req.params.idChoice
   const formData = req.body
   connection.query('UPDATE Choice SET ? WHERE idChoice = ?', [formData, idChoice], err => {
@@ -38,7 +38,7 @@ router.put('/choice/:id', (req, res) => {
 })
 
 // Suppression d'un choix
-router.delete('/choice/:id', (req, res) => {
+router.delete('/choices/:id', (req, res) => {
   const idChoice = req.params.idChoice
   connection.query('DELETE FROM Choice WHERE idChoice = ?', idChoice, err => {
     if (err)

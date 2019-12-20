@@ -1,11 +1,9 @@
 const express = require('express')
-const connection = require('./conf')
-
-
+const connection = require('../conf')
 const router = express.Router()
 
 // Récupération des tests
-router.get('/test', (req, res) => {
+router.get('/tests', (req, res) => {
   connection.query('SELECT * from tests', (err, results) => {
     if (err)
       res.status(500).send('Erreur lors de la récupération des tests')
@@ -15,7 +13,7 @@ router.get('/test', (req, res) => {
 })
 
 // Ajout d'un nouveau test
-router.post('/test', (req, res) => {
+router.post('/tests', (req, res) => {
   const formData = req.body
   connection.query('INSERT INTO Tests SET ?', formData, err => {
     if (err)
@@ -26,7 +24,7 @@ router.post('/test', (req, res) => {
 })
 
 // Modification d'un test
-router.put('/test/:id', (req, res) => {
+router.put('/tests/:id', (req, res) => {
   const idTest = req.params.idTest
   const formData = req.body
   connection.query('UPDATE Tests SET ? HWERE idTest = ?', [formData, idTest], err => {
@@ -38,7 +36,7 @@ router.put('/test/:id', (req, res) => {
 })
 
 // Suppression d'un test
-router.delete('/test/:id', (req, res) => {
+router.delete('/tests/:id', (req, res) => {
   const idTest = req.params.idTest
   connection.query('DELETE FROM Tests WHERE idTest= ?', idTest, err => {
     if (err)

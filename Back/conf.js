@@ -9,7 +9,7 @@ const connection = mysql.createConnection({
     host : 'localhost',
     user: 'root',
     password: 'monsieurguiz',
-    database: 'AgilBDD',
+    database: 'QCMpsmpo',
 })
 
 module.exports = connection

@@ -20,6 +20,7 @@ app.get('/', (request, response) => {
 });
 
 app.use('/infosres', Routes.Resultats)
+app.use('/admin', Routes.Admin)
 app.use('/infos', Routes.Candidat)
 app.use('/quizzstep1', Routes.Tests)
 app.use('/quizzstep2', Routes.Questions)

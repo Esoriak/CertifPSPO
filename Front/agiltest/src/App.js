@@ -1,9 +1,10 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import axios from 'axios'
+// import axios from 'axios'
 import Header from './Components/Header';
 import Tests from './Components/Tests';
+import Register from './Components/Register';
 
 function App() {
   return (

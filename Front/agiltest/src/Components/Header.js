@@ -4,7 +4,7 @@ export class Header extends Component {
   render() {
     return (
       <div>
-        <h3> Coucou Poulet</h3>
+        <h3> Coucou Pouletto</h3>
       </div>
     )
   }

@@ -22,9 +22,9 @@ app.get('/', (request, response) => {
 app.use('/infosres', Routes.Resultats)
 app.use('/admin', Routes.Admin)
 app.use('/infos', Routes.Candidat)
-app.use('/quizzstep1', Routes.Tests)
-app.use('/quizzstep2', Routes.Questions)
-app.use('/quizzstep3', Routes.Choices)
+app.use('/quizz', Routes.Tests)
+app.use('/quizzquestions', Routes.Questions)
+app.use('/quizzchoices', Routes.Choices)
 
 
 app.listen(port, (err) => {

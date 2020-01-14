@@ -11,9 +11,6 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Entraînement certif PSPO
-        </p>
       </header>
       <Header />
       <Tests />

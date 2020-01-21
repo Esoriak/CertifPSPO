@@ -5,25 +5,33 @@ import './Tests.css'
 
 const Questionnaire = []
 let questions =[]
-let choixUnique =0
-let choixMultiple =[]
+let choix = []
 let score =0
+
 
  class Tests extends Component {
   state ={
     tests : [],
-    pointQuestions : 0,
+    pointQuestions : 1000,
     questions: [],
     choices: [],
     choices_selected : [],
     right_answers : 0,
     questionnaire : [],
     ready : false,
+    finish: false,
+    checked : false,
     displayQuestion : 1,
     previousQuestion : 0,
     multiple_answer : false,
     score : [],
   }
+
+
+/////////////////////////// RECUPERATION DES INFORMATIONS DE LA DATABASE ///////////////////////////////////////
+
+
+
 
 
  GetDataTests = async() => {
@@ -52,19 +60,29 @@ let score =0
 
 
 
+
+
+
+/////////////// CREATION D'UN QUESTIONNAIRE UNIQUE , RANDOM, SANS DOUBLONS, STOCKER EN STATE //////////////////////////
+
+
+
+
+
+
 RandomQuestionnaire = () => {
     // Tant que le tableau n'a pas 80 nombres uniques on lance la requête
-   while (questions.length < 80) {
+   while (questions.length < 10) {
       // On récupère un nombre aléatoire compris entre 0 et 150 ( le nombre de questions exploitables pour le moment)
       const random = Math.floor(Math.random() * 150)
       // On copie le nombre dans le tableau des questions
       questions.push(random+1)
     }   
     // Si le tableau de nombre est egal à 80 on vérifie que toutes les valeurs sont uniques
-   if (questions.length == 80) {
+   if (questions.length == 10) {
       questions = [... new Set(questions)]
       // Si le tableau de nombre uniques est égal à 80, on lance une boucle qui va remplir le questionnaire
-      if (questions.length == 80) {
+      if (questions.length == 10) {
           for (let i=0; i< questions.length; i++) {
               // On cherche l'id de la question correspondant au chiffre random dans notre base de données et on la copie dans le tableau du questionnaire
               Questionnaire.push(this.state.questions.filter(res => res.idQuestions === questions[i]))
@@ -82,6 +100,18 @@ RandomQuestionnaire = () => {
       }
     } 
 }
+
+
+
+
+
+/////////////////////////////////////////// VERIFICATION DU STYLE DE BOUTONS ATTENDUS - CHOIX UNIQUE OU CHOIX MULTIPLE ///////////////////////////////
+
+
+
+
+
+
 
   StyleButtonChoices = () => {
     const quest = Questionnaire.slice(this.state.previousQuestion+1,this.state.displayQuestion+1)
@@ -122,92 +152,140 @@ RandomQuestionnaire = () => {
   }
 
 
+
+
+
+////////////////////////////////////////  STOCKAGE DU CHOIX DU CANDIDAT POUR LE CALCUL DU SCORE ET L'AFFICHAGE FINAL ///////////////////////////////
+
+
+//         bonnesreponses = leschoix.filter(choix => choix[0].value === 1)
+//         console.log("nb de bonnes reponses", bonnesreponses.length)
+//         // // on va filtrer les choix a valeur true, et si le nombre est le même que le nombre de réponses attendues, on ajoute le nombre de points de la question
+//         // console.log("mon score est de :", score)
+//       }
+
+//     }
+// if (reponsesattendues !=0) {
+//       if ( bonnesreponses.length === reponsesattendues) {
+//       score = score + this.state.pointQuestions
+//       this.setState({
+//         right_answers : this.state.right_answers +1
+//       })
+//       console.log("mon score est de :", score)
+//     }
+//     else if ( bonnesreponses < reponsesattendues) {
+//       score = score
+//       console.log("mon score reste de :", score)
+//     }
+
+
   StockChoice = () => {
-    if (choixUnique !=0 ) {
-      //  console.log("je cherche ca",choixUnique)
-     let lechoix = this.state.choices.filter(choices => choices.idChoice == choixUnique.id)
-    //  console.log("lechoix", lechoix)
-       this.setState({
-          choices_selected : [...this.state.choices_selected, lechoix[0] ] 
-        })
-        // console.log('et je trouve ça', this.state.choices_selected)
-        // console.log("la value est ", lechoix[0].value)
-         if (lechoix[0].value == 1) {
-           score = score  + this.state.pointQuestions
-           console.log("mon score", score)
-           this.setState({
-             right_answers : this.state.right_answers +1
-           })
-         }
-         choixUnique=0
+    const leschoix = []
+    let reponsesattendues =0
+    let bonnesreponses =[]
+    let Allanswers = []
+     // on initie un tableau vide qui recevra l'objet entier des choix séléctionnés ; le nombre de réponses justes attendues; et un tableau comportant tous les choix
+     // possibles associés à la question
+     // Pour la  longueur du tableau des choix
+     // On filtre dans la liste des choix ceux qui ont été séléctionnés pour stocker l'objet entier
+    for (let i =0; i < choix.length; i++) {
+      console.log("la data", choix)
+      leschoix.push(this.state.choices.filter(choices => choices.idChoice == choix[i]))
+      console.log("totoro", leschoix)
+      // on récupère l'id de la question associé au choix fait - le premier suffit -
+      let idquest = leschoix[0][0].idQuestions
+      // on récupère tous les choix associés à la question posée
+      Allanswers = this.state.choices.filter(choices => choices.idQuestions == idquest)
+      // Si la valeur d'un choix est egale a 1 c'est que la réponse est juste, on parcours à nouveau le tableau pour finir la boucle et stocker le nombre de réponses justes attendues
+     
+      reponsesattendues = Allanswers.filter(res => res.value === 1)
+      // console.log("ALL ANSWERS",reponsesattendues)
+      // console.log("je veux", reponsesattendues.length, " bonnes réponses")
     }
-    // Si le tableau des choix multiples à été rempli :
-    else if ( choixMultiple.length != 0) {
-      // on initie un tableau vide qui recevra l'objet entier des choix séléctionnés ; le nombre de réponses justes attendues; et un tableau comportant tous les choix
-      // possibles associés à la question
-      let leschoix = []
-      let reponsesattendues =0
-      let Allanswers = []
-      // console.log("le tableau des choix multiples", choixMultiple)
-      //Pour la  longueur du tableau des choix multiples
-      for (let i =0; i < choixMultiple.length; i++) {
-        // On filtre dans la liste des choix ceux qui ont été séléctionnés pour stocker l'objet entier
-         let hischoice = this.state.choices.filter(choices => choices.idChoice == choixMultiple[i])
-         leschoix.push(hischoice)
-         // on récupère l'id de la question associé au choix fait - le premier suffit -
-         let idquest = hischoice[0].idQuestions
-         // on récupère tous les choix associés à la question posée
-         Allanswers = this.state.choices.filter(choices => choices.idQuestions == idquest)
-         console.log("tous les choix possibles", Allanswers)
-         // Si la valeur d'un choix est egale a 1 c'est que la réponse est juste, on parcours à nouveau le tableau pour finir la boucle et stocker le nombre de réponses justes attendues
-         if (Allanswers[i].value === 1) {
-             reponsesattendues = reponsesattendues + 1
-        }
-         console.log("je veux", reponsesattendues, "réponses")
-         //on stock quoi qu'il arrive les choix faits par le candidat dans un tableau ( lui même dans un tableau ), pour l'affichage final
+    if(leschoix.length > 1) {
         this.setState({
           choices_selected : [...this.state.choices_selected, leschoix]
         })
-        // console.log(" les choix faits sont", this.state.choices_selected)
-        let bonnesreponses = leschoix.filter(choix => choix[0].value == 1)
-        console.log("bonnes reponses", bonnesreponses.length)
-        // on va filtrer les choix a valeur true, et si le nombre est le même que le nombre de réponses attendues, on ajoute le nombre de points de la question
-        if ( bonnesreponses.length === reponsesattendues) {
-          score = score + this.state.pointQuestions
-          this.setState({
-            right_answers : this.state.right_answers +1
-          })
+        // console.log("yaviat plsrs choix", this.state.choices_selected) 
+    }
+    else {
+      this.setState({
+        choices_selected : [...this.state.choices_selected, leschoix[0][0]]
+      })
+      // console.log("choix simple ixi ", this.state.choices_selected)
+    }
+    bonnesreponses = leschoix.filter(choix => choix[0].value === 1)
+    console.log("nb de bonnes reponses", bonnesreponses.length)
+    if (leschoix.length === reponsesattendues.length) {
+       if ( bonnesreponses.length === reponsesattendues.length) {
+      score = score + this.state.pointQuestions
+      this.setState({ right_answers : this.state.right_answers +1 })
         }
-        console.log("mon score est de :", score)
-      } choixMultiple =[]
+        else {
+          console.log("tu as une mauvaise réponse")
+        }
     }
-         this.setState({ displayQuestion : this.state.displayQuestion+1 , previousQuestion: this.state.previousQuestion+1})
-         this.StyleButtonChoices()
-  }
+    else {
+      console.log("tu n'as pas coché le nombre de réponses attendues.")
+    }
+    choix =[]
+    this.setState({ displayQuestion : this.state.displayQuestion+1 , previousQuestion: this.state.previousQuestion+1 ,  checked : false, })
+    this.StyleButtonChoices()
+    console.log("la state",this.state.choices_selected)
+    console.log("ton score", score)
+     }
 
+
+
+
+  
   handleCheck = (e) => {
-    // choixUnique =0
-     let unchoix = e.target
-     console.log("c'est ok ou pas ?",unchoix)
-    choixUnique = unchoix
+    let select = e.target.id
+    let selecttype = e.target.type
+    let selectvalue = e.target.value
+    console.log("et c'est",selectvalue)
+      if( selecttype === 'checkbox') {
+        if (choix.includes(select)) {
+          let indexOfChoice = choix.indexOf(select)
+          choix.splice(indexOfChoice, 1)
+        }
+        else {choix.push(select)}
+        console.log("les choix sont :", choix)
+      }
+      else if ( selecttype === 'radio') {
+        choix = []
+        choix.push(select)
+        console.log("le choix est :", choix)
+      }
+      this.ActiveNext()
   }
 
-  handleCheckMultipleAnswer =(e) => {
-    // console.log("les choix déjà là", choixMultiple)
-    let rosis = e.target.id
-    let rosarum = e.target.value
-    console.log("et c'essssstttt ", rosarum)
-    if (choixMultiple.includes(rosis)){
-      // console.log("c'est deja la", rosis)
-      let indexOfChoice = choixMultiple.indexOf(rosis)
-      // console.log('il ets en position', indexOfChoice)
-      choixMultiple.splice(indexOfChoice, 1)
-      // console.log("ducoup il est parti")
-    } else {
-      choixMultiple.push(rosis)
-      // console.log("ca y etait pas, on l'a mis !", rosis)
+
+  FinishTest = () => {
+    this.setState({ finish : true, ready : false })
+    score = score / 100
+  }
+
+  //////////////////////// VERIFICATION POUR QUE LE CANDIDAT CHOISSISSE UNE REPONSE POUR PASSER A LA QUESTION SUIVANTE //////////////////////////
+
+
+
+
+
+  
+
+  ActiveNext = () => {
+
+    if (choix.length >=1 ) {
+      this.setState({
+        checked : true
+      })
     }
-    // console.log("la gueule du tableau", choixMultiple)
+    else if ( choix.length === 0) {
+      this.setState({ 
+        checked : false
+      })
+    }
   }
 
 componentDidMount =() => {
@@ -215,6 +293,7 @@ componentDidMount =() => {
   this.GetDataQuestions()
   this.GetDataChoices()
 }
+
 
   render() {
 
@@ -224,65 +303,71 @@ componentDidMount =() => {
       previousQuestion,
       displayQuestion,
       multiple_answer,
+      checked,
+      finish,
   
     } = this.state
 
     return (
       <div>
         {ready === false ? <button onClick={this.RandomQuestionnaire}> Lancer le quizz </button> : <h3> Quizz Product Owner</h3> }
-        <div class="main_container questions_container">
-            <div class="card question_card question_current">
+        {
+          
+          ready ? 
+                <div className="main_container questions_container">
+            <div className="card question_card question_current">
             <h1>Question {displayQuestion}</h1>
             {/* {ready ? this.GetAllChoices() : null } */}
             {ready ? questionnaire.slice(previousQuestion, displayQuestion).map(i =>
             
             <div key={i[0].idQuestions }>
               <p className="question"> {i[0].Question} </p>
-              <div class="checkbox_question">
-                <ul class="answer_list">
+              <div className="checkbox_question">
+                <ul className="answer_list">
               
               {multiple_answer ? 
               
               questionnaire.slice(previousQuestion, displayQuestion).map(i =>
               
               i[1].map(choices =>
-                 <div>
-                 <input type="checkbox"  id={choices.idChoice} value={choices.value} name={i[0].idQuestions} onChange={this.handleCheckMultipleAnswer} /> {choices.answer}
-              </div>))
+                <li className="answer answer_checkbox"  >
+                  <input type="checkbox" className="input input_checkbox" id={choices.idChoice} value={choices.value} name={i[0].idQuestions} onChange={this.handleCheck} />
+                  <label for={choices.idChoice} className="answer_label">{choices.answer}</label>
+                </li >))
                 :
 
                 questionnaire.slice(previousQuestion, displayQuestion).map(i =>
-                  i[1].map(choices =>
-                <div>
-                <input type="radio" id={choices.idChoice} value={choices.value} name={i[0].idQuestions}  onChange={this.handleCheck} /> {choices.answer}
                 
-                </div>)
-                )
-               }
-              </ul>
+                i[1].map(choices =>
+                  <li className="answer answer_radio" >
+                    <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.value} name={i[0].idQuestions}  onChange={this.handleCheck} />
+                    <label for={choices.idChoice} className="answer_label">{choices.answer}</label>
+                    <div className="radio_check"></div>
+                </li >))
+              }
+                </ul>
               </div>
             </div>)
               : null}
 
+                {displayQuestion < 10 ? this.state.checked ? <button onClick={this.StockChoice} className="input_button input_button__active connect_button"> Suivant</button> : <button className="input_button connect_button"> Suivant </button>  :  <button onClick={this.FinishTest} className="input_button input_button__active connect_button"> Terminer </button>}
 
-
-            {/* {multiple_answer  ? makeachoice.map(choices => 
-            <div>
-              <input type="checkbox"  id={choices.idChoice} onChange={this.handleCheck} value={choices.answer} />{choices.answer}
-            </div>)
-                : 
-                makeachoice.map(choices => 
-                <div>
-                <input type="radio" id={choices.idChoice} value={choices.answer} name={i[0].Question}  onChange={this.handleCheck} />{choices.answer}
-                
-                </div>) }  
- */}
-
-              <button onClick={this.StockChoice} className="Next"> Suivant</button>
           </div>
           <h2> {displayQuestion} / 80</h2>
         </div>
-      </div>
+      : null}
+            {finish ? 
+            <div>
+            <h1> Tu as {score} % de réponses justes.</h1>
+            <h3>{this.state.right_answers}/10</h3>
+            </div>
+          : null}
+              <footer>
+              <a href="www.monsieurguiz.fr" className="footer__byMG_link">
+                  <img src="imgs/byMG.svg" alt="by Monsieur Guiz" />
+              </a>
+          </footer>
+    </div>
     )
   }
 }

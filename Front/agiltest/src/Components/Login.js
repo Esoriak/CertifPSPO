@@ -3,11 +3,15 @@ import {NavLink} from "react-router-dom"
 import './Style.css'
 
  class Login extends Component {
-
+  state ={
+    validation : false,
+  }
 
 // //******* CONNECTION *********//
 
-// emailCheck(val){
+ emailCheck = (val) => {
+   const mail =val.target.value
+   console.log("email", val.target.value)
    
 //   // EMAIL CHECKER
 //  /* if(val.indexOf("@")<=0){
@@ -19,8 +23,17 @@ import './Style.css'
 //          }
 //      }*/
   
-//   // EMAIL EXTENSION CHECKER
-//   if(val.indexOf("cdc.com") >=4){
+   // EMAIL EXTENSION CHECKER
+   if(mail.indexOf("cdc.com") >=4){
+     console.log("ok")
+     this.setState({
+       validation : true
+     })
+     const connect = document.getElementsByClassName('connect_button')
+     console.log("ya quoi", connect)
+
+
+   }
 //       $('.connect_button').addClass('input_button__active');
 //       //CONNECT OK
 //       $('.connect_button.input_button__active').click(function(){
@@ -29,7 +42,7 @@ import './Style.css'
 //      }else{
 //          $('.connect_button').removeClass('input_button__active');
 //      }
-// }
+ }
 
 // connectOK(){
     
@@ -65,7 +78,7 @@ import './Style.css'
             <h1>Bienvenue sur notre plateforme d’entrainement à la certification PSPO !</h1>
             <p>Veuillez entrer <b>votre adresse email</b> pour pouvoir accéder à notre questionnaire qui permettra de tester les connaissances requises afin d’obtenir la certificaiton PSPO.</p>
             <div className="login-email">
-                <input type="email" className="input_email" placeholder="First name" onKeyUp="emailCheck(this.value)" />
+                <input type="email" className="input_email" placeholder="mail@mail.com" onKeyPress={this.emailCheck} />
             </div>
             
             <div className="input_button input_button__inactive connect_button">Accéder à la plateforme</div>

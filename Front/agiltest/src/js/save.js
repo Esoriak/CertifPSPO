@@ -1,13 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import Airtable from 'airtable'
 
-
-Airtable.configure({
-    endpointUrl: 'https://api.airtable.com',
-    apiKey: 'keyUajiBVtVRhgWX6'
-});
-var base = Airtable.base('appKfn6pRBJqckTwa');
 
 
 const Questionnaire = []
@@ -15,18 +8,16 @@ let questions =[]
 let choix = []
 let score =0
 let choixselection = []
-const nbquestion = 2
-const nbminichoix = 1
 
 
  class Tests extends Component {
   state ={
     welcome : true,
     tests : [],
-    pointQuestions : 2000,
+    pointQuestions : 1000,
     questions: [],
     choices: [],
-    // choices_selected : [],
+    choices_selected : [],
     right_answers : 0,
     questionnaire : [],
     ready : false,
@@ -41,12 +32,10 @@ const nbminichoix = 1
 /////////////////////////// RECUPERATION DES INFORMATIONS DE LA DATABASE ///////////////////////////////////////
 
 
+
+
  GetDataTests = async() => {
-  //  let PathApi = process.env.REACT_APP_PATH_API_DEV + '/quizz/tests'
-  //  if (process.env.NODE_ENV === 'production') {
-     let PathApi = process.env.REACT_APP_PATH_API_DEV + '/quizz/tests'
-    // }
-   const tests =  await axios.get(PathApi)
+   const tests =  await axios.get('build/quizz/tests')
     console.log('voilà les tests',tests.data)
      this.setState({
        tests : tests.data, 
@@ -55,8 +44,7 @@ const nbminichoix = 1
  }
 
  GetDataQuestions = async() => {
-  let PathApi = process.env.REACT_APP_PATH_API_DEV + '/quizzquestions/questions'
-   const questions = await axios.get(PathApi)
+   const questions = await axios.get('build/quizzquestions/questions')
     console.log('ici les questions', questions.data)
     this.setState({
       questions : questions.data
@@ -64,8 +52,7 @@ const nbminichoix = 1
  }
 
  GetDataChoices = async() => {
-  let PathApi = process.env.REACT_APP_PATH_API_DEV + '/quizzchoices/choices'
-   const choices = await axios.get(PathApi)
+   const choices = await axios.get('/quizzchoices/choices')
    console.log('là les choix', choices.data)
    this.setState({
      choices : choices.data
@@ -78,19 +65,22 @@ const nbminichoix = 1
 
 
 
+
+
+
 RandomQuestionnaire = () => {
     // Tant que le tableau n'a pas 80 nombres uniques on lance la requête
-   while (questions.length < nbquestion) {
+   while (questions.length < 3) {
       // On récupère un nombre aléatoire compris entre 0 et 150 ( le nombre de questions exploitables pour le moment)
       const random = Math.floor(Math.random() * 150)
-      // On copie le nombre dans le tableau des questions - on rajoute 1 au chiffre random pour éviter l'index 0
+      // On copie le nombre dans le tableau des questions
       questions.push(random+1)
     }   
     // Si le tableau de nombre est egal à 80 on vérifie que toutes les valeurs sont uniques
-   if (questions.length == nbquestion) {
+   if (questions.length == 3) {
       questions = [...new Set(questions)]
       // Si le tableau de nombre uniques est égal à 80, on lance une boucle qui va remplir le questionnaire
-      if (questions.length == nbquestion) {
+      if (questions.length == 3) {
           for (let i=0; i< questions.length; i++) {
               // On cherche l'id de la question correspondant au chiffre random dans notre base de données et on la copie dans le tableau du questionnaire
               Questionnaire.push(this.state.questions.filter(res => res.idQuestions === questions[i]))
@@ -112,7 +102,12 @@ RandomQuestionnaire = () => {
 
 
 
+
 /////////////////////////////////////////// VERIFICATION DU STYLE DE BOUTONS ATTENDUS - CHOIX UNIQUE OU CHOIX MULTIPLE ///////////////////////////////
+
+
+
+
 
 
 
@@ -174,18 +169,20 @@ RandomQuestionnaire = () => {
       // on récupère tous les choix associés à la question posée
       Allanswers = this.state.choices.filter(choices => choices.idQuestions == idquest)
       // Si la valeur d'un choix est egale a 1 c'est que la réponse est juste, on parcours à nouveau le tableau pour finir la boucle et stocker le nombre de réponses justes attendues
+     
       reponsesattendues = Allanswers.filter(res => res.value === 1)
     }
-    // Quoi qu'il arrive, on stocke le résultat du candidat dans un tableau de façon différente selon si c'était un choix unique ou multiple
-       if( leschoix.length > nbminichoix ) {
-          choixselection.push(leschoix)
-       }
-       else {
-         choixselection.push(leschoix[0][0])
-       }
-    // On créer une variable comportant le nombre de bonnes réponses séléctionnées par le candidat
+    if(leschoix.length > 1) {
+        this.setState({
+          choices_selected : [...this.state.choices_selected, leschoix]
+        })
+    }
+    else {
+      this.setState({
+        choices_selected : [...this.state.choices_selected, leschoix[0][0]]
+      })
+    }
     bonnesreponses = leschoix.filter(choix => choix[0].value === 1)
-    // Si ce nombre est  strictement égal au nombre de réponses attendues alors on lui ajoute le nombre de points / question + 1 bonne réponse supplémentaire 
     if (leschoix.length === reponsesattendues.length) {
        if ( bonnesreponses.length === reponsesattendues.length) {
       score = score + this.state.pointQuestions
@@ -198,18 +195,16 @@ RandomQuestionnaire = () => {
     else {
       console.log("tu n'as pas coché le nombre de réponses attendues.")
     }
-    // on vide le tableau de choix pour la sélection de la prochaine question
     choix =[]
-    // Si la question affichée est la dernière du questionnaire on lance la fonction finish test
-    if(this.state.displayQuestion === nbquestion) {
+    if(this.state.displayQuestion ===3) {
       this.FinishTest()
     }
-    // Sinon on continue d'avancer dans l'affichage du questionnaire et la vérification des choix multiples ou unique
     else {
-      this.setState({  displayQuestion : this.state.displayQuestion+1 , previousQuestion: this.state.previousQuestion+1 ,  checked : false, })
+      this.setState({ displayQuestion : this.state.displayQuestion+1 , previousQuestion: this.state.previousQuestion+1 ,  checked : false, })
       this.StyleButtonChoices()
     }
-    }
+ 
+     }
 
 
 
@@ -238,16 +233,17 @@ RandomQuestionnaire = () => {
   FinishTest = () => {
     this.setState({ finish : true, ready : false })
     score = score / 100
+    choixselection = this.state.choices_selected
     console.log("les choix pour l'affichage final", choixselection)
   }
 
-  //////////////////////// VERIFICATION POUR QUE LE CANDIDAT CHOISISSE UNE REPONSE POUR PASSER A LA QUESTION SUIVANTE //////////////////////////
+  //////////////////////// VERIFICATION POUR QUE LE CANDIDAT CHOISSISSE UNE REPONSE POUR PASSER A LA QUESTION SUIVANTE //////////////////////////
 
   
 
   ActiveNext = () => {
 
-    if (choix.length >= 1 ) {
+    if (choix.length >=1 ) {
       this.setState({
         checked : true
       })
@@ -345,8 +341,8 @@ componentDidMount =() => {
             </div>)
               : null}
 
-                {displayQuestion < nbquestion ? this.state.checked ? <div onClick={this.StockChoice} className="input_button input_button__active connect_button"> Suivant</div> : <div className="input_button input_button__inactive connect_button"> Suivant </div>  :  null }
-                {displayQuestion === nbquestion ? this.state.checked ? <div onClick={this.StockChoice} className="input_button input_button__active connect_button"> Terminer</div> : <div className="input_button input_button__inactive connect_button"> Terminer </div> : null }
+                {displayQuestion < 3 ? this.state.checked ? <div onClick={this.StockChoice} className="input_button input_button__active connect_button"> Suivant</div> : <div className="input_button input_button__inactive connect_button"> Suivant </div>  :  null }
+                {displayQuestion === 3 ? this.state.checked ? <div onClick={this.StockChoice} className="input_button input_button__active connect_button"> Terminer</div> : <div className="input_button input_button__inactive connect_button"> Terminer </div> : null }
 
           </div>
           <h2> {displayQuestion} / 80</h2>
@@ -361,7 +357,7 @@ componentDidMount =() => {
       <div className="main_container results_container">
         <div className="quizzScore">
             <span>Résultat:</span>
-            <span className="score">{score}% ({this.state.right_answers}/{nbquestion})</span>
+            <span className="score">{score}% ({this.state.right_answers}/80)</span>
         </div>
 
 
@@ -386,38 +382,33 @@ componentDidMount =() => {
                   
                   i[1].map(choices =>
                   <ul className="answer_list">
-                      <li className="answer answer_checkbox"  key={i[1].idChoice} >
+                      <li className="answer answer_checkbox"  >
                         <input type="checkbox" className="input input_checkbox" id={choices.idChoice} value={choices.value} name={i[0].idQuestions} disabled />
                         <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
                       </li >
                   </ul>
                     )
-
-
                     :
 
                     
                     i[1].map(choices =>
                     <ul className="answer_list">
-                      <li className="answer answer_radio"  key={i[1].idChoice}>
+                      <li className="answer answer_radio" >
                         <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.value} name={i[0].idQuestions}  disabled />
                         <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
                         <div className="radio_check"></div>
                       </li >
-                    </ul>)
-                    }
+                    </ul>)}
 
-                  {/* <div> {choixselection.map(i => 
-                    <p>{i.answer}</p>)}</div> */}
-
-                    {/* {choixselection.map(i =>
+                    {choixselection.map(i =>
                       <div>
                         <p>{i.answer}</p>
-                        </div>)} */}
-                    {choixselection.map(i => <p>{i.answer}</p>)}
-                </div>            
-                )
-                }
+                        </div>)}
+
+                </div>
+
+
+                )}
                 </div>
       : null } 
 

@@ -1,10 +1,12 @@
 {
   "name": "back",
   "version": "1.0.0",
-  "description": "back of certification test pspo",
-  "main": "server.js",
+  "description": "back of training certification pspo",
+  "main": "conf.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "export NODE_ENV=production && node server.js", 
+    "dev": "export NODE_ENV=developpement && node server.js"
   },
   "author": "SM",
   "license": "ISC",

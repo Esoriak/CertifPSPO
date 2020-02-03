@@ -1,13 +1,5 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import Airtable from 'airtable'
-
-
-Airtable.configure({
-    endpointUrl: 'https://api.airtable.com',
-    apiKey: 'keyUajiBVtVRhgWX6'
-});
-var base = Airtable.base('appKfn6pRBJqckTwa');
 
 
 const Questionnaire = []
@@ -15,7 +7,7 @@ let questions =[]
 let choix = []
 let score =0
 let choixselection = []
-const nbquestion = 2
+const nbquestion = 4
 const nbminichoix = 1
 
 
@@ -112,7 +104,7 @@ RandomQuestionnaire = () => {
 
 
 
-/////////////////////////////////////////// VERIFICATION DU STYLE DE BOUTONS ATTENDUS - CHOIX UNIQUE OU CHOIX MULTIPLE ///////////////////////////////
+/////////////////////////////////////// VERIFICATION DU STYLE DE BOUTONS ATTENDUS - CHOIX UNIQUE OU CHOIX MULTIPLE ///////////////////////////////
 
 
 
@@ -128,7 +120,6 @@ RandomQuestionnaire = () => {
 
   FirstStyleButtonChoices = () => {
     const quest = Questionnaire[0]
-  //  console.log("la première question", quest[0].Multiple)
     if (quest[0].Multiple === 0) {
       this.UniqueAnswer()
     }
@@ -149,8 +140,6 @@ RandomQuestionnaire = () => {
       multiple_answer : false
     })
   }
-
-
 
 
 
@@ -259,13 +248,18 @@ RandomQuestionnaire = () => {
     }
   }
 
+  GoodChoices = (response) => {
+    const goodchoices = response.filter(choices => choices.value === 1 )
+    return <div>{goodchoices.map(goodchoices => <p>{goodchoices.answer}</p>)}</div>
+  }
+
+
 componentDidMount =() => {
   this.GetDataTests()
   this.GetDataQuestions()
   this.GetDataChoices()
+  
 }
-
-
   render() {
 
     const {
@@ -310,32 +304,32 @@ componentDidMount =() => {
             <div className="card question_card question_current">
             <h1>Question {displayQuestion}</h1>
        
-            {ready ? questionnaire.slice(previousQuestion, displayQuestion).map(i =>
+            {ready ? questionnaire.slice(previousQuestion, displayQuestion).map(obj =>
             
-            <div key={i[0].idQuestions }>
-              <p className="question"> {i[0].Question} </p>
+            <div key={obj[0].idQuestions }>
+              <p className="question"> {obj[0].Question} </p>
               <div className="checkbox_question">
               
               {multiple_answer ? 
               
-              questionnaire.slice(previousQuestion, displayQuestion).map(i =>
+              questionnaire.slice(previousQuestion, displayQuestion).map(obj =>
               
-              i[1].map(choices =>
+              obj[1].map(choices =>
               <ul className="answer_list">
-                  <li className="answer answer_checkbox"  >
-                    <input type="checkbox" className="input input_checkbox" id={choices.idChoice} value={choices.value} name={i[0].idQuestions} onChange={this.handleCheck} />
+                  <li className="answer answer_checkbox" key={obj[1].idChoice} >
+                    <input type="checkbox" className="input input_checkbox" id={choices.idChoice} value={choices.value} name={obj[0].idQuestions} onChange={this.handleCheck} />
                     <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
                   </li >
               </ul>
                 ))
                 :
 
-                questionnaire.slice(previousQuestion, displayQuestion).map(i =>
+                questionnaire.slice(previousQuestion, displayQuestion).map(obj =>
                 
-                i[1].map(choices =>
+                obj[1].map(choices =>
                 <ul className="answer_list">
-                  <li className="answer answer_radio" >
-                    <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.value} name={i[0].idQuestions}  onChange={this.handleCheck} />
+                  <li className="answer answer_radio" key={obj[1].idChoice} >
+                    <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.value} name={obj[0].idQuestions}  onChange={this.handleCheck} />
                     <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
                     <div className="radio_check"></div>
                   </li >
@@ -354,7 +348,7 @@ componentDidMount =() => {
       : null} 
 
 
-
+{/* ////////// LE TEST EST FINI ON PROPOSE L'AFFICHAGE DU SCORE / NB DE BONNES REPONSES ET LES REPONSES ATTENDUES DU QUIZZ ///// */}
 
 
     {finish ? 
@@ -368,11 +362,11 @@ componentDidMount =() => {
 {/* //////// AFFICHAGE DES QUESTIONS POSEES LORS DU QUIZZ ///////// */}
 
 
-          {questionnaire.map(i => 
+          {questionnaire.map(obj => 
                 <div className="card result_card">
-                <h1>Question {displayQuestion}</h1>
-                <div key={i[0].idQuestions }>
-                  <p className="question"> {i[0].Question} </p>
+                <h1>Question </h1>
+                <div key={obj[0].idQuestions } >
+                  <p className="question"> {obj[0].Question} </p>
                   <div className="checkbox_question">
                   </div>
                 </div>
@@ -380,49 +374,43 @@ componentDidMount =() => {
 
 
                 {/* /////////////// AFFICHAGE DES CHOIX EN FONCION D'UN CHOIX MULTIPLE OU D'UN CHOIX UNIQUE  ////////////////*/}
-                  {multiple_answer ? 
+
+                {/* // Si la question affichée est à choix multiple ( 1 veut dire true ) alors on affichera les choix associés à côtés de checkbox, sinon ce sera des boutons radio. Ils sont en disabled pour ne pas modifier l'état. */}
+                  {obj[0].Multiple === 1 ? 
                   
           
                   
-                  i[1].map(choices =>
-                  <ul className="answer_list">
-                      <li className="answer answer_checkbox"  key={i[1].idChoice} >
-                        <input type="checkbox" className="input input_checkbox" id={choices.idChoice} value={choices.value} name={i[0].idQuestions} disabled />
-                        <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
-                      </li >
-                  </ul>
-                    )
-
+                  obj[1].map(choices =>
+                    <ul className="answer_list">
+                        <li className="answer answer_checkbox"  key={obj[1].idChoice} >
+                          <input type="checkbox" className="input input_checkbox" id={choices.idChoice} value={choices.value} name={obj[0].idQuestions} disabled />
+                          <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
+                        </li >
+                    </ul>)
 
                     :
 
+                  obj[1].map(choices =>
                     
-                    i[1].map(choices =>
-                    <ul className="answer_list">
-                      <li className="answer answer_radio"  key={i[1].idChoice}>
-                        <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.value} name={i[0].idQuestions}  disabled />
-                        <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
-                        <div className="radio_check"></div>
-                      </li >
-                    </ul>)
+                        <ul className="answer_list">
+                          <li className="answer answer_radio"  key={obj[1].idChoice}>
+                            <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.value} name={obj[0].idQuestions}  disabled />
+                            <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
+                            <div className="radio_check"></div>
+                          </li >
+                        </ul>)
                     }
 
-                  {/* <div> {choixselection.map(i => 
-                    <p>{i.answer}</p>)}</div> */}
+                    {/* {choixselection.map(i => <p>{i.answer}</p>)} */}
 
-                    {/* {choixselection.map(i =>
-                      <div>
-                        <p>{i.answer}</p>
-                        </div>)} */}
-                    {choixselection.map(i => <p>{i.answer}</p>)}
+
+                    {/* //J'éxécute la fonction qui permet de vérifier quels choix auraient dus être séléctionnés pour avoir la totalité des points. Je lui donne en paramètre tout l'objet comportant les choix. La fonction éxécéute un filtre et ne retourne à cet endroit que les choix ayant une value égale a 1 soit " True" */}
+                    <div>{this.GoodChoices(obj[1])} </div>
                 </div>            
                 )
                 }
                 </div>
       : null } 
-
-
-
 
 
 

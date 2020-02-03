@@ -13,11 +13,6 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json()) 
 
-// const corsOptions = {
-//   origin: 'http://training.monsieurguiz.com',
-//   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-// }
-
 
 app.use(cors())
 

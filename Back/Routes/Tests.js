@@ -1,15 +1,10 @@
 const express = require('express')
 const connection = require('../conf')
-const cors = require ('cors')
 const router = express.Router()
 
-const corsOptions = {
-  origin: 'http://training.monsieurguiz.com',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
 
 // Récupération des tests
-router.get('/tests', cors(corsOptions), (req, res) => {
+router.get('/tests', (req, res) => {
   connection.query('SELECT * from tests', (err, results) => {
     if (err)
       res.status(500).send('Erreur lors de la récupération des tests')

@@ -14,7 +14,7 @@ require('dotenv').config(process.cwd(), '.env')
 
 const connection = mysql.createConnection({
     multipleStatements: true,
-    host : '51.91.109.91',
+    host : 'localhost',
     user: process.env.DB_USER,
     password: process.env.DB_PWD,
     database: process.env.DB_DB,

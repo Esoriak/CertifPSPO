@@ -7,7 +7,7 @@ let questions =[]
 let choix = []
 let score =0
 let choixselection = []
-const nbquestion = 5
+const nbquestion = 2
 const nbminichoix = 1
 
 
@@ -255,7 +255,13 @@ RandomQuestionnaire = () => {
 
   GoodChoices = (response) => {
     const goodchoices = response.filter(choices => choices.value === 1 )
-    return <div>{goodchoices.map(goodchoices => <p>{goodchoices.answer}</p>)}</div>
+    return goodchoices.map(goodchoices => <p>{goodchoices.answer}</p>)
+  }
+
+
+  DisplayChoiceSelection = (choixselection, idQuestions) => {
+    const yourselection = choixselection.filter(choice => choice.idQuestions === idQuestions)
+    return yourselection.map(choices => <p>{choices.answer}</p>)
   }
 
 
@@ -404,12 +410,14 @@ componentDidMount =() => {
                           </li >
                         </ul>)
                     }
-
+                    <h5>Les choix faits :</h5>
                     {/* {choixselection.map(i => <p>{i.answer}</p>)} */}
+                    <div>{this.DisplayChoiceSelection(choixselection, obj[0].idQuestions)}</div>
 
 
                     {/* //J'éxécute la fonction qui permet de vérifier quels choix auraient dus être séléctionnés pour avoir la totalité des points. Je lui donne en paramètre tout l'objet comportant les choix. La fonction éxécéute un filtre et ne retourne à cet endroit que les choix ayant une value égale a 1 soit " True" */}
-                    <div>{this.GoodChoices(obj[1])} </div>
+                    <h5>Les réponses attendues : </h5>
+                    <div>{this.GoodChoices(obj[1])}</div>
                 </div>            
                 )
                 }

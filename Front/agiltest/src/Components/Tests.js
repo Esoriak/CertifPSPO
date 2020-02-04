@@ -7,7 +7,7 @@ let questions =[]
 let choix = []
 let score =0
 let choixselection = []
-const nbquestion = 4
+const nbquestion = 5
 const nbminichoix = 1
 
 
@@ -18,7 +18,6 @@ const nbminichoix = 1
     pointQuestions : 2000,
     questions: [],
     choices: [],
-    // choices_selected : [],
     right_answers : 0,
     questionnaire : [],
     ready : false,
@@ -34,10 +33,10 @@ const nbminichoix = 1
 
 
  GetDataTests = async() => {
-  //  let PathApi = process.env.REACT_APP_PATH_API_DEV + '/quizz/tests'
-  //  if (process.env.NODE_ENV === 'production') {
-     let PathApi = process.env.REACT_APP_PATH_API_DEV + '/quizz/tests'
-    // }
+  let PathApi = process.env.REACT_APP_PATH_API_DEV + '/quizz/tests'
+  if (process.env.NODE_ENV === 'production') {
+      PathApi = process.env.REACT_APP_PATH_API_PROD + '/quizz/tests'
+   }
    const tests =  await axios.get(PathApi)
     console.log('voilà les tests',tests.data)
      this.setState({
@@ -47,7 +46,10 @@ const nbminichoix = 1
  }
 
  GetDataQuestions = async() => {
-  let PathApi = process.env.REACT_APP_PATH_API_DEV + '/quizzquestions/questions'
+   let PathApi = process.env.REACT_APP_PATH_API_DEV + '/quizzquestions/questions'
+   if (process.env.NODE_ENV === 'production') {
+     PathApi = process.env.REACT_APP_PATH_API_PROD + '/quizzquestions/questions'
+   }
    const questions = await axios.get(PathApi)
     console.log('ici les questions', questions.data)
     this.setState({
@@ -56,7 +58,10 @@ const nbminichoix = 1
  }
 
  GetDataChoices = async() => {
-  let PathApi = process.env.REACT_APP_PATH_API_DEV + '/quizzchoices/choices'
+   let PathApi = process.env.REACT_APP_PATH_API_DEV + '/quizzchoices/choices'
+   if (process.env.NODE_ENV === 'production') {
+    PathApi = process.env.REACT_APP_PATH_API_PROD + '/quizzchoices/choices'
+   }
    const choices = await axios.get(PathApi)
    console.log('là les choix', choices.data)
    this.setState({
@@ -268,7 +273,6 @@ componentDidMount =() => {
       previousQuestion,
       displayQuestion,
       multiple_answer,
-      choices_selected,
       finish,
       welcome
   

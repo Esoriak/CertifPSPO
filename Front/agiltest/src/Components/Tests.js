@@ -426,9 +426,9 @@ componentDidMount =() => {
 
 
 
-{/* -----------------------    AFFICHAGE DES CHOIX SELECTIONNES    ------------------------- */}
+{/* -----------------------    AFFICHAGE DES CHOIX SELECTIONNES  copy code Tony   ------------------------- */}
 
-          
+        
 
     </div>
     )

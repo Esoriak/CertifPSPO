@@ -7,7 +7,7 @@ let questions =[]
 let choix = []
 let score =0
 let choixselection = []
-const nbquestion = 5
+const nbquestion = 2
 const nbminichoix = 1
 
 
@@ -255,7 +255,13 @@ RandomQuestionnaire = () => {
 
   GoodChoices = (response) => {
     const goodchoices = response.filter(choices => choices.value === 1 )
-    return <div>{goodchoices.map(goodchoices => <p>{goodchoices.answer}</p>)}</div>
+    return goodchoices.map(goodchoices => <p>{goodchoices.answer}</p>)
+  }
+
+
+  DisplayChoiceSelection = (choixselection, idQuestions) => {
+    const yourselection = choixselection.filter(choice => choice.idQuestions === idQuestions)
+    return yourselection.map(choices => <p>{choices.answer}</p>)
   }
 
 
@@ -404,12 +410,14 @@ componentDidMount =() => {
                           </li >
                         </ul>)
                     }
-
+                    <h5>Les choix faits :</h5>
                     {/* {choixselection.map(i => <p>{i.answer}</p>)} */}
+                    <div>{this.DisplayChoiceSelection(choixselection, obj[0].idQuestions)}</div>
 
 
                     {/* //J'éxécute la fonction qui permet de vérifier quels choix auraient dus être séléctionnés pour avoir la totalité des points. Je lui donne en paramètre tout l'objet comportant les choix. La fonction éxécéute un filtre et ne retourne à cet endroit que les choix ayant une value égale a 1 soit " True" */}
-                    <div>{this.GoodChoices(obj[1])} </div>
+                    <h5>Les réponses attendues : </h5>
+                    <div>{this.GoodChoices(obj[1])}</div>
                 </div>            
                 )
                 }
@@ -418,77 +426,9 @@ componentDidMount =() => {
 
 
 
-{/* -----------------------    AFFICHAGE DES CHOIX SELECTIONNES    ------------------------- */}
+{/* -----------------------    AFFICHAGE DES CHOIX SELECTIONNES  copy code Tony   ------------------------- */}
 
-            {/* {finish ? 
-                  <div className="main_container results_container">
-                    <div className="quizzScore">
-                        <span>Résultat:</span>
-                        <span className="score">{score}% ({this.state.right_answers}/80)</span>
-                    </div>
-                    {finish ?
-
-                      questionnaire.map(i => 
-                        <div className="card result_card">
-                          <h1> Question </h1>
-                          <p className="question"> {i[0].Question} </p>
-                        
- 
-                          {finish ? this.state.choices_selected.map(i =>
-                           <p>{i.answer}</p>)
-
-                             : null
-                          }
-                          </div>
-                        )
-                 
-                  : null}
-                   </div>
-          : null} */}
-
-          {/* <div class="card result_card result_true">
-                <h1>Question 1</h1>
-                <p class="question">Sprint burndown charts are an efficient tracking tool because they show : </p>
-                <div class="radio_question">
-                    <ul class="answer_list">
-                        <li class="answer answer_radio" onclick="activeNext()">
-                            <input type="radio" class="input input_radio" id="ID_answer-1" name="ID_question_1" value="ID_answer" disabled="true" checked="true" />
-                            <label for="ID_answer-1" class="answer_label">An estimate of the total work remaining for the Sprint</label>
-                            <div class="radio_check"></div>
-                        </li >
-                        <li class="answer answer_radio" onclick="activeNext()">
-                            <input type="radio" class="input input_radio" id="ID_answer-2" name="ID_question_1" value="ID_answer" disabled="true"/>
-                            <label for="ID_answer-2" class="answer_label">How many hours have been worked by each Development Team member</label>
-                            <div class="radio_check"></div>
-                        </li>
-                        <li class="answer answer_radio" onclick="activeNext()">
-                            <input type="radio" class="input input_radio" id="ID_answer-3" name="ID_question_1" value="ID_answer" disabled="true"/>
-                            <label for="ID_answer-3" class="answer_label">How many Product Backlog items remain</label>
-                            <div class="radio_check"></div>
-                        </li>
-                        <li class="answer answer_radio" onclick="activeNext()">
-                            <input type="radio" class="input input_radio" id="ID_answer-4" name="ID_question_1" value="ID_answer" disabled="true"/>
-                            <label for="ID_answer-4" class="answer_label">How much effort has gone into a Sprint</label>
-                            <div class="radio_check"></div>
-                        </li>
-                    </ul>  
-                    <ul class="correct_answer_list">
-                        <li class="answer answer_radio correct_answer" onclick="activeNext()">
-                            <input type="radio" class="input input_radio" id="ID_answer-1" name="ID_question_1" value="ID_answer" disabled="true"/>
-                            <label for="ID_answer-1" class="answer_label">An estimate of the total work remaining for the Sprint</label>
-                            <div class="radio_check"></div>
-                        </li >
-                    </ul> 
-                    <ul class="solution_list">
-                        <li class="answer answer_radio" onclick="activeNext()">
-                            <input type="radio" class="input input_radio" id="ID_answer-1" name="ID_solution_2" value="ID_answer" disabled="true" checked="true"/>
-                            <label for="ID_answer-1" class="answer_label">An estimate of the total work remaining for the Sprint</label>
-                            <div class="radio_check"></div>
-                        </li >
-                    </ul> 
-               </div>
-            </div> */}
-          
+        
 
     </div>
     )

@@ -266,6 +266,7 @@ class Tests extends Component {
 
 
   ShowResultFinal = (obj) => {
+    console.log("je passe une question")
     if (obj[0].Multiple === 1) {
       return <div className="card result_card">
         <h1>Question {countquestion}</h1>
@@ -345,14 +346,14 @@ class Tests extends Component {
     for (let i = 0; i < choixselection.length; i++) {
       if (choixselection[i].idChoice === choices.idChoice) {
         return <li className="answer answer_radio correct_answer" key={questions.idChoice}>
-          <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.value} name={choices.idQuestions} checked readOnly />
+          <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.value} name={questions.idQuestions} disabled="true" checked readOnly />
           <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
           <div className="radio_check"></div>
         </li >
       }
       else {
         return <li className="answer answer_radio " key={questions.idChoice}>
-          <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.value} name={choices.idQuestions} disabled readOnly />
+          <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.value} name={questions.idQuestions} disabled="true" readOnly />
           <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
           <div className="radio_check"></div>
         </li >

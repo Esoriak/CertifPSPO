@@ -9,7 +9,7 @@ let score = 0
 let choixselection = []
 const nbquestion = 2
 const nbminichoix = 1
-const countquestion = 1
+let countquestion = 0
 
 
 class Tests extends Component {
@@ -256,8 +256,8 @@ class Tests extends Component {
 
   GoodChoices = (response) => {
     const goodchoices = response.filter(choices => choices.value === 1)
-    return goodchoices.map(goodchoices => <li className="answer answer_radio correct_answer" key={questions.idChoice} >
-      <input type="radio" className="input input_radio" id={goodchoices.idChoice} value={goodchoices.value} name={goodchoices.idQuestions + 1} disabled="true"checked />
+    return goodchoices.map(goodchoices => <li className="answer answer_radio correct_answer" key={goodchoices.idChoice}  >
+      <input type="radio" className="input input_radio" id={goodchoices.idChoice} value={goodchoices.value} name={goodchoices.idQuestions + 1} disabled={true} checked readOnly />
       <label htmlFor={goodchoices.idChoice} className="answer_label">{goodchoices.answer}</label>
       <div className="radio_check"></div>
     </li >
@@ -266,7 +266,7 @@ class Tests extends Component {
 
 
   ShowResultFinal = (obj) => {
-    console.log("je passe une question")
+    console.log("je passe une question", obj)
     if (obj[0].Multiple === 1) {
       return <div className="card result_card">
         <h1>Question {countquestion}</h1>
@@ -276,21 +276,22 @@ class Tests extends Component {
           </div>
         </div>
         {obj[1].map(choices =>
-          <ul className="answer_list">
+          <ul className="answer_list" key={obj[1].idChoice}>
             <li className="answer answer_checkbox" key={obj[1].idChoice} >
-              <input type="checkbox" className="input input_checkbox" id={choices.idChoice} value={choices.value} name={obj[0].idQuestions} disabled="true" />
+              <input type="checkbox" className="input input_checkbox" id={choices.idChoice} value={choices.value} name={obj[0].idQuestions} disabled />
               <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
             </li >
           </ul>)}
       </div>
     }
     else {
-      const nbres = obj[1].filter(choices => choices.value ===1)
-      const ressend = choixselection.filter(choices => choices.idQuestions === obj[0].idQuestions)
-      console.log("le nombr de res attendu", nbres)
-      console.log("le nb envoyé", ressend)
-      if(nbres[0].idChoice === ressend[0].idChoice){
-              return <div className="card result_card result_true">
+      const nbres = obj[1].filter(choices => choices.value == 1)
+      const ressend = choixselection.filter(choices => choices.idQuestions == obj[0].idQuestions)
+      countquestion = countquestion +1
+      // console.log("le nombr de res attendu", nbres)
+      // console.log("le nb envoyé", ressend)
+      if(nbres[0].idChoice == ressend[0].idChoice){
+              return <div className="card result_card result_true" key={obj[0].idQuestions}>
         <h1>Question {countquestion}</h1>
         <div key={obj[0].idQuestions} >
           <p className="question"> {obj[0].Question} </p>
@@ -303,16 +304,15 @@ class Tests extends Component {
             this.DisplayResultChoices(choices, obj[0])
           )}
         </ul>
-        <h5> Les réponses attendues : </h5>
         <div>
-          <ul className="answer_list" key={questions.idChoice}>
+          <ul className="solution_list" key={questions.idChoice}>
             {this.GoodChoices(obj[1])}
           </ul>
         </div>
       </div>
       }
       else {
-        return <div className="card result_card result_false">
+        return <div className="card result_card result_false" key={obj[0].idQuestions}>
         <h1>Question {countquestion}</h1>
         <div key={obj[0].idQuestions} >
           <p className="question"> {obj[0].Question} </p>
@@ -325,9 +325,8 @@ class Tests extends Component {
             this.DisplayResultChoices(choices, obj[0])
           )}
         </ul>
-        <h5> Les réponses attendues : </h5>
         <div>
-          <ul className="answer_list" key={questions.idChoice}>
+          <ul className="solution_list" key={questions.idChoice}>
             {this.GoodChoices(obj[1])}
           </ul>
         </div>
@@ -343,23 +342,22 @@ class Tests extends Component {
   // }
 
   DisplayResultChoices = (choices, questions) => {
-    for (let i = 0; i < choixselection.length; i++) {
-      if (choixselection[i].idChoice === choices.idChoice) {
-        return <li className="answer answer_radio correct_answer" key={questions.idChoice}>
-          <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.value} name={questions.idQuestions} disabled="true" checked />
+    let selection = choixselection.map(choices => choices.idChoice)
+      if (selection.includes(choices.idChoice)) {
+        return <li className="answer answer_radio correct_answer " key={choices.idChoice}>
+          <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.value} name={questions.idQuestions} disabled={true} checked={true} readOnly/>
           <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
           <div className="radio_check"></div>
         </li >
       }
       else {
-        return <li className="answer answer_radio " key={questions.idChoice}>
-          <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.value} name={questions.idQuestions} disabled="true" />
+        return <li className="answer answer_radio " key={choices.idChoice}>
+          <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.value} name={questions.idQuestions} disabled={true} readOnly/>
           <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
           <div className="radio_check"></div>
         </li >
 
       }
-    }
   }
 
 
@@ -386,7 +384,7 @@ class Tests extends Component {
 
     return (
       <>
-        {welcome ?
+        {welcome &&
           <div className="main_container">
             <div className="card start_card">
               <h1>Vous êtes connecté !</h1>
@@ -402,21 +400,19 @@ class Tests extends Component {
               <div className="input_button input_button__active start_button" type="button" onClick={this.RandomQuestionnaire}>Commencer le test</div>
             </div>
           </div>
-          :
-
-          null
         }
 
-        {ready ?
-          <div className="main_container questions_container">
+        {ready &&
+        <>
+          <div className="main_container questions_container" key="container">
             <div className="card question_card question_current">
               <h1>Question {displayQuestion}</h1>
+              
+              {ready && questionnaire.slice(previousQuestion, displayQuestion).map((obj, index) =>
 
-              {ready ? questionnaire.slice(previousQuestion, displayQuestion).map(obj =>
-
-                <div key={obj[0].idQuestions}>
+                <div key={index}>
                   <p className="question"> {obj[0].Question} </p>
-                  <div className="checkbox_question">
+                  <div className="checkbox_question" key={obj[0].idQuestions}>
 
                     {multiple_answer ?
 
@@ -444,22 +440,26 @@ class Tests extends Component {
                           </ul>))
                     }
                   </div>
-                </div>)
-                : null}
+                 </div>
+                )
+                }
+                
 
               {displayQuestion < nbquestion ? this.state.checked ? <div onClick={this.StockChoice} className="input_button input_button__active connect_button"> Suivant</div> : <div className="input_button input_button__inactive connect_button"> Suivant </div> : null}
               {displayQuestion === nbquestion ? this.state.checked ? <div onClick={this.StockChoice} className="input_button input_button__active connect_button"> Terminer</div> : <div className="input_button input_button__inactive connect_button"> Terminer </div> : null}
 
             </div>
-            <h2> {displayQuestion} / 80</h2>
+            {/* <h2> {displayQuestion} / 80</h2> */}
           </div>
-          : null}
+          <h2> {displayQuestion} / 80</h2>
+          </>
+          }
 
 
         {/* ////////// LE TEST EST FINI ON PROPOSE L'AFFICHAGE DU SCORE / NB DE BONNES REPONSES ET LES REPONSES ATTENDUES DU QUIZZ ///// */}
 
 
-        {finish ?
+        {finish &&
           <div className="main_container results_container">
             <div className="quizzScore">
               <span>Résultat:</span>
@@ -475,7 +475,7 @@ class Tests extends Component {
 
 
           </div>
-          : null}
+          }
       </>
     )
   }

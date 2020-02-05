@@ -257,7 +257,7 @@ class Tests extends Component {
   GoodChoices = (response) => {
     const goodchoices = response.filter(choices => choices.value === 1)
     return goodchoices.map(goodchoices => <li className="answer answer_radio correct_answer" key={questions.idChoice} >
-      <input type="radio" className="input input_radio" id={goodchoices.idChoice} value={goodchoices.value} name={goodchoices.idQuestions + 1} checked readOnly />
+      <input type="radio" className="input input_radio" id={goodchoices.idChoice} value={goodchoices.value} name={goodchoices.idQuestions + 1} disabled="true"checked />
       <label htmlFor={goodchoices.idChoice} className="answer_label">{goodchoices.answer}</label>
       <div className="radio_check"></div>
     </li >
@@ -278,7 +278,7 @@ class Tests extends Component {
         {obj[1].map(choices =>
           <ul className="answer_list">
             <li className="answer answer_checkbox" key={obj[1].idChoice} >
-              <input type="checkbox" className="input input_checkbox" id={choices.idChoice} value={choices.value} name={obj[0].idQuestions} disabled />
+              <input type="checkbox" className="input input_checkbox" id={choices.idChoice} value={choices.value} name={obj[0].idQuestions} disabled="true" />
               <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
             </li >
           </ul>)}
@@ -346,14 +346,14 @@ class Tests extends Component {
     for (let i = 0; i < choixselection.length; i++) {
       if (choixselection[i].idChoice === choices.idChoice) {
         return <li className="answer answer_radio correct_answer" key={questions.idChoice}>
-          <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.value} name={questions.idQuestions} disabled="true" checked readOnly />
+          <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.value} name={questions.idQuestions} disabled="true" checked />
           <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
           <div className="radio_check"></div>
         </li >
       }
       else {
         return <li className="answer answer_radio " key={questions.idChoice}>
-          <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.value} name={questions.idQuestions} disabled="true" readOnly />
+          <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.value} name={questions.idQuestions} disabled="true" />
           <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
           <div className="radio_check"></div>
         </li >

@@ -6,7 +6,7 @@ const router = express.Router()
 
 // Récupération des choix liés aux questions
 router.get('/choices', (req, res) => {
-  connection.query('SELECT * FROM choice', (err, results) => {
+  connection.query('SELECT * FROM Choice', (err, results) => {
     if (err)
       res.status(500).send('Erreur lors de la récupération des choix')
     else 

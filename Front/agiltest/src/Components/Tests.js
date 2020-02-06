@@ -7,7 +7,7 @@ let questions = []
 let choix = []
 let score = 0
 let choixselection = []
-const nbquestion = 2
+const nbquestion = 5
 const nbminichoix = 1
 let countquestion = 0
 
@@ -256,41 +256,95 @@ class Tests extends Component {
 
   GoodChoices = (response) => {
     const goodchoices = response.filter(choices => choices.value === 1)
-    return goodchoices.map(goodchoices => <li className="answer answer_radio correct_answer" key={goodchoices.idChoice}  >
+    if(goodchoices.length < 2) {
+          return goodchoices.map(goodchoices => <li className="answer answer_radio correct_answer" key={goodchoices.idChoice}  >
       <input type="radio" className="input input_radio" id={goodchoices.idChoice} value={goodchoices.value} name={goodchoices.idQuestions + 1} disabled={true} checked readOnly />
       <label htmlFor={goodchoices.idChoice} className="answer_label">{goodchoices.answer}</label>
       <div className="radio_check"></div>
     </li >
-    )
+    )}
+    else if ( goodchoices.length > 1) {
+      return goodchoices.map(goodchoices => <li className="answer answer_checkbox correct_answer" key={goodchoices.idChoice}  >
+      <input type="checkbox" className="input input_checkbox" id={goodchoices.idChoice} value={goodchoices.value} name={goodchoices.idQuestions + 1} disabled={true} checked readOnly />
+      <label htmlFor={goodchoices.idChoice} className="answer_label">{goodchoices.answer}</label>
+    </li >
+      )}
   }
 
 
   ShowResultFinal = (obj) => {
-    console.log("je passe une question", obj)
+    // console.log("je passe une question", obj)
     if (obj[0].Multiple === 1) {
-      return <div className="card result_card">
+      //on stock les resultats attendus dans un tableau
+      const array_expected = obj[1].filter(choices => choices.value === 1)
+      // on stock tous les résultats qui compote plus d'un choix dans un tableau
+      const array_send = choixselection.filter(choices => choices.length >1)
+      const results_array = array_send.flat().filter(choices => choices[0].idQuestions === obj[0].idQuestions)
+      const results_array_flat = results_array.flat()
+      countquestion = countquestion +1
+       console.log("le res attendu", array_expected)
+       console.log("le res envoyé -------------", results_array_flat)
+       for (let i=0; i < array_expected.length; i ++) {
+         const array_choices = array_expected.map(choices => choices.idChoice)
+         // On vérifie que le candidat a choisi le bon nombres de résultats, s'il est strictement égal on passe a la vérification suivante; sinon, on affiche la carte result_false
+         if(results_array_flat.length === array_expected.length) {
+           // On vérifie maintenant que chaque résultat envoyé est celui attendu, si oui, on affiche la carte result_true
+           if(array_choices.includes(results_array_flat[i].idChoice)) {
+            return <div className="card result_card result_true">
+            <h1>Question {countquestion}</h1>
+            <div key={obj[0].idQuestions} >
+              <p className="question"> {obj[0].Question} </p>
+              <div className="checkbox_question">
+              </div>
+            </div>
+              <ul className="answer_list" key={obj[1].idChoice}>
+                {obj[1].map(choices =>
+                <li className="answer answer_checkbox" key={obj[1].idChoice} >
+                  <input type="checkbox" className="input input_checkbox" id={choices.idChoice} value={choices.value} name={obj[0].idQuestions} disabled />
+                  <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
+                </li >
+                )}
+              </ul>
+              <div>
+              <ul className="solution_list" key={questions.idChoice}>
+                {this.GoodChoices(obj[1])}
+              </ul>
+            </div>
+          </div>
+           }
+         }
+         else {
+           return <div className="card result_card result_false">
         <h1>Question {countquestion}</h1>
         <div key={obj[0].idQuestions} >
           <p className="question"> {obj[0].Question} </p>
           <div className="checkbox_question">
           </div>
         </div>
-        {obj[1].map(choices =>
           <ul className="answer_list" key={obj[1].idChoice}>
+            {obj[1].map(choices =>
             <li className="answer answer_checkbox" key={obj[1].idChoice} >
               <input type="checkbox" className="input input_checkbox" id={choices.idChoice} value={choices.value} name={obj[0].idQuestions} disabled />
               <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
             </li >
-          </ul>)}
+            )}
+          </ul>
+          <div>
+          <ul className="solution_list" key={questions.idChoice}>
+            {this.GoodChoices(obj[1])}
+          </ul>
+        </div>
       </div>
+         }
+       }
     }
     else {
-      const nbres = obj[1].filter(choices => choices.value == 1)
-      const ressend = choixselection.filter(choices => choices.idQuestions == obj[0].idQuestions)
+      const res_expected = obj[1].filter(choices => choices.value === 1)
+      const res_send = choixselection.filter(choices => choices.idQuestions === obj[0].idQuestions)
       countquestion = countquestion +1
-      // console.log("le nombr de res attendu", nbres)
-      // console.log("le nb envoyé", ressend)
-      if(nbres[0].idChoice == ressend[0].idChoice){
+      // console.log("le res attendu", res_expected)
+      // console.log("le res envoyé", res_send)
+      if(res_expected[0].idChoice === res_send[0].idChoice){
               return <div className="card result_card result_true" key={obj[0].idQuestions}>
         <h1>Question {countquestion}</h1>
         <div key={obj[0].idQuestions} >
@@ -334,12 +388,6 @@ class Tests extends Component {
       }
     }
   }
-
-
-  // DisplayChoiceSelection = (choixselection, idQuestions) => {
-  // const yourselection = choixselection.filter(choice => choice.idQuestions === idQuestions)
-  // return yourselection.map(choices => <p>{choices.answer}</p>)
-  // }
 
   DisplayResultChoices = (choices, questions) => {
     let selection = choixselection.map(choices => choices.idChoice)

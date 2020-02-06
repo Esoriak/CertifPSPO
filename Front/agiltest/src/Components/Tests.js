@@ -39,7 +39,7 @@ class Tests extends Component {
       PathApi = process.env.REACT_APP_PATH_API_PROD + '/quizz/tests'
     }
     const tests = await axios.get(PathApi)
-    console.log('voilà les tests', tests.data)
+    // console.log('voilà les tests', tests.data)
     this.setState({
       tests: tests.data,
       //  pointQuestions: tests.data[5].PointsQuestion
@@ -52,7 +52,7 @@ class Tests extends Component {
       PathApi = process.env.REACT_APP_PATH_API_PROD + '/quizzquestions/questions'
     }
     const questions = await axios.get(PathApi)
-    console.log('ici les questions', questions.data)
+    // console.log('ici les questions', questions.data)
     this.setState({
       questions: questions.data
     })
@@ -64,7 +64,7 @@ class Tests extends Component {
       PathApi = process.env.REACT_APP_PATH_API_PROD + '/quizzchoices/choices'
     }
     const choices = await axios.get(PathApi)
-    console.log('là les choix', choices.data)
+    // console.log('là les choix', choices.data)
     this.setState({
       choices: choices.data
     })
@@ -163,7 +163,6 @@ class Tests extends Component {
     // On filtre dans la liste des choix ceux qui ont été séléctionnés pour stocker l'objet entier
     for (let i = 0; i < choix.length; i++) {
       leschoix.push(this.state.choices.filter(choices => choices.idChoice == choix[i]))
-      console.log("totoro", leschoix)
       // on récupère l'id de la question associé au choix fait - le premier suffit -
       let idquest = leschoix[0][0].idQuestions
       // on récupère tous les choix associés à la question posée
@@ -217,30 +216,39 @@ class Tests extends Component {
       if (choix.includes(select)) {
         let indexOfChoice = choix.indexOf(select)
         choix.splice(indexOfChoice, 1)
+          this.ActiveNext_Checkbox()
       }
-      else { choix.push(select) }
+      else { 
+        choix.push(select)
+      }
       console.log("les choix sont :", choix)
+      if(choix.length >= 2){
+          this.ActiveNext_Checkbox()
+      }
     }
     else if (selecttype === 'radio') {
       choix = []
       choix.push(select)
       console.log("le choix est :", choix)
+      if(choix.length ===1 ){
+        this.ActiveNext_Radio()
+      }
     }
-    this.ActiveNext()
+  
   }
 
 
   FinishTest = () => {
     this.setState({ finish: true, ready: false })
     score = score / 100
-    console.log("les choix pour l'affichage final", choixselection)
+    // console.log("les choix pour l'affichage final", choixselection)
   }
 
   //////////////////////// VERIFICATION POUR QUE LE CANDIDAT CHOISISSE UNE REPONSE POUR PASSER A LA QUESTION SUIVANTE //////////////////////////
 
 
 
-  ActiveNext = () => {
+  ActiveNext_Radio = () => {
 
     if (choix.length >= 1) {
       this.setState({
@@ -254,6 +262,18 @@ class Tests extends Component {
     }
   }
 
+  ActiveNext_Checkbox = () =>{
+    if (choix.length >1) {
+      this.setState({
+        checked : true
+      })
+    }
+    else if (choix.length < 2) {
+      this.setState({
+        checked : false
+      })
+    }
+  }
 
 
 
@@ -297,8 +317,8 @@ class Tests extends Component {
       const results_array_flat = results_array.flat()
       //on incrémente de 1 a chaque tour pour afficher le numéro de la question
       countquestion = countquestion +1
-       console.log("le res attendu", array_expected)
-       console.log("le res envoyé -------------", results_array_flat)
+       console.log("le resultat attendu", array_expected)
+       console.log("le resultat envoyé -------------", results_array_flat)
        array_expected = array_expected.map(choice => choice.idChoice)
       // SI le nombre de réponses attendues est le même que le nombres de réponses envoyés on va vérifier le contenu
         if (array_expected.length === results_array_flat.length) {
@@ -308,7 +328,7 @@ class Tests extends Component {
               count_good_response = count_good_response +1
             }
           }
-          console.log("bonita bonito momo '''''''''", count_good_response)
+          console.log("bonita bonito momo '''''''' le nombre de bonnes réponses est : TOUDOUM'", count_good_response)
           if(count_good_response === array_expected.length) {
             return <div className="card result_card result_true">
             <h1>Question {countquestion}</h1>
@@ -460,7 +480,7 @@ class Tests extends Component {
       selection = selection.flat()
       selection = selection.flat().filter(selectchoices => selectchoices.idChoice === choices.idChoice)
       const select_choice_id = selection.map(choice => choice.idChoice)
-      console.log("!!!!!!!!!!!!!!!!!!!!!!!", select_choice_id)
+      // console.log("!!!!!!!!!!!!!!!!!!!!!!!", select_choice_id)
       // const value_select_choice = selection.map(choice => choice.value)
       // console.log("§§§§§§§§§§§§§§§§§§", value_select_choice)
       if ( select_choice_id.includes(choices.idChoice)) {
@@ -569,7 +589,6 @@ class Tests extends Component {
               {displayQuestion === nbquestion ? this.state.checked ? <div onClick={this.StockChoice} className="input_button input_button__active connect_button"> Terminer</div> : <div className="input_button input_button__inactive connect_button"> Terminer </div> : null}
 
             </div>
-            {/* <h2> {displayQuestion} / 80</h2> */}
           </div>
           <h2> {displayQuestion} / 80</h2>
           </>

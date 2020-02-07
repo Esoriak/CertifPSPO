@@ -618,7 +618,7 @@ ReloadTest = async() => {
               <span>Résultat:</span>
               <span className="score">{score}% ({this.state.right_answers}/{nbquestion})</span>
             </div>
-            <div className="input_button input_button__active start_button" type="button" onClick={this.ReloadTest}>Relancer le test</div><br/>
+            <div className="input_button input_button__active start_button reload" type="button" onClick={this.ReloadTest}>Relancer le test</div><br/>
 
             {/* //////// AFFICHAGE DES QUESTIONS POSEES LORS DU QUIZZ ///////// */}
 

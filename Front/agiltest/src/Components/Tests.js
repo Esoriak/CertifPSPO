@@ -82,10 +82,10 @@ ReloadTest = async() => {
   
 
   RandomQuestionnaire = () => {
-    // Tant que le tableau n'a pas 80 nombres uniques on lance la requête
+    // Tant que le tableau n'a pas 80 ( ou nb utilisé ) questions uniques on lance la requête
     while (questions.length < nbquestion) {
-      // On récupère un nombre aléatoire compris entre 0 et 150 ( le nombre de questions exploitables pour le moment)
-      const random = Math.floor(Math.random() * 150)
+      // On récupère un nombre aléatoire compris entre 0 et 160 ( le nombre de questions exploitables pour le moment)
+      const random = Math.floor(Math.random() * 160)
       // On copie le nombre dans le tableau des questions - on rajoute 1 au chiffre random pour éviter l'index 0
       questions.push(random + 1)
     }
@@ -191,11 +191,11 @@ ReloadTest = async() => {
         this.setState({ right_answers: this.state.right_answers + 1 })
       }
       else {
-        console.log("tu as une mauvaise réponse")
+        // console.log("tu as une mauvaise réponse")
       }
     }
     else {
-      console.log("tu n'as pas coché le nombre de réponses attendues.")
+      // console.log("tu n'as pas coché le nombre de réponses attendues.")
     }
     // on vide le tableau de choix pour la sélection de la prochaine question
     choix = []
@@ -216,7 +216,7 @@ ReloadTest = async() => {
     let select = e.target.id
     let selecttype = e.target.type
     let selectvalue = e.target.value
-    console.log("et c'est", selectvalue)
+    // console.log("et c'est", selectvalue)
     if (selecttype === 'checkbox') {
       if (choix.includes(select)) {
         let indexOfChoice = choix.indexOf(select)
@@ -226,7 +226,7 @@ ReloadTest = async() => {
       else { 
         choix.push(select)
       }
-      console.log("les choix sont :", choix)
+      // console.log("les choix sont :", choix)
       if(choix.length >= 2){
           this.ActiveNext_Checkbox()
       }
@@ -234,7 +234,7 @@ ReloadTest = async() => {
     else if (selecttype === 'radio') {
       choix = []
       choix.push(select)
-      console.log("le choix est :", choix)
+      // console.log("le choix est :", choix)
       if(choix.length ===1 ){
         this.ActiveNext_Radio()
       }
@@ -322,8 +322,8 @@ ReloadTest = async() => {
       const results_array_flat = results_array.flat()
       //on incrémente de 1 a chaque tour pour afficher le numéro de la question
       countquestion = countquestion +1
-       console.log("le resultat attendu", array_expected)
-       console.log("le resultat envoyé -------------------------", results_array_flat)
+      //  console.log("le resultat attendu", array_expected)
+      //  console.log("le resultat envoyé -------------------------", results_array_flat)
        array_expected = array_expected.map(choice => choice.idChoice)
       // SI le nombre de réponses attendues est le même que le nombres de réponses envoyés on va vérifier le contenu
         if (array_expected.length === results_array_flat.length) {
@@ -333,7 +333,7 @@ ReloadTest = async() => {
               count_good_response = count_good_response +1
             }
           }
-          console.log("bonita bonito momo '''''''' le nombre de bonnes réponses est : TOUDOUM'", count_good_response)
+          // console.log("bonita bonito momo '''''''' le nombre de bonnes réponses est : TOUDOUM'", count_good_response)
           if(count_good_response === array_expected.length) {
             return <div className="card result_card result_true">
             <h1>Question {countquestion}</h1>

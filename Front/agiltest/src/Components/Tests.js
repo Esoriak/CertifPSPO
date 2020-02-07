@@ -592,10 +592,13 @@ class Tests extends Component {
               {displayQuestion < nbquestion ? this.state.checked ? <div onClick={this.StockChoice} className="input_button input_button__active connect_button"> Suivant</div> : <div className="input_button input_button__inactive connect_button"> Suivant </div> : null}
               {displayQuestion === nbquestion ? this.state.checked ? <div onClick={this.StockChoice} className="input_button input_button__active connect_button"> Terminer</div> : <div className="input_button input_button__inactive connect_button"> Terminer </div> : null}
 
-          <h2 className="info-current-question"> {displayQuestion} / 10</h2>
+      
           </div>
+
           </div>
+          
         )}
+        <h2 className="info-current-question"> {displayQuestion} / 10</h2>
           </>
           }
 

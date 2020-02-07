@@ -601,7 +601,7 @@ ReloadTest = async() => {
 
       
           </div>
-          <h2 className="info-current-question"> {displayQuestion} / 10</h2>
+          <h2 className="info-current-question"> {displayQuestion} / {nbquestion}</h2>
           </div>
           
         )}

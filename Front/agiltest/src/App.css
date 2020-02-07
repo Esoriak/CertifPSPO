@@ -510,6 +510,9 @@ input[type=radio]:disabled ~ .answer_label{
     box-shadow: none;
     opacity: 1;
 }
+.result_false .answer_list .correct_answer [type="checkbox"]:checked + label::after {
+    background:#20ACAD;
+}
 .solution_list [type="checkbox"]:disabled:checked + label::after {
     background:#999;
     opacity: 1;

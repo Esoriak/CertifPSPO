@@ -488,7 +488,7 @@ class Tests extends Component {
       // const value_select_choice = selection.map(choice => choice.value)
       // console.log("§§§§§§§§§§§§§§§§§§", value_select_choice)
       if ( select_choice_id.includes(choices.idChoice)) {
-        return <li className="answer answer_checkbox correct_answer" key={choices.idChoice}>
+        return <li className="answer answer_checkbox" key={choices.idChoice}>
         <input type="checkbox" className="input input_checkbox" id={choices.idChoice} value={choices.value} name={questions.idQuestions} disabled={true} checked readOnly/>
         <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
       </li >

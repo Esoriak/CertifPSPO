@@ -76,9 +76,10 @@ class Tests extends Component {
 
   /////////////// CREATION D'UN QUESTIONNAIRE UNIQUE , RANDOM, SANS DOUBLONS, STOCKER EN STATE //////////////////////////
 
-
+ReloadTest = async() => {
+  window.location.reload(false);
+}
   
-
 
   RandomQuestionnaire = () => {
     // Tant que le tableau n'a pas 80 nombres uniques on lance la requête
@@ -157,7 +158,7 @@ class Tests extends Component {
 
 
   StockChoice = () => {
-    const leschoix = []
+    let leschoix = []
     let reponsesattendues = 0
     let bonnesreponses = []
     let Allanswers = []
@@ -617,14 +618,13 @@ class Tests extends Component {
               <span>Résultat:</span>
               <span className="score">{score}% ({this.state.right_answers}/{nbquestion})</span>
             </div>
-
+            <div className="input_button input_button__active start_button" type="button" onClick={this.ReloadTest}>Relancer le test</div><br/>
 
             {/* //////// AFFICHAGE DES QUESTIONS POSEES LORS DU QUIZZ ///////// */}
 
 
             {questionnaire.map(obj =>
               this.ShowResultFinal(obj))}
-
           </div>
           }
       </>

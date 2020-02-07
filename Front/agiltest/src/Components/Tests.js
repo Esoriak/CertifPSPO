@@ -600,11 +600,10 @@ class Tests extends Component {
 
       
           </div>
-
+          <h2 className="info-current-question"> {displayQuestion} / 10</h2>
           </div>
           
         )}
-        <h2 className="info-current-question"> {displayQuestion} / 10</h2>
           </>
           }
 

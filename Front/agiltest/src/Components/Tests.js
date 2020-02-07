@@ -8,7 +8,7 @@ let questions = []
 let choix = []
 let score = 0
 let choixselection = []
-const nbquestion = 5
+const nbquestion = 10
 const nbminichoix = 1
 let countquestion = 0
 
@@ -17,7 +17,7 @@ class Tests extends Component {
   state = {
     welcome: true,
     tests: [],
-    pointQuestions: 2000,
+    pointQuestions: 1000,
     questions: [],
     checked: false,
     choices: [],
@@ -592,7 +592,7 @@ class Tests extends Component {
               {displayQuestion < nbquestion ? this.state.checked ? <div onClick={this.StockChoice} className="input_button input_button__active connect_button"> Suivant</div> : <div className="input_button input_button__inactive connect_button"> Suivant </div> : null}
               {displayQuestion === nbquestion ? this.state.checked ? <div onClick={this.StockChoice} className="input_button input_button__active connect_button"> Terminer</div> : <div className="input_button input_button__inactive connect_button"> Terminer </div> : null}
 
-          <h2 className="info-current-question"> {displayQuestion} / 80</h2>
+          <h2 className="info-current-question"> {displayQuestion} / 10</h2>
           </div>
           </div>
         )}

@@ -8,7 +8,7 @@ let questions = []
 let choix = []
 let score = 0
 let choixselection = []
-const nbquestion = 10
+const nbquestion = 20
 const nbminichoix = 1
 let countquestion = 0
 
@@ -17,7 +17,7 @@ class Tests extends Component {
   state = {
     welcome: true,
     tests: [],
-    pointQuestions: 1000,
+    pointQuestions: 500,
     questions: [],
     checked: false,
     choices: [],
@@ -333,7 +333,7 @@ ReloadTest = async() => {
               count_good_response = count_good_response +1
             }
           }
-          // console.log("bonita bonito momo '''''''' le nombre de bonnes réponses est : TOUDOUM'", count_good_response)
+          // console.log("bonita bonitgito momo '''''''' le nombre de bonnes réponses est : TOUDOUM'", count_good_response)
           if(count_good_response === array_expected.length) {
             return <div className="card result_card result_true">
             <h1>Question {countquestion}</h1>

@@ -92,6 +92,7 @@ table {
     position: relative;
     top: 0;
     left: 0;
+    flex-direction: column;
 }
 
 
@@ -195,6 +196,7 @@ input{
 }
 
 .info-current-question{
+    margin-top: 20px;
     color: white;
     display: flex;
     justify-content: center;

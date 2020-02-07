@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 
+import '../App.css'
 
-const Questionnaire = []
+let Questionnaire = []
 let questions = []
 let choix = []
 let score = 0
@@ -18,6 +19,7 @@ class Tests extends Component {
     tests: [],
     pointQuestions: 2000,
     questions: [],
+    checked: false,
     choices: [],
     right_answers: 0,
     questionnaire: [],
@@ -74,6 +76,8 @@ class Tests extends Component {
 
   /////////////// CREATION D'UN QUESTIONNAIRE UNIQUE , RANDOM, SANS DOUBLONS, STOCKER EN STATE //////////////////////////
 
+
+  
 
 
   RandomQuestionnaire = () => {
@@ -318,7 +322,7 @@ class Tests extends Component {
       //on incrémente de 1 a chaque tour pour afficher le numéro de la question
       countquestion = countquestion +1
        console.log("le resultat attendu", array_expected)
-       console.log("le resultat envoyé -------------", results_array_flat)
+       console.log("le resultat envoyé -------------------------", results_array_flat)
        array_expected = array_expected.map(choice => choice.idChoice)
       // SI le nombre de réponses attendues est le même que le nombres de réponses envoyés on va vérifier le contenu
         if (array_expected.length === results_array_flat.length) {
@@ -544,11 +548,12 @@ class Tests extends Component {
 
         {ready &&
         <>
+        {ready && questionnaire.slice(previousQuestion, displayQuestion).map((obj, index) =>
           <div className="main_container questions_container" key="container">
             <div className="card question_card question_current">
               <h1>Question {displayQuestion}</h1>
               
-              {ready && questionnaire.slice(previousQuestion, displayQuestion).map((obj, index) =>
+  
 
                 <div key={index}>
                   <p className="question"> {obj[0].Question} </p>
@@ -581,16 +586,16 @@ class Tests extends Component {
                     }
                   </div>
                  </div>
-                )
-                }
+                
                 
 
               {displayQuestion < nbquestion ? this.state.checked ? <div onClick={this.StockChoice} className="input_button input_button__active connect_button"> Suivant</div> : <div className="input_button input_button__inactive connect_button"> Suivant </div> : null}
               {displayQuestion === nbquestion ? this.state.checked ? <div onClick={this.StockChoice} className="input_button input_button__active connect_button"> Terminer</div> : <div className="input_button input_button__inactive connect_button"> Terminer </div> : null}
 
-            </div>
+          <h2 className="info-current-question"> {displayQuestion} / 80</h2>
           </div>
-          <h2> {displayQuestion} / 80</h2>
+          </div>
+        )}
           </>
           }
 
@@ -611,7 +616,6 @@ class Tests extends Component {
 
             {questionnaire.map(obj =>
               this.ShowResultFinal(obj))}
-
 
           </div>
           }

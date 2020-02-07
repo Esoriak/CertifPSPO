@@ -12,16 +12,16 @@ import {NavLink} from "react-router-dom"
 
  emailCheck = (val) => {
    const mail =val.target.value
-   console.log("email", val.target.value)
+  //  console.log("email", val.target.value)
   
    // EMAIL EXTENSION CHECKER
    if(mail.indexOf("@ccomptes.fr") >=4){
-     console.log("ok")
+    //  console.log("ok")
      this.setState({
        validation : true
      })
      const connect = document.getElementsByClassName('connect_button')
-     console.log("ya quoi", connect)
+    //  console.log("ya quoi", connect)
    }
    else {
      this.setState({
@@ -70,7 +70,7 @@ import {NavLink} from "react-router-dom"
                     <input type="email" className="input_email" placeholder="mail@mail.com" onChange={this.emailCheck} />
                 </div>
                 
-               {this.state.validation ? <NavLink to="/test"><div className="input_button connect_button input_button__active" >Accéder à la plateforme</div></NavLink> : <div className="input_button input_button__inactive connect_button">Accéder à la plateforme</div> } 
+               {this.state.validation ? <NavLink to="/test" className="link"><div className="input_button connect_button input_button__active" >Accéder à la plateforme</div></NavLink> : <div className="input_button input_button__inactive connect_button">Accéder à la plateforme</div> } 
             </div>
             </div>
         

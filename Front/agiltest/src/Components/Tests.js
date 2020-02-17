@@ -555,7 +555,7 @@ ReloadTest = async() => {
 
                         obj[1].map(choices =>
                           <ul className="answer_list">
-                            <li className="answer answer_checkbox" key={obj[1].idChoice} >
+                            <li className="answer answer_checkbox" key={choices.idChoice} >
                               <input type="checkbox" className="input input_checkbox" id={choices.idChoice} value={choices.answer} name={obj[0].idQuestions} onChange={this.handleCheck} />
                               <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
                             </li >

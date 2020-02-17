@@ -105,5 +105,23 @@
   "Firstname": "Jolan" ,
   "Lastname" : "Boungat" ,
   "mail" : "jolan@monsieurguiz.fr" 
+},
+{
+  "id":17 ,
+  "Firstname": "Kelly" ,
+  "Lastname" : "La" ,
+  "mail" : "kelly@monsieurguiz.fr" 
+},
+{
+  "id":18 ,
+  "Firstname": "Marie-Sophie" ,
+  "Lastname" : "Avenet" ,
+  "mail" : "marie-sophie@monsieurguiz.fr" 
+},
+{
+  "id":19 ,
+  "Firstname": "Raphaelle" ,
+  "Lastname" : "Vinouze" ,
+  "mail" : "raphaelle@monsieurguiz.fr" 
 }
 ]

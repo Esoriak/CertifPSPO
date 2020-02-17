@@ -164,6 +164,11 @@ input{
     opacity: 1
 }
 
+.access_denied_message {
+    font-size: 0.9em;
+    color: #AD2020;
+    margin-bottom: 15px;
+}
 .card {
     position: relative;
 	display: flex;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {NavLink} from "react-router-dom"
+import { Redirect } from 'react-router';
 
 import ListCandidats from "./Candidats.json"
 
@@ -7,7 +7,8 @@ import ListCandidats from "./Candidats.json"
  class Login extends Component {
   state ={
     home: true,
-    validation : false,
+    redirection: false,
+    accessdenied : false,
   }
 
 // //******* CONNECTION *********//
@@ -23,8 +24,13 @@ import ListCandidats from "./Candidats.json"
       if ( mail === ListCandidats[i].mail){
         // Si le mail entré est présent dans la base de candidats connus alors on valide l'accès à la plateforme
           this.setState({
-            validation: true
+            redirection: true, accessdenied: false,
           })
+      }
+      else if ( mail !== ListCandidats[i].mail) {
+        this.setState({
+          accessdenied : true
+        })
       }
     }
 }
@@ -34,22 +40,22 @@ import ListCandidats from "./Candidats.json"
     return (
       <div>
 
-{this.state.home ? 
+{this.state.home &&
                 <div className="main_container">
                 <div className="card welcome_card">
                 <h1>Bienvenue sur notre plateforme d’entrainement à la certification PSPO !</h1>
                 <p>Veuillez entrer <b>votre adresse email</b> pour pouvoir accéder à notre questionnaire qui permettra de tester les connaissances requises afin d’obtenir la certification PSPO.</p>
+                {this.state.accessdenied && <small className="access_denied_message">Aucun compte ne correspond à cette adresse email.</small> }
                 <div className="login-email">
                     <input type="email" className="input_email" placeholder="mail@mail.com"/>
-                    <button type="button" onClick={this.emailCheck}>Valider</button>
                 </div>
                 
-               {this.state.validation ? <NavLink to="/test" className="link"><div className="input_button connect_button input_button__active" >Accéder à la plateforme</div></NavLink> : <div className="input_button input_button__inactive connect_button">Accéder à la plateforme</div> } 
+              <div className="input_button connect_button input_button__active" onClick={this.emailCheck}>Accéder à la plateforme</div>
             </div>
             </div>
-        
-      :
-      null }      
+        }  
+
+      {this.state.redirection && <Redirect to="/test" /> }    
         </div>
     )
   }

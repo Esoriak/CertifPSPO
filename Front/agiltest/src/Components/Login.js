@@ -38,7 +38,7 @@ import ListCandidats from "./Candidats.json"
                 <div className="main_container">
                 <div className="card welcome_card">
                 <h1>Bienvenue sur notre plateforme d’entrainement à la certification PSPO !</h1>
-                <p>Veuillez entrer <b>votre adresse email</b> pour pouvoir accéder à notre questionnaire qui permettra de tester les connaissances requises afin d’obtenir la certificaiton PSPO.</p>
+                <p>Veuillez entrer <b>votre adresse email</b> pour pouvoir accéder à notre questionnaire qui permettra de tester les connaissances requises afin d’obtenir la certification PSPO.</p>
                 <div className="login-email">
                     <input type="email" className="input_email" placeholder="mail@mail.com"/>
                     <button type="button" onClick={this.emailCheck}>Valider</button>

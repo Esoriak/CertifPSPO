@@ -190,12 +190,6 @@ ReloadTest = async() => {
         score = score + this.state.pointQuestions
         this.setState({ right_answers: this.state.right_answers + 1 })
       }
-      else {
-        // console.log("tu as une mauvaise réponse")
-      }
-    }
-    else {
-      // console.log("tu n'as pas coché le nombre de réponses attendues.")
     }
     // on vide le tableau de choix pour la sélection de la prochaine question
     choix = []
@@ -215,8 +209,6 @@ ReloadTest = async() => {
   handleCheck = (e) => {
     let select = e.target.id
     let selecttype = e.target.type
-    let selectvalue = e.target.value
-    // console.log("et c'est", selectvalue)
     if (selecttype === 'checkbox') {
       if (choix.includes(select)) {
         let indexOfChoice = choix.indexOf(select)
@@ -226,7 +218,6 @@ ReloadTest = async() => {
       else { 
         choix.push(select)
       }
-      // console.log("les choix sont :", choix)
       if(choix.length >= 2){
           this.ActiveNext_Checkbox()
       }
@@ -234,7 +225,6 @@ ReloadTest = async() => {
     else if (selecttype === 'radio') {
       choix = []
       choix.push(select)
-      // console.log("le choix est :", choix)
       if(choix.length ===1 ){
         this.ActiveNext_Radio()
       }
@@ -246,7 +236,6 @@ ReloadTest = async() => {
   FinishTest = () => {
     this.setState({ finish: true, ready: false })
     score = score / 100
-    // console.log("les choix pour l'affichage final", choixselection)
   }
 
   //////////////////////// VERIFICATION POUR QUE LE CANDIDAT CHOISISSE UNE REPONSE POUR PASSER A LA QUESTION SUIVANTE //////////////////////////
@@ -322,8 +311,6 @@ ReloadTest = async() => {
       const results_array_flat = results_array.flat()
       //on incrémente de 1 a chaque tour pour afficher le numéro de la question
       countquestion = countquestion +1
-      //  console.log("le resultat attendu", array_expected)
-      //  console.log("le resultat envoyé -------------------------", results_array_flat)
        array_expected = array_expected.map(choice => choice.idChoice)
       // SI le nombre de réponses attendues est le même que le nombres de réponses envoyés on va vérifier le contenu
         if (array_expected.length === results_array_flat.length) {
@@ -333,7 +320,6 @@ ReloadTest = async() => {
               count_good_response = count_good_response +1
             }
           }
-          // console.log("bonita bonitgito momo '''''''' le nombre de bonnes réponses est : TOUDOUM'", count_good_response)
           if(count_good_response === array_expected.length) {
             return <div className="card result_card result_true">
             <h1>Question {countquestion}</h1>
@@ -407,8 +393,6 @@ ReloadTest = async() => {
       const res_expected = obj[1].filter(choices => choices.value == 1)
       const res_send = choixselection.filter(choices => choices.idQuestions == obj[0].idQuestions)
       countquestion = countquestion +1
-      // console.log("le res attendu", res_expected)
-      // console.log("le res envoyé", res_send)
       if(res_expected[0].idChoice === res_send[0].idChoice){
               return <div className="card result_card result_true" key={obj[0].idQuestions}>
         <h1>Question {countquestion}</h1>
@@ -485,7 +469,6 @@ ReloadTest = async() => {
       selection = selection.flat()
       selection = selection.flat().filter(selectchoices => selectchoices.idChoice === choices.idChoice)
       const select_choice_id = selection.map(choice => choice.idChoice)
-      // console.log("!!!!!!!!!!!!!!!!!!!!!!!", select_choice_id)
       if ( select_choice_id.includes(choices.idChoice)) {
         if ( choices.value !== 1) {
           return <li className="answer answer_checkbox" key={choices.idChoice}>
@@ -573,7 +556,7 @@ ReloadTest = async() => {
                         obj[1].map(choices =>
                           <ul className="answer_list">
                             <li className="answer answer_checkbox" key={obj[1].idChoice} >
-                              <input type="checkbox" className="input input_checkbox" id={choices.idChoice} value={choices.value} name={obj[0].idQuestions} onChange={this.handleCheck} />
+                              <input type="checkbox" className="input input_checkbox" id={choices.idChoice} value={choices.answer} name={obj[0].idQuestions} onChange={this.handleCheck} />
                               <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
                             </li >
                           </ul>
@@ -585,7 +568,7 @@ ReloadTest = async() => {
                         obj[1].map(choices =>
                           <ul className="answer_list">
                             <li className="answer answer_radio" key={obj[1].idChoice} >
-                              <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.value} name={obj[0].idQuestions} onChange={this.handleCheck} />
+                              <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.answer} name={obj[0].idQuestions} onChange={this.handleCheck} />
                               <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
                               <div className="radio_check"></div>
                             </li >

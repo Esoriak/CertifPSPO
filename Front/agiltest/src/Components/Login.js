@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router';
-
+import { Redirect } from 'react-router'
 import ListCandidats from "./Candidats.json"
 
 
@@ -26,6 +25,7 @@ import ListCandidats from "./Candidats.json"
           this.setState({
             redirection: true, accessdenied: false,
           })
+          localStorage.setItem("mail",mail)
       }
       else if ( mail !== ListCandidats[i].mail) {
         this.setState({
@@ -33,8 +33,8 @@ import ListCandidats from "./Candidats.json"
         })
       }
     }
-}
 
+  }
 
   render() {
     return (

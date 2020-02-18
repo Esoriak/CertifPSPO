@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router'
 import axios from 'axios'
 
 import '../App.css'
@@ -11,6 +12,7 @@ let choixselection = []
 const nbquestion = 20
 const nbminichoix = 1
 let countquestion = 0
+
 
 
 class Tests extends Component {
@@ -31,7 +33,7 @@ class Tests extends Component {
     score: [],
   }
 
-
+  
   /////////////////////////// RECUPERATION DES INFORMATIONS DE LA DATABASE ///////////////////////////////////////
 
 
@@ -512,7 +514,7 @@ ReloadTest = async() => {
       displayQuestion,
       multiple_answer,
       finish,
-      welcome
+      welcome,
 
     } = this.state
 

@@ -39,7 +39,7 @@ class Tests extends Component {
       PathApi = process.env.REACT_APP_PATH_API_PROD + '/quizz/tests'
     }
     const tests = await axios.get(PathApi)
-    console.log('voilà les tests', tests.data)
+    // console.log('voilà les tests', tests.data)
     this.setState({
       tests: tests.data,
       //  pointQuestions: tests.data[5].PointsQuestion
@@ -52,7 +52,7 @@ class Tests extends Component {
       PathApi = process.env.REACT_APP_PATH_API_PROD + '/quizzquestions/questions'
     }
     const questions = await axios.get(PathApi)
-    console.log('ici les questions', questions.data)
+    // console.log('ici les questions', questions.data)
     this.setState({
       questions: questions.data
     })
@@ -64,7 +64,7 @@ class Tests extends Component {
       PathApi = process.env.REACT_APP_PATH_API_PROD + '/quizzchoices/choices'
     }
     const choices = await axios.get(PathApi)
-    console.log('là les choix', choices.data)
+    // console.log('là les choix', choices.data)
     this.setState({
       choices: choices.data
     })
@@ -163,7 +163,7 @@ class Tests extends Component {
     // On filtre dans la liste des choix ceux qui ont été séléctionnés pour stocker l'objet entier
     for (let i = 0; i < choix.length; i++) {
       leschoix.push(this.state.choices.filter(choices => choices.idChoice == choix[i]))
-      console.log("totoro", leschoix)
+      // console.log("totoro", leschoix)
       // on récupère l'id de la question associé au choix fait - le premier suffit -
       let idquest = leschoix[0][0].idQuestions
       // on récupère tous les choix associés à la question posée
@@ -187,11 +187,11 @@ class Tests extends Component {
         this.setState({ right_answers: this.state.right_answers + 1 })
       }
       else {
-        console.log("tu as une mauvaise réponse")
+        // console.log("tu as une mauvaise réponse")
       }
     }
     else {
-      console.log("tu n'as pas coché le nombre de réponses attendues.")
+      // console.log("tu n'as pas coché le nombre de réponses attendues.")
     }
     // on vide le tableau de choix pour la sélection de la prochaine question
     choix = []
@@ -212,19 +212,19 @@ class Tests extends Component {
     let select = e.target.id
     let selecttype = e.target.type
     let selectvalue = e.target.value
-    console.log("et c'est", selectvalue)
+    // console.log("et c'est", selectvalue)
     if (selecttype === 'checkbox') {
       if (choix.includes(select)) {
         let indexOfChoice = choix.indexOf(select)
         choix.splice(indexOfChoice, 1)
       }
       else { choix.push(select) }
-      console.log("les choix sont :", choix)
+      // console.log("les choix sont :", choix)
     }
     else if (selecttype === 'radio') {
       choix = []
       choix.push(select)
-      console.log("le choix est :", choix)
+      // console.log("le choix est :", choix)
     }
     this.ActiveNext()
   }
@@ -233,7 +233,7 @@ class Tests extends Component {
   FinishTest = () => {
     this.setState({ finish: true, ready: false })
     score = score / 100
-    console.log("les choix pour l'affichage final", choixselection)
+    // console.log("les choix pour l'affichage final", choixselection)
   }
 
   //////////////////////// VERIFICATION POUR QUE LE CANDIDAT CHOISISSE UNE REPONSE POUR PASSER A LA QUESTION SUIVANTE //////////////////////////
@@ -282,8 +282,8 @@ class Tests extends Component {
       const results_array = array_send.flat().filter(choices => choices[0].idQuestions === obj[0].idQuestions)
       const results_array_flat = results_array.flat()
       countquestion = countquestion +1
-       console.log("le res attendu", array_expected)
-       console.log("le res envoyé -------------", results_array_flat)
+      //  console.log("le res attendu", array_expected)
+      //  console.log("le res envoyé -------------", results_array_flat)
        for (let i=0; i < array_expected.length; i ++) {
          const array_choices = array_expected.map(choices => choices.idChoice)
          // On vérifie que le candidat a choisi le bon nombres de résultats, s'il est strictement égal on passe a la vérification suivante; sinon, on affiche la carte result_false
@@ -421,9 +421,9 @@ this.DisplayResultChoices(choices, obj[0])
       selection = selection.flat()
       selection = selection.flat().filter(selectchoices => selectchoices.idChoice === choices.idChoice)
       const select_choice_id = selection.map(choice => choice.idChoice)
-      console.log("!!!!!!!!!!!!!!!!!!!!!!!", select_choice_id)
+      // console.log("!!!!!!!!!!!!!!!!!!!!!!!", select_choice_id)
       const value_select_choice = selection.map(choice => choice.value)
-      console.log("§§§§§§§§§§§§§§§§§§", value_select_choice)
+      // console.log("§§§§§§§§§§§§§§§§§§", value_select_choice)
       if ( selection.value === 1) {
         return <li className="answer answer_checkbox " key={choices.idChoice}>
         <input type="checkbox" className="input input_checkbox" id={choices.idChoice} value={choices.value} name={questions.idQuestions} disabled={true} checked={true} readOnly/>
@@ -654,6 +654,91 @@ export default Tests
 //           :
 //           null}
 //       </div>
+//     )
+//   }
+// }
+
+// export default Login
+
+
+
+
+
+
+// import React, { Component } from 'react'
+// import { Redirect } from 'react-router'
+// import ListCandidats from "./Candidats.json"
+
+
+//  class Login extends Component {
+//   state ={
+//     home: true,
+//     redirection: false,
+//     accessdenied : false,
+//   }
+
+// // //******* CONNECTION *********//
+
+//  emailCheck = () => {
+//    // On récupère la donnée fournie par l'utilisateur
+//    const inputvalue = document.getElementsByClassName('input_email')
+//    const mail = inputvalue[0].value
+//   //  console.log("email", mail)
+  
+//    // EMAIL CHECKER
+//     for ( let i=0; i< ListCandidats.length ; i++) {
+//       if ( mail === ListCandidats[i].mail){
+//         // Si le mail entré est présent dans la base de candidats connus alors on valide l'accès à la plateforme
+//           this.setState({
+//             redirection: true, accessdenied: false,
+//           })
+//           localStorage.setItem("mail",mail)
+//       }
+//       else if ( mail !== ListCandidats[i].mail) {
+//         this.setState({
+//           accessdenied : true
+//         })
+//       }
+//     }
+
+//   }
+
+   
+//   CheckAccess = () => {
+//     const email_check = localStorage.getItem('mail')
+//     if (typeof email_check === 'undefined') {
+//       this.setState({
+//         accessdenied : true
+//       })
+//     }
+//     else {
+//       this.setState({
+//         accessdenied : false
+//       })
+//     }
+//   }
+
+//   render() {
+//     return (
+//       <div>
+
+// {this.state.home &&
+//                 <div className="main_container">
+//                 <div className="card welcome_card">
+//                 <h1>Bienvenue sur notre plateforme d’entrainement à la certification PSPO !</h1>
+//                 <p>Veuillez entrer <b>votre adresse email</b> pour pouvoir accéder à notre questionnaire qui permettra de tester les connaissances requises afin d’obtenir la certification PSPO.</p>
+//                 {this.state.accessdenied && <small className="access_denied_message">Aucun compte ne correspond à cette adresse email.</small> }
+//                 <div className="login-email">
+//                     <input type="email" className="input_email" placeholder="mail@mail.com"/>
+//                 </div>
+                
+//               <div className="input_button connect_button input_button__active" onClick={this.emailCheck}>Accéder à la plateforme</div>
+//             </div>
+//             </div>
+//         }  
+
+//       {this.state.redirection && <Redirect to="/test" /> }    
+//         </div>
 //     )
 //   }
 // }

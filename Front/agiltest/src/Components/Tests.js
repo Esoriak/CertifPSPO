@@ -8,7 +8,8 @@ let questions = []
 let choix = []
 let score = 0
 let choixselection = []
-const nbquestion = 20
+let nbquestion = 20
+let PointsQuestion = 500
 const nbminichoix = 1
 let countquestion = 0
 
@@ -18,7 +19,7 @@ class Tests extends Component {
   state = {
     welcome: true,
     tests: [],
-    pointQuestions: 500,
+    pointQuestions: PointsQuestion,
     questions: [],
     checked: false,
     choices: [],
@@ -42,10 +43,8 @@ class Tests extends Component {
       PathApi = process.env.REACT_APP_PATH_API_PROD + '/quizz/tests'
     }
     const tests = await axios.get(PathApi)
-    // console.log('voilà les tests', tests.data)
     this.setState({
       tests: tests.data,
-      //  pointQuestions: tests.data[5].PointsQuestion
     })
   }
 
@@ -55,7 +54,6 @@ class Tests extends Component {
       PathApi = process.env.REACT_APP_PATH_API_PROD + '/quizzquestions/questions'
     }
     const questions = await axios.get(PathApi)
-    // console.log('ici les questions', questions.data)
     this.setState({
       questions: questions.data
     })
@@ -67,13 +65,39 @@ class Tests extends Component {
       PathApi = process.env.REACT_APP_PATH_API_PROD + '/quizzchoices/choices'
     }
     const choices = await axios.get(PathApi)
-    // console.log('là les choix', choices.data)
     this.setState({
       choices: choices.data
     })
   }
 
+  /////////////// MODIFICATION DES VARIABLES AU CHOIX DU QUIZZ //////////////////////////
 
+ UpdateLengthQuizz20 = () => {
+  const newNbQuestion = 20
+  nbquestion = newNbQuestion
+  PointsQuestion = 500
+  this.setState({
+    pointQuestions : PointsQuestion
+  })
+ }
+
+ UpdateLengthQuizz40 = () => {
+  const newNbQuestion = 40
+  nbquestion = newNbQuestion
+  PointsQuestion = 250
+  this.setState({
+    pointQuestions : PointsQuestion
+  })
+ }
+
+ UpdateLengthQuizz80 = () => {
+  const newNbQuestion = 80
+  nbquestion = newNbQuestion
+  PointsQuestion = 125
+  this.setState({
+    pointQuestions : PointsQuestion
+  })
+ }
 
   /////////////// CREATION D'UN QUESTIONNAIRE UNIQUE , RANDOM, SANS DOUBLONS, STOCKER EN STATE //////////////////////////
 
@@ -443,7 +467,6 @@ ReloadTest = async() => {
 
 
 
-
   DisplayResultChoices = (choices, questions) => {
     if(questions.Multiple === 0) {
        let selection = choixselection.map(choices => choices.idChoice)
@@ -495,9 +518,6 @@ ReloadTest = async() => {
    
   }
 
-
-
-
   componentDidMount = () => {
     this.GetDataTests()
     this.GetDataQuestions()
@@ -525,12 +545,12 @@ ReloadTest = async() => {
               <h1>Vous êtes connecté !</h1>
               <p>Vous pouvez dès maintenant accéder à notre test d'entrainement à la certification PSPO</p>
 
-              {/* <div className="quizz_choices">
+              <div className="quizz_choices">
            <p>Sélectionnez la durée du test :</p>
-           <div className="quizz_choice quiz_short" id="quizz_choice_20" onClick="chooseQuizz(20)" >15 min <br/><span className="minor_txt">(20 Questions)</span></div>
-           <div className="quizz_choice quiz_medium" id="quizz_choice_40" onClick="chooseQuizz(40)" >30 min <br/><span className="minor_txt">(40 Questions)</span></div>
-           <div className="quizz_choice quizlong"  id="quizz_choice_80" onClick="chooseQuizz(80)" >60 min <br/><span className="minor_txt">(80 Questions)</span></div>
-       </div> */}
+           <div className="quizz_choice quiz_short" id="quizz_choice_20" onClick={this.UpdateLengthQuizz20} >15 min <br/><span className="minor_txt">(20 Questions)</span></div>
+           <div className="quizz_choice quiz_medium" id="quizz_choice_40" onClick={this.UpdateLengthQuizz40} >30 min <br/><span className="minor_txt">(40 Questions)</span></div>
+           <div className="quizz_choice quizlong" id="quizz_choice_80" onClick={this.UpdateLengthQuizz80} >60 min <br/><span className="minor_txt">(80 Questions)</span></div>
+       </div>
 
               <div className="input_button input_button__active start_button" type="button" onClick={this.RandomQuestionnaire}>Commencer le test</div>
             </div>
@@ -581,7 +601,7 @@ ReloadTest = async() => {
                 
 
               {displayQuestion < nbquestion ? this.state.checked ? <div onClick={this.StockChoice} className="input_button input_button__active connect_button"> Suivant</div> : <div className="input_button input_button__inactive connect_button"> Suivant </div> : null}
-              {displayQuestion === nbquestion ? this.state.checked ? <div onClick={this.StockChoice} className="input_button input_button__active connect_button"> Terminer</div> : <div className="input_button input_button__inactive connect_button"> Terminer </div> : null}
+              {displayQuestion == nbquestion ? this.state.checked ? <div onClick={this.StockChoice} className="input_button input_button__active connect_button"> Terminer</div> : <div className="input_button input_button__inactive connect_button"> Terminer </div> : null}
 
       
           </div>

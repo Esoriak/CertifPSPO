@@ -31,9 +31,23 @@ class Tests extends Component {
     previousQuestion: 0,
     multiple_answer: false,
     score: [],
+    log : false,
   }
 
-  
+  //////////////////////// VERIFICATION DU LOG ////////////////////////////////////////////////////////////
+
+  VerifiedLog =() => {
+    const logvalue = localStorage.getItem('mail')
+    if (logvalue === null) {
+      return
+    }
+    else if (logvalue !== null) {
+      this.setState({
+        log : true
+      })
+    }
+  }
+
   /////////////////////////// RECUPERATION DES INFORMATIONS DE LA DATABASE ///////////////////////////////////////
 
 
@@ -79,6 +93,9 @@ class Tests extends Component {
   this.setState({
     pointQuestions : PointsQuestion
   })
+  const button_type_test = document.getElementById("quizz_choice_20")
+  button_type_test.classList.toggle('quizz_active')
+  // button_type_test.classList.add("quizz_active")
  }
 
  UpdateLengthQuizz40 = () => {
@@ -88,6 +105,8 @@ class Tests extends Component {
   this.setState({
     pointQuestions : PointsQuestion
   })
+  const button_type_test = document.getElementById("quizz_choice_40")
+  button_type_test.classList.toggle('quizz_active')
  }
 
  UpdateLengthQuizz80 = () => {
@@ -97,12 +116,14 @@ class Tests extends Component {
   this.setState({
     pointQuestions : PointsQuestion
   })
+  const button_type_test = document.getElementById("quizz_choice_80")
+  button_type_test.classList.toggle('quizz_active')
  }
 
   /////////////// CREATION D'UN QUESTIONNAIRE UNIQUE , RANDOM, SANS DOUBLONS, STOCKER EN STATE //////////////////////////
 
 ReloadTest = async() => {
-  window.location.reload(false);
+  window.location.reload();
 }
   
 
@@ -322,8 +343,6 @@ ReloadTest = async() => {
 
 
 
-
-
   ShowResultFinal = (obj) => {
     /////// Si la question est à choix multiple :
     if (obj[0].Multiple === 1) {
@@ -487,7 +506,6 @@ ReloadTest = async() => {
       }
     }
 
-
     else if (questions.Multiple === 1) {
       let selection = choixselection.filter(choices => choices.length > 1)
       selection = selection.flat()
@@ -522,6 +540,7 @@ ReloadTest = async() => {
     this.GetDataTests()
     this.GetDataQuestions()
     this.GetDataChoices()
+    this.VerifiedLog()
 
   }
   render() {
@@ -534,11 +553,14 @@ ReloadTest = async() => {
       multiple_answer,
       finish,
       welcome,
+      log,
 
     } = this.state
 
     return (
       <>
+      {log &&
+      <div>
         {welcome &&
           <div className="main_container">
             <div className="card start_card">
@@ -547,9 +569,9 @@ ReloadTest = async() => {
 
               <div className="quizz_choices">
            <p>Sélectionnez la durée du test :</p>
-           <div className="quizz_choice quiz_short" id="quizz_choice_20" onClick={this.UpdateLengthQuizz20} >15 min <br/><span className="minor_txt">(20 Questions)</span></div>
-           <div className="quizz_choice quiz_medium" id="quizz_choice_40" onClick={this.UpdateLengthQuizz40} >30 min <br/><span className="minor_txt">(40 Questions)</span></div>
-           <div className="quizz_choice quizlong" id="quizz_choice_80" onClick={this.UpdateLengthQuizz80} >60 min <br/><span className="minor_txt">(80 Questions)</span></div>
+           <div className="quizz_choice" id="quizz_choice_20" onClick={this.UpdateLengthQuizz20} >15 min <br/><span className="minor_txt">(20 Questions)</span></div>
+           <div className="quizz_choice" id="quizz_choice_40" onClick={this.UpdateLengthQuizz40} >30 min <br/><span className="minor_txt">(40 Questions)</span></div>
+           <div className="quizz_choice" id="quizz_choice_80" onClick={this.UpdateLengthQuizz80} >60 min <br/><span className="minor_txt">(80 Questions)</span></div>
        </div>
 
               <div className="input_button input_button__active start_button" type="button" onClick={this.RandomQuestionnaire}>Commencer le test</div>
@@ -557,14 +579,12 @@ ReloadTest = async() => {
           </div>
         }
 
-        {ready &&
         <>
         {ready && questionnaire.slice(previousQuestion, displayQuestion).map((obj, index) =>
           <div className="main_container questions_container" key="container">
             <div className="card question_card question_current">
               <h1>Question {displayQuestion}</h1>
               
-  
 
                 <div key={index}>
                   <p className="question"> {obj[0].Question} </p>
@@ -610,8 +630,6 @@ ReloadTest = async() => {
           
         )}
           </>
-          }
-
 
         {/* ////////// LE TEST EST FINI ON PROPOSE L'AFFICHAGE DU SCORE / NB DE BONNES REPONSES ET LES REPONSES ATTENDUES DU QUIZZ ///// */}
 
@@ -631,6 +649,8 @@ ReloadTest = async() => {
               this.ShowResultFinal(obj))}
           </div>
           }
+          </div>
+      }
       </>
     )
   }

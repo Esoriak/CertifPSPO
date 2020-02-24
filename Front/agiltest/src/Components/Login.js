@@ -26,6 +26,7 @@ import ListCandidats from "./Candidats.json"
             redirection: true, accessdenied: false,
           })
           localStorage.setItem("mail",mail)
+          return
       }
       else if ( mail !== ListCandidats[i].mail) {
         this.setState({

@@ -5,22 +5,14 @@ import { Switch, Route, Redirect } from "react-router-dom"
 import Tests from './Components/Tests';
 import Login from './Components/Login';
 import Footer from './Components/Footer';
+import ListCandidats from "./Components/Candidats.json"
 
 class App extends Component {
-state = {
-  log : '',
-}
+  state ={
+    log : '',
+    accessdenied : false,
+  }
 
-
-  VerifiedLog = () => {
-    this.setState({
-      log : localStorage.getItem('mail')
-    })
-}
-
-componentDidMount = () => {
-  this.VerifiedLog()
-}
   render() {
 
     return (
@@ -28,8 +20,7 @@ componentDidMount = () => {
         <Switch>
           <Route exact path="/" component={Login} />
           {/* Mettre en place la protection des routes après authentification, en attendant une redirection est faite à chaque fois qu'un utilisateur arrive sur la route /test sans s'être connecté au préalable */}
-          {this.state.log.length > 1 ? <Route path="/test" component={Tests} /> 
-          : <Redirect to="/"/> }
+         <Route path="/test" component={Tests} /> 
         </Switch>
         <Footer />
       </div>

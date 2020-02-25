@@ -355,11 +355,10 @@ ReloadTest = async() => {
       let results_array = array_send.reduce((acc, val) => acc.concat(val), [])
       results_array = results_array.filter(choices => choices[0].idQuestions === obj[0].idQuestions)
       results_array = results_array.reduce((acc, val) => acc.concat(val) )
-      console.log("ici ", results_array)
       // Cette méthode n'est pas prise en compte sur le navigateur microsoft edege
       // const results_array = array_send.flat().filter(choices => choices[0].idQuestions === obj[0].idQuestions)
       // const  results_array_complete = results_array.flat()
-      // console.log(" et la ", results_array_complete)
+      // console.log(" ici ", results_array_complete)
       //  results_array = results_array.flat()
       //on incrémente de 1 a chaque tour pour afficher le numéro de la question
       countquestion = countquestion +1
@@ -532,7 +531,7 @@ ReloadTest = async() => {
       selection = selection.reduce((acc, val) => acc.concat(val))
       selection = selection.filter((selectchoices => selectchoices.idChoice === choices.idChoice))
       // selection = selection.flat().filter(selectchoices => selectchoices.idChoice === choices.idChoice)
-      console.log("selectionctionction", selection)
+      // console.log("selectionctionction", selection)
       const select_choice_id = selection.map(choice => choice.idChoice)
       if ( select_choice_id.includes(choices.idChoice)) {
         if ( choices.value !== 1) {

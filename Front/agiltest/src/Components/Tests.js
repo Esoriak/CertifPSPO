@@ -346,24 +346,34 @@ ReloadTest = async() => {
   ShowResultFinal = (obj) => {
     /////// Si la question est à choix multiple :
     if (obj[0].Multiple === 1) {
+      // on initie un compteur de bonnes réponses
       let count_good_response = 0
-      //on stock les resultats attendus dans un tableau
+      // on stock les resultats attendus dans un tableau
       let array_expected = obj[1].filter(choices => choices.value === 1)
-      // on stock toutes les réponses qui comportent plus d'un choix dans un tableau
+      // on stock toutes les réponses envoyées qui comportent plus d'un choix dans un tableau
       const array_send = choixselection.filter(choices => choices.length >1)
-      const results_array = array_send.flat().filter(choices => choices[0].idQuestions === obj[0].idQuestions)
-      const results_array_flat = results_array.flat()
+      let results_array = array_send.reduce((acc, val) => acc.concat(val), [])
+      results_array = results_array.filter(choices => choices[0].idQuestions === obj[0].idQuestions)
+      results_array = results_array.reduce((acc, val) => acc.concat(val) )
+      console.log("ici ", results_array)
+      // Cette méthode n'est pas prise en compte sur le navigateur microsoft edege
+      // const results_array = array_send.flat().filter(choices => choices[0].idQuestions === obj[0].idQuestions)
+      // const  results_array_complete = results_array.flat()
+      // console.log(" et la ", results_array_complete)
+      //  results_array = results_array.flat()
       //on incrémente de 1 a chaque tour pour afficher le numéro de la question
       countquestion = countquestion +1
        array_expected = array_expected.map(choice => choice.idChoice)
-      // SI le nombre de réponses attendues est le même que le nombres de réponses envoyés on va vérifier le contenu
-        if (array_expected.length === results_array_flat.length) {
+      // SI le nombre de réponses attendues est le même que le nombres de réponses envoyées on va vérifier le contenu
+        if (array_expected.length === results_array.length) {
           // ON VERIFIE LE CONTENU
           for (let i =0 ; i < array_expected.length; i++){
-            if(array_expected.includes(results_array_flat[i].idChoice)){
+            // si le tableau des choix attendus comporte un choix envoyé, ajouter 1 au nombre de bonne réponse
+            if(array_expected.includes(results_array[i].idChoice)){
               count_good_response = count_good_response +1
             }
           }
+          // Si le nb de bonnes réponses envoyées est de même longueur que le tableau des réponses attendues alors la carte affichée sera de couleur verte
           if(count_good_response === array_expected.length) {
             return <div className="card result_card result_true">
             <h1>Question {countquestion}</h1>
@@ -385,6 +395,7 @@ ReloadTest = async() => {
             </div>
           </div>
           }
+          // Si une des réponses attendues est manquante ou qu'il y a une réponse fausse dans le tableau des choix envoyés malgrès que le nb de choix faits soit le bon la carte sera de couleur rouge
           else {
             return <div className="card result_card result_false">
             <h1>Question {countquestion}</h1>
@@ -408,8 +419,8 @@ ReloadTest = async() => {
           }
 
         }
-        // Si le nombre de bonnes reponses attendus est différent du nombre de réponses envoyés, le résultat est forcément faux
-        else if ( array_expected.length !== results_array_flat.length) {
+        // Si le nombre de bonnes reponses attendu est différent du nombre de réponses envoyées, le résultat est forcément faux
+        else if ( array_expected.length !== results_array.length) {
           return <div className="card result_card result_false">
           <h1>Question {countquestion}</h1>
           <div key={obj[0].idQuestions} >
@@ -432,11 +443,14 @@ ReloadTest = async() => {
         }
 
       }
-        /// Si la questions est a choix unique : 
+        /// Si la question est a choix unique : 
     else {
-      const res_expected = obj[1].filter(choices => choices.value == 1)
-      const res_send = choixselection.filter(choices => choices.idQuestions == obj[0].idQuestions)
+      // On stock dans un tableau la réponse juste attendue
+      const res_expected = obj[1].filter(choices => choices.value === 1)
+      // On stock dans un tableau les choix faits pour l'id de la question que l'on est en train de traiter
+      const res_send = choixselection.filter(choices => choices.idQuestions === obj[0].idQuestions)
       countquestion = countquestion +1
+      // Si l'id du choix attendu est le même que l'id du choix séléctionné on return une carte de couleur verte
       if(res_expected[0].idChoice === res_send[0].idChoice){
               return <div className="card result_card result_true" key={obj[0].idQuestions}>
         <h1>Question {countquestion}</h1>
@@ -458,6 +472,7 @@ ReloadTest = async() => {
         </div>
       </div>
       }
+      // Sinon on return une carte de couleur rouge
       else {
         return <div className="card result_card result_false" key={obj[0].idQuestions}>
         <h1>Question {countquestion}</h1>
@@ -484,11 +499,14 @@ ReloadTest = async() => {
 
 
 
-
+///////////////////////////////////////// AFFICHAGE DES CHOIX SELECTIONNES OU NON PAR LE CANDIDAT    //////////////////////////////////////////
 
   DisplayResultChoices = (choices, questions) => {
+    // Si la question est à choix unique
     if(questions.Multiple === 0) {
+      // On stock dans un tableau l'id des choix faits par le candidat
        let selection = choixselection.map(choices => choices.idChoice)
+       // Si l'id du choix à afficher est présent dans le tableau de la selection alors il doit apparaître coché sinon le bouton radio est disabled et non coché
       if (selection.includes(choices.idChoice)) {
         return <li className="answer answer_radio correct_answer " key={choices.idChoice}>
           <input type="radio" className="input input_radio" id={choices.idChoice} value={choices.value} name={questions.idQuestions} disabled={true} checked={true} readOnly/>
@@ -505,11 +523,16 @@ ReloadTest = async() => {
 
       }
     }
-
+ // Si la question est à choix multiple 
     else if (questions.Multiple === 1) {
       let selection = choixselection.filter(choices => choices.length > 1)
-      selection = selection.flat()
-      selection = selection.flat().filter(selectchoices => selectchoices.idChoice === choices.idChoice)
+      selection = selection.reduce((acc, val) => acc.concat(val))
+      // fonction flat n'est pas supporté sur microsoft edge ( navigateur du client )
+      // selection = selection.flat()
+      selection = selection.reduce((acc, val) => acc.concat(val))
+      selection = selection.filter((selectchoices => selectchoices.idChoice === choices.idChoice))
+      // selection = selection.flat().filter(selectchoices => selectchoices.idChoice === choices.idChoice)
+      console.log("selectionctionction", selection)
       const select_choice_id = selection.map(choice => choice.idChoice)
       if ( select_choice_id.includes(choices.idChoice)) {
         if ( choices.value !== 1) {

@@ -20,8 +20,9 @@ app.get('/', (request, response) => {
   response.send('Bienvenue à l\'entrainement');
 });
 
+app.use('/auth', Routes.Auth)
 app.use('/infosres', Routes.Resultats)
-app.use('/admin', Routes.Admin)
+app.use('/bco', Routes.Admin)
 app.use('/infos', Routes.Candidat)
 app.use('/quizz', Routes.Tests)
 app.use('/quizzquestions', Routes.Questions)

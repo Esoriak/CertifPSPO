@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express()
+const Auth = require('../Authentification/Authcontroller')
 const Resultats = require('./Resultats')
 const Candidat = require('./Candidat')
 const Tests = require ('./Tests')
@@ -10,6 +11,7 @@ const Admin = require('./Admin')
 
 
 module.exports = {
+  Auth,
   Resultats,
   Candidat,
   Tests,

@@ -5,7 +5,7 @@ const router = express.Router()
 
 // Récupération des informations des Candidats
 router.get('/candidat', (req, res) => {
-  connection.query('SELECT Firstname, Lastname, FROM Candidat', (err, results) => {
+  connection.query('SELECT Firstname, Lastname, Mail, Company, Position FROM Candidat', (err, results) => {
     if(err) {
         res.status(500).send('Erreur lors de la reception des données du candidat')
     } else {

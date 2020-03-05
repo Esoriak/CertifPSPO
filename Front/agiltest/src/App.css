@@ -143,6 +143,17 @@ input{
      background: #20acad;
     cursor:pointer;
 }
+.input-connect{
+    background: #F3F3F3;
+    height: 50px;
+    display:flex;
+    align-items:center;
+    padding: 0 20px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+}
+
+
 .login-email{
     background: #F3F3F3;
     height: 50px;
@@ -162,6 +173,18 @@ input{
 .input_email::placeholder{
     color:#90A6C6;
     opacity: 1
+}
+.input_connect{
+    border :none;
+    background : transparent;
+    border-bottom: solid 1px #90A6C6;
+    border-radius:0;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.input_password:focus{
+    border: none;
 }
 
 .access_denied_message {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router'
-import ListCandidats from "./Candidats.json"
+import ListCandidats from "../Components/Candidats.json"
 
 
  class Login extends Component {
@@ -16,7 +16,6 @@ import ListCandidats from "./Candidats.json"
    // On récupère la donnée fournie par l'utilisateur
    const inputvalue = document.getElementsByClassName('input_email')
    const mail = inputvalue[0].value
-  //  console.log("email", mail)
   
    // EMAIL CHECKER
     for ( let i=0; i< ListCandidats.length ; i++) {

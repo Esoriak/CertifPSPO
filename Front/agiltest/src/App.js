@@ -1,26 +1,64 @@
 import React, { Component } from 'react';
 import './App.css'
-import { Switch, Route, Redirect } from "react-router-dom"
-
-import Tests from './Components/Tests';
-import Login from './Components/Login';
+import { Switch, Route} from "react-router-dom"
+import axios from 'axios';
+import PrivateRoute from './Components/PrivateRoute'
+import Tests from './Screens/Tests';
+import Login from './Screens/Login';
 import Footer from './Components/Footer';
-import ListCandidats from "./Components/Candidats.json"
+import LogAdmin from './Components/LogAdmin';
+import Backoffice from './Screens/Backoffice';
+
+// import LogAdmin from './Components/LogAdmin';
 
 class App extends Component {
-  state ={
-    log : '',
-    accessdenied : false,
+  state = {
+    verified : false,
   }
+
+
+
+  protectedRoute = () => {
+    // Storage for token //
+    const token = localStorage.getItem("token")
+    let pathApi = process.env.REACT_APP_PATH_API_DEV + '/auth/protected/'
+    if (process.env.NODE_ENV === 'production') {
+      pathApi = process.env.REACT_APP_PATH_API_PROD + '/auth/protected/'
+    }
+    axios({
+      method: 'POST',
+      url: pathApi,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    })
+      // Verified if a token is correct //
+      .then(res => {
+        this.setState({
+          verified: res.data.auth,
+        })
+      })
+  }
+
+  componentDidMount = () => {
+    this.protectedRoute()
+  }
+
+
 
   render() {
 
     return (
       <div className="App">
         <Switch>
+           {/* Section CONNEXION */}
+           <Route path="/login"  component={LogAdmin} />
+           <PrivateRoute path="/backoffice/admin" component={Backoffice} />
+
           <Route exact path="/" component={Login} />
           {/* Mettre en place la protection des routes après authentification, en attendant une redirection est faite à chaque fois qu'un utilisateur arrive sur la route /test sans s'être connecté au préalable */}
          <Route path="/test" component={Tests} /> 
+         {/* <Route path="/bo" component={LogAdmin} /> */}
         </Switch>
         <Footer />
       </div>

@@ -355,11 +355,6 @@ ReloadTest = async() => {
       let results_array = array_send.reduce((acc, val) => acc.concat(val), [])
       results_array = results_array.filter(choices => choices[0].idQuestions === obj[0].idQuestions)
       results_array = results_array.reduce((acc, val) => acc.concat(val) )
-      // Cette méthode n'est pas prise en compte sur le navigateur microsoft edege
-      // const results_array = array_send.flat().filter(choices => choices[0].idQuestions === obj[0].idQuestions)
-      // const  results_array_complete = results_array.flat()
-      // console.log(" ici ", results_array_complete)
-      //  results_array = results_array.flat()
       //on incrémente de 1 a chaque tour pour afficher le numéro de la question
       countquestion = countquestion +1
        array_expected = array_expected.map(choice => choice.idChoice)
@@ -449,6 +444,8 @@ ReloadTest = async() => {
       // On stock dans un tableau les choix faits pour l'id de la question que l'on est en train de traiter
       const res_send = choixselection.filter(choices => choices.idQuestions === obj[0].idQuestions)
       countquestion = countquestion +1
+      console.log("on test 1: ", res_expected[0])
+      console.log("la suite 2: ", res_send[0])
       // Si l'id du choix attendu est le même que l'id du choix séléctionné on return une carte de couleur verte
       if(res_expected[0].idChoice === res_send[0].idChoice){
               return <div className="card result_card result_true" key={obj[0].idQuestions}>

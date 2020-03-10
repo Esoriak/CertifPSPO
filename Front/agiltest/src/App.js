@@ -8,7 +8,7 @@ import Tests from './Screens/Tests';
 import Login from './Screens/Login';
 import Footer from './Components/Footer';
 import LogAdmin from './Components/LogAdmin';
-import Backoffice from './Screens/Backoffice';
+import Backoffice from './Screens/BackofficeNavbar';
 import ListAdmin from './Components/ListAdmin';
 import ListCandidat from './Components/ListCandidat';
 

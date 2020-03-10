@@ -9,6 +9,7 @@ class BackofficeNavbar extends Component {
     return (
       <>
       <div className="navbar">
+        
         <Link to="/admin" className="link-navbar">Gérer les administrateurs</Link>
         <Link to="/users" className="link-Navbar">Gérer les utilisateurs</Link>
         <Link to="/" className="link-navbar">Base de données des tests</Link>

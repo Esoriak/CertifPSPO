@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import BackofficeNavbar from '../Screens/Backoffice';
+import BackofficeNavbar from '../Screens/BackofficeNavbar';
 import axios from 'axios'
 
 import MaterialTable from "material-table";
@@ -15,6 +15,7 @@ class ListCandidat extends Component {
     ],
     users : [],
   }
+
 //Récupère la liste des utilisateurs ayant accés à la plateforme
   GetUsers = async() => {
     let PathApi = process.env.REACT_APP_PATH_API_DEV + '/infos/candidat'
@@ -45,7 +46,9 @@ class ListCandidat extends Component {
       'x-access-token': `${token}`
       }
   }
-  )}
+  )
+  alert('Le candidat à bien été ajouté à la base de données.')
+}
 
 //Permet de modifier des informations sur la fiche d'un candidat
   update = async(id, Firstname, Lastname, Mail, Company) => {
@@ -64,6 +67,7 @@ class ListCandidat extends Component {
     'x-access-token': `${token}`
     }
 })
+alert('Les modifications ont bien étés prises en compte.')
 }
 
 // Permet de supprimer l'accès d'un candidat à la plateforme
@@ -77,7 +81,9 @@ class ListCandidat extends Component {
     {headers: {
       'x-access-token': `${token}`
       }
-  })}
+  })
+  alert('Le candidat a bien été supprimé de la base de données.')
+}
 
 
   componentDidMount = () => {
@@ -86,6 +92,7 @@ class ListCandidat extends Component {
 
 
   render() {
+
 
     return (
       <>

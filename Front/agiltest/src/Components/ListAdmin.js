@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 
-import BackofficeNavbar from '../Screens/Backoffice';
+import BackofficeNavbar from '../Screens/BackofficeNavbar';
 
 import MaterialTable from "material-table";
 
@@ -42,6 +42,7 @@ class ListAdmin extends Component {
           Firstname : event.target.firstname.value,
           Lastname : event.target.lastname.value
       })
+      alert("Le nouvel administrateur a bien été ajouté à la base de données.")
       this.GetAdminData()
     }
 
@@ -57,6 +58,8 @@ class ListAdmin extends Component {
         admins : adminsdata.data
       })
     }
+
+
 //Permet de modifier des informations sur la fiche d'un administrateur
 update = async(id, Firstname, Lastname, Mail) => {
   let pathApi = process.env.REACT_APP_PATH_API_DEV + `/bco/admin/${id}`
@@ -68,6 +71,7 @@ update = async(id, Firstname, Lastname, Mail) => {
     Lastname: Lastname,
     Mail : Mail,
   })
+  alert("Les modifications ont bien été prises en compte.")
 }
 
 // Permet de supprimer un administrateur
@@ -81,7 +85,9 @@ update = async(id, Firstname, Lastname, Mail) => {
     {headers: {
       'x-access-token': `${token}`
       }
-  })}
+  })
+  alert("L'administrateur a bien été supprimé de la base de données.")
+}
 
     componentDidMount=()=> {
       this.GetAdminData()

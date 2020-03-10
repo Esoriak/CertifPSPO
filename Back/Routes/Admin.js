@@ -25,6 +25,18 @@ router.post('/admin', (req, res) => {
   })
 })
 
+// Informations d'un candidat avec son id
+router.get('/admin/:id', (req, res) => {
+  const id = req.params.id
+  connection.query('SELECT * from Admin WHERE idAdmin = ?', id, err => {
+    if (err)
+      res.status(500).send(`Erreur lors de la récupération des informations de l'admin ${id}`)
+    else 
+      res.status(200).send(`Requête éxécutée avec succés`)
+  })
+})
+
+
 // Modification d'un élément dans la fiche de l'Administrateur
 router.put('/admin/:id', (req, res) => {
   const idAdmin = req.params.idAdmin
@@ -40,8 +52,8 @@ router.put('/admin/:id', (req, res) => {
 
 // Suppression d'un administrateur
 router.delete('/admin/:id', (req, res) => {
-  const idAdmin = req.params.idAdmin
-  connection.query('DELETE FROM `Admin` WHERE `idAdmin` = ?', idAdmin, err => {
+  const idAdmin = req.params.id
+  connection.query('DELETE FROM Admin WHERE idAdmin = ?', idAdmin, err => {
     if (err)
       res.status(500).send('Erreur lors de la supression')
     else

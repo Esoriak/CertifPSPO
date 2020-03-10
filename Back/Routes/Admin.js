@@ -39,7 +39,7 @@ router.get('/admin/:id', (req, res) => {
 
 // Modification d'un élément dans la fiche de l'Administrateur
 router.put('/admin/:id', (req, res) => {
-  const idAdmin = req.params.idAdmin
+  const idAdmin = req.params.id
   const formData = req.body
   connection.query('UPDATE Admin SET ? WHERE idAdmin = ?', [formData, idAdmin], err => {
     if (err)
@@ -52,8 +52,8 @@ router.put('/admin/:id', (req, res) => {
 
 // Suppression d'un administrateur
 router.delete('/admin/:id', (req, res) => {
-  const idAdmin = req.params.id
-  connection.query('DELETE FROM Admin WHERE idAdmin = ?', idAdmin, err => {
+  const id = req.params.id
+  connection.query('DELETE FROM Admin WHERE idAdmin = ?', id, err => {
     if (err)
       res.status(500).send('Erreur lors de la supression')
     else

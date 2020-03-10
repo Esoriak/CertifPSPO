@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router'
-import ListCandidats from "../Components/Candidats.json"
-
+import axios from 'axios'
 
  class Login extends Component {
   state ={
@@ -10,30 +9,35 @@ import ListCandidats from "../Components/Candidats.json"
     accessdenied : false,
   }
 
-// //******* CONNECTION *********//
+// //******* CONNEXION *********//
+emailCheck = () => {
+  // On récupère la donnée fournie par l'utilisateur
+    const inputvalue = document.getElementsByClassName('input_email')
+    const mail = inputvalue[0].value
 
- emailCheck = () => {
-   // On récupère la donnée fournie par l'utilisateur
-   const inputvalue = document.getElementsByClassName('input_email')
-   const mail = inputvalue[0].value
-  
-   // EMAIL CHECKER
-    for ( let i=0; i< ListCandidats.length ; i++) {
-      if ( mail === ListCandidats[i].mail){
-        // Si le mail entré est présent dans la base de candidats connus alors on valide l'accès à la plateforme
-          this.setState({
-            redirection: true, accessdenied: false,
-          })
-          localStorage.setItem("mail",mail)
-          return
+    let pathApi = process.env.REACT_APP_PATH_API_DEV + '/auth/log/user'
+      if (process.env.NODE_ENV === 'production') {
+        pathApi = process.env.REACT_APP_PATH_API_PROD + '/auth/log/user'
       }
-      else if ( mail !== ListCandidats[i].mail) {
-        this.setState({
-          accessdenied : true
-        })
-      }
+      axios.post(pathApi, {
+        Mail: mail,
+    })
+    .then((res) => {
+      localStorage.setItem("tokenmail", res.headers["x-access-token"])
+      this.setState({
+        redirection: true, accessdenied : false,
+      })
+    })
+    this.verify()
+  }
+
+  verify = () => {
+    const value = localStorage.getItem("tokenmail")
+    if (value === null) {
+      this.setState({
+        accessdenied : true,
+      })
     }
-
   }
 
   render() {

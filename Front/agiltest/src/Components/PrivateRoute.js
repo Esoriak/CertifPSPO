@@ -63,7 +63,7 @@ class PrivateRoute extends Component {
                 />
             )
         } else {
-            return <Redirect to='/backoffice/admin' />
+            return <Redirect to='/backoffice' />
         }
     }
 }

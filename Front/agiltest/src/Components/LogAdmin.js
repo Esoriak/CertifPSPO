@@ -17,13 +17,13 @@ class LogAdmin extends Component {
     })
   }
 
-    handleSubmit = (event) => {
+    handleSubmit = async(event) => {
       event.preventDefault()
       let pathApi = process.env.REACT_APP_PATH_API_DEV + '/auth/login'
       if (process.env.NODE_ENV === 'production') {
         pathApi = process.env.REACT_APP_PATH_API_PROD + '/auth/login'
       }
-        axios.post(pathApi, {
+       await axios.post(pathApi, {
           Mail: event.target.mail.value,
           Password: event.target.password.value,
       })

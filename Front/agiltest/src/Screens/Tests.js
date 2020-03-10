@@ -37,7 +37,7 @@ class Tests extends Component {
   //////////////////////// VERIFICATION DU LOG ////////////////////////////////////////////////////////////
 
   VerifiedLog =() => {
-    const logvalue = localStorage.getItem('mail')
+    const logvalue = localStorage.getItem('tokenmail')
     if (logvalue === null) {
       return
     }

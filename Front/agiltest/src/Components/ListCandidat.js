@@ -47,7 +47,7 @@ class ListCandidat extends Component {
   }
   )}
 
-
+//Permet de modifier des informations sur la fiche d'un candidat
   update = async(id, Firstname, Lastname, Mail, Company) => {
     let pathApi = process.env.REACT_APP_PATH_API_DEV + `/infos/candidat/${id}`
     if (process.env.NODE_ENV === 'production') {
@@ -64,11 +64,10 @@ class ListCandidat extends Component {
     'x-access-token': `${token}`
     }
 })
-  }
+}
 
 // Permet de supprimer l'accès d'un candidat à la plateforme
   delete = async(id) => {
-    console.log("lulu l'id", id)
     let pathApi = process.env.REACT_APP_PATH_API_DEV + `/infos/candidat/${id}`
     if (process.env.NODE_ENV === 'production') {
       pathApi = process.env.REACT_APP_PATH_API_PROD + `/infos/candidat/${id}`
@@ -91,40 +90,42 @@ class ListCandidat extends Component {
     return (
       <>
         <BackofficeNavbar />
-        <div className="list-admin">
-        <MaterialTable
-          title="Liste des utilisateurs"
-          columns={this.state.columns}
-          data={this.state.users}
-          id={this.state.users.idCandidat}
-          editable={{
-            onRowAdd: newData =>
-              new Promise((resolve, reject) => {
-                this.addcandidat(newData.Firstname, newData.Lastname, newData.Mail, newData.Company)
-                  setTimeout(() => {
-                      { this.GetUsers()}
-                      resolve();
-                  }, 1000);
-              }),
-              onRowUpdate: (newData, oldData) =>
-              new Promise((resolve, reject) => {
-                this.update(newData.idCandidat, newData.Firstname, newData.Lastname, newData.Mail, newData.Company)
-                  setTimeout(() => {
-                      {this.GetUsers()}
-                      resolve();
-                  }, 1000);
-              }),
-              onRowDelete: oldData =>
-              new Promise((resolve, reject) => {
-                this.delete(oldData.idCandidat)
-                  setTimeout(() => {
-                      { this.GetUsers() }
-                      resolve();
-                  }, 1000);
-              })
-      }}                                                                                         
-        />
+        <div className="main-container-bo">
+          <div className="list-users">
+          <MaterialTable
+            title="Liste des utilisateurs"
+            columns={this.state.columns}
+            data={this.state.users}
+            id={this.state.users.idCandidat}
+            editable={{
+              onRowAdd: newData =>
+                new Promise((resolve, reject) => {
+                  this.addcandidat(newData.Firstname, newData.Lastname, newData.Mail, newData.Company)
+                    setTimeout(() => {
+                        { this.GetUsers()}
+                        resolve();
+                    }, 1000);
+                }),
+                onRowUpdate: (newData, oldData) =>
+                new Promise((resolve, reject) => {
+                  this.update(newData.idCandidat, newData.Firstname, newData.Lastname, newData.Mail, newData.Company)
+                    setTimeout(() => {
+                        {this.GetUsers()}
+                        resolve();
+                    }, 1000);
+                }),
+                onRowDelete: oldData =>
+                new Promise((resolve, reject) => {
+                  this.delete(oldData.idCandidat)
+                    setTimeout(() => {
+                        { this.GetUsers() }
+                        resolve();
+                    }, 1000);
+                })
+        }}                                                                                         
+          />
         </div>
+      </div>
       </>
     )
   }

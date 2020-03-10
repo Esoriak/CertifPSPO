@@ -41,7 +41,7 @@ router.post('/register', (req, res) => {
   //Paswword crypting
   const hashedPassword = bcrypt.hashSync(req.body.Password, 8);
 
-  const values = [req.body.Mail, hashedPassword,req.body.Firstname , req.body.Lastname]
+  const values = [req.body.Mail, hashedPassword, req.body.Firstname , req.body.Lastname]
 
   connection.query('INSERT INTO Admin (Mail, Password, Firstname, Lastname ) VALUES (?,?,?,?)', values, (err, user) => {
 
@@ -56,23 +56,23 @@ router.post('/register', (req, res) => {
 });
 
 
-// Login user //
+// Login admin //
 router.post('/login', (req, res) => {
 
   const values = [req.body.Mail]
 
-  connection.query('SELECT * from Admin WHERE Mail = ?', values, (err, user) => {
+  connection.query('SELECT * from Admin WHERE Mail = ?', values, (err, admin) => {
     if (err)
       return res.status(500).send('Error on the server.');
-    if (!user[0])
-      return res.status(402).send('No user found.');
+    if (!admin[0])
+      return res.status(402).send('Admin not found.');
 
   //Verify the password is valid
-    const passwordIsValid = bcrypt.compareSync(req.body.Password, user[0].Password);
+    const passwordIsValid = bcrypt.compareSync(req.body.Password, admin[0].Password);
     if (!passwordIsValid)
       return res.status(401).send({ auth: false, token: null });
       
-      const token = jwt.sign({ idAdmin: user[0].idAdmin }, config.secret, {
+      const token = jwt.sign({ idAdmin: admin[0].idAdmin }, config.secret, {
         expiresIn: 86400 // expires in 24 hours
          });
     res.header("Access-Control-Expose-Headers", "x-access-token")
@@ -80,6 +80,30 @@ router.post('/login', (req, res) => {
     res.status(200).send({ auth: true })
    });
   });
+
+
+  
+//login Candidat
+router.post('/log/user',(req, res ) => {
+  
+  const mail = req.body.Mail
+
+  connection.query('SELECT * from Candidat WHERE Mail = ? ', mail, (err, user) => {
+    if (err){
+      return res.status(500).send('Error on the server.');
+    }    
+    if (!user[0]) {
+      return res.status(402).send('User not found.');
+    }
+
+      const tokenmail = jwt.sign({ idCandidat: user[0].idCandidat }, config.secret, {
+        expiresIn: 86400 // expires in 24 hours
+         });
+    res.header("Access-Control-Expose-Headers", "x-access-token")
+    res.set("x-access-token", tokenmail)
+    res.status(200).send({ login : true })
+  })
+})
 
 
 // // Verify Token //

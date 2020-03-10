@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import './App.css'
 import { Switch, Route} from "react-router-dom"
 import axios from 'axios';
@@ -8,10 +9,9 @@ import Login from './Screens/Login';
 import Footer from './Components/Footer';
 import LogAdmin from './Components/LogAdmin';
 import Backoffice from './Screens/Backoffice';
-import AddAdmin from './Components/Adddmin';
+import ListAdmin from './Components/ListAdmin';
 import ListCandidat from './Components/ListCandidat';
 
-// import LogAdmin from './Components/LogAdmin';
 
 class App extends Component {
   state = {
@@ -56,8 +56,8 @@ class App extends Component {
            {/* Section ADMIN */}
            <Route path="/login"  component={LogAdmin} />
            <PrivateRoute path="/backoffice" component={Backoffice} />
-           <Route path="/users" component={ListCandidat} />
-           <Route path="/admin" component={AddAdmin} />
+           <PrivateRoute path="/users" component={ListCandidat} />
+           <PrivateRoute path="/admin" component={ListAdmin} />
 
 
             {/* Section Candidats */}

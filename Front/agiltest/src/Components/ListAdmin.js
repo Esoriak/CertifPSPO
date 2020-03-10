@@ -5,7 +5,7 @@ import BackofficeNavbar from '../Screens/Backoffice';
 
 import MaterialTable from "material-table";
 
-class AddAdmin extends Component {
+class ListAdmin extends Component {
   state={
     columns: [
       { title: 'Id', field: 'idAdmin'},
@@ -29,6 +29,7 @@ class AddAdmin extends Component {
     })
   }
 
+// Permet d'ajouter un administrateur à la base de données
     handleSubmit = (event) => {
       event.preventDefault()
       let pathApi = process.env.REACT_APP_PATH_API_DEV + '/auth/register'
@@ -41,16 +42,11 @@ class AddAdmin extends Component {
           Firstname : event.target.firstname.value,
           Lastname : event.target.lastname.value
       })
-       .then((res) => {
-          localStorage.setItem("token", res.headers["x-access-token"])
-          this.setState({ register: true , success : true}, () => {
-            setTimeout(() => this.setState({ register: false }), 1400)
-            setTimeout(() => this.setState({ admin_connect: true }), 1400)
-            setTimeout(() => this.protectedRoute(), 1400)
-          })
-        })
+      this.GetAdminData()
     }
 
+
+// Permet de récupérer les données des administrateurs
     GetAdminData = async() => {
       let pathApi = process.env.REACT_APP_PATH_API_DEV + '/bco/admin'
       if (process.env.NODE_ENV === 'production') {
@@ -61,32 +57,34 @@ class AddAdmin extends Component {
         admins : adminsdata.data
       })
     }
+//Permet de modifier des informations sur la fiche d'un administrateur
+update = async(id, Firstname, Lastname, Mail) => {
+  let pathApi = process.env.REACT_APP_PATH_API_DEV + `/bco/admin/${id}`
+  if (process.env.NODE_ENV === 'production') {
+    pathApi = process.env.REACT_APP_PATH_API_PROD + `/bco/admin/${id}`
+  }
+  await axios.put(pathApi, {
+    Firstname : Firstname,
+    Lastname: Lastname,
+    Mail : Mail,
+  })
+}
 
-    protectedRoute = () => {
-      // Storage for token //
-      const token = localStorage.getItem("token")
-      let pathApi = process.env.REACT_APP_PATH_API_DEV + '/auth/protected/'
-      if (process.env.NODE_ENV === 'production') {
-        pathApi = process.env.REACT_APP_PATH_API_PROD + '/auth/protected/'
-      }
-      axios({
-        method: 'POST',
-        url: pathApi,
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      })
-        // Verified if a token is correct //
-        .then(res => {
-          this.setState({
-            verified: res.data.auth,
-          })
-        })
+// Permet de supprimer un administrateur
+  delete = async(id) => {
+    let pathApi = process.env.REACT_APP_PATH_API_DEV + `/bco/admin/${id}`
+    if (process.env.NODE_ENV === 'production') {
+      pathApi = process.env.REACT_APP_PATH_API_PROD + `/bco/admin/${id}`
     }
+    const token = localStorage.getItem("token")
+      await axios.delete(pathApi, 
+    {headers: {
+      'x-access-token': `${token}`
+      }
+  })}
 
     componentDidMount=()=> {
       this.GetAdminData()
-      this.protectedRoute()
     }
 
   render() {
@@ -94,7 +92,7 @@ class AddAdmin extends Component {
     return (
       <>
       <BackofficeNavbar />
-        <div className="main_container">
+        <div className="main_container-bo">
           <div className="card-tall start_card">
           <h1> Ajouter un administrateur</h1>
             <form onSubmit={this.handleSubmit}>
@@ -148,32 +146,18 @@ class AddAdmin extends Component {
               </fieldset>
             </form>
           <br/>
+
           <div className="list-admin">
             <MaterialTable
             title="Liste des administrateurs"
             columns={this.state.columns}
             data={this.state.admins}
             editable={{
-              onRowAdd: newData =>
-                new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        {
-                            /* const data = this.state.data;
-                            data.push(newData);
-                            this.setState({ data }, () => resolve()); */
-                        }
-                        resolve();
-                    }, 1000);
-                }),
                 onRowUpdate: (newData, oldData) =>
                 new Promise((resolve, reject) => {
+                  this.update(newData.idAdmin, newData.Firstname, newData.Lastname, newData.Mail)
                     setTimeout(() => {
-                        {
-                            /* const data = this.state.data;
-                            const index = data.indexOf(oldData);
-                            data[index] = newData;                
-                            this.setState({ data }, () => resolve()); */
-                        }
+                        {this.GetAdminData()}
                         resolve();
                     }, 1000);
                 }),
@@ -181,12 +165,7 @@ class AddAdmin extends Component {
                 new Promise((resolve, reject) => {
                   this.delete(oldData.idAdmin)
                     setTimeout(() => {
-                        {
-                            /* let data = this.state.data;
-                            const index = data.indexOf(oldData);
-                            data.splice(index, 1);
-                            this.setState({ data }, () => resolve()); */
-                        }
+                        {this.GetAdminData()}
                         resolve();
                     }, 1000);
                 })
@@ -202,4 +181,4 @@ class AddAdmin extends Component {
   }
 }
 
-export default AddAdmin
+export default ListAdmin

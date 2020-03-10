@@ -17,7 +17,6 @@ class LogAdmin extends Component {
     })
   }
 
-
     handleSubmit = (event) => {
       event.preventDefault()
       let pathApi = process.env.REACT_APP_PATH_API_DEV + '/auth/login'
@@ -44,7 +43,7 @@ class LogAdmin extends Component {
     return (
       <>
       {/* Si vous êtes connecté en tant qu'admin vous accéder à la partie back office */}
-      {this.state.admin_connect && <Redirect to="/backoffice/admin" />}
+      {this.state.admin_connect && <Redirect to="/backoffice" />}
       {/* Espace de connexion administrateur */}
         <div className="main_container">
           <div className="card start_card">

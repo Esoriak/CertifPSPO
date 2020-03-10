@@ -28,14 +28,14 @@ router.post("/protected", (req, res, next) => {
 
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
-      return res.status(200).send({auth: false, mess: 'na pas accès au données' })
+      return res.status(200).send({auth: false, mess: "n'a pas accès au données" })
     }
     return res.status(200).send({auth: true, mess: 'Donne du user' })
   })
 })
 
 
-// Register a new user//
+// Register a new admin//
 router.post('/register', (req, res) => {
 
   //Paswword crypting

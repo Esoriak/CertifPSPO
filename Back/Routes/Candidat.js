@@ -5,7 +5,7 @@ const router = express.Router()
 
 // Récupération des informations des Candidats
 router.get('/candidat', (req, res) => {
-  connection.query('SELECT Firstname, Lastname, Mail, Company, Position FROM Candidat', (err, results) => {
+  connection.query('SELECT idCandidat, Firstname, Lastname, Mail, Company, Position FROM Candidat', (err, results) => {
     if(err) {
         res.status(500).send('Erreur lors de la reception des données du candidat')
     } else {
@@ -24,12 +24,22 @@ router.post('/candidat', (req, res) => {
       res.sendStatus(200)
   })
 })
+// Informations d'un candidat avec son id
+router.get('/candidat/:id', (req, res) => {
+  const id = req.params.id
+  connection.query('SELECT * from Candidat WHERE idCandidat = ?', id, err => {
+    if (err)
+      res.status(500).send(`Erreur lors de la récupération des informations du candidat ${id}`)
+    else 
+      res.status(200).send(`Requête éxécutée avec succés`)
+  })
+})
 
 // Modification d'un élément dans la fiche du candidat
 router.put('/candidat/:id', (req, res) => {
-  const idCandidat = req.params.idCandidat
+  const idCandidat = req.params.id
   const formData = req.body
-  connection.query('UPDATE Candidat SET ? WHERE idCandidat = ?', [formData, idCandidat], err => {
+  connection.query('UPDATE Candidat SET ? WHERE idCandidat= ?', [formData, idCandidat], err => {
     if (err)
       res.status(500).send('Erreur lors de la modification')
     else
@@ -40,15 +50,14 @@ router.put('/candidat/:id', (req, res) => {
 
 // Suppression d'un candidat
 router.delete('/candidat/:id', (req, res) => {
-  const idCandidat = req.params.idCandidat
-  connection.query('DELETE FROM Candidat WHERE idCandidat = ?', idCandidat, err => {
+  const id = req.params.id
+  connection.query('DELETE FROM Candidat WHERE idCandidat =?',id, err => {
     if (err)
-      res.status(500).send('Erreur lors de la supression')
+      res.status(500).send(err)
     else
       res.sendStatus(200)
   })
 })
-
 
 
 module.exports = router

@@ -8,6 +8,8 @@ import Login from './Screens/Login';
 import Footer from './Components/Footer';
 import LogAdmin from './Components/LogAdmin';
 import Backoffice from './Screens/Backoffice';
+import AddAdmin from './Components/Adddmin';
+import ListCandidat from './Components/ListCandidat';
 
 // import LogAdmin from './Components/LogAdmin';
 
@@ -51,15 +53,19 @@ class App extends Component {
     return (
       <div className="App">
         <Switch>
-           {/* Section CONNEXION */}
+           {/* Section ADMIN */}
            <Route path="/login"  component={LogAdmin} />
-           <PrivateRoute path="/backoffice/admin" component={Backoffice} />
+           <PrivateRoute path="/backoffice" component={Backoffice} />
+           <Route path="/users" component={ListCandidat} />
+           <Route path="/admin" component={AddAdmin} />
 
+
+            {/* Section Candidats */}
           <Route exact path="/" component={Login} />
           {/* Mettre en place la protection des routes après authentification, en attendant une redirection est faite à chaque fois qu'un utilisateur arrive sur la route /test sans s'être connecté au préalable */}
-         <Route path="/test" component={Tests} /> 
-         {/* <Route path="/bo" component={LogAdmin} /> */}
+          <Route path="/test" component={Tests} /> 
         </Switch>
+
         <Footer />
       </div>
     );

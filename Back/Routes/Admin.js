@@ -5,7 +5,7 @@ const router = express.Router()
 
 // Récupération des informations des administrateurs
 router.get('/admin', (req, res) => {
-  connection.query('SELECT * FROM Admin', (err, results) => {
+  connection.query('SELECT idAdmin, Firstname, Lastname, Mail FROM Admin', (err, results) => {
     if(err) {
         res.status(500).send('Erreur lors de la reception des données des administrateurs')
     } else {
@@ -41,7 +41,7 @@ router.put('/admin/:id', (req, res) => {
 // Suppression d'un administrateur
 router.delete('/admin/:id', (req, res) => {
   const idAdmin = req.params.idAdmin
-  connection.query('DELETE FROM Admin WHERE idAdmin= ?', idAdmin, err => {
+  connection.query('DELETE FROM `Admin` WHERE `idAdmin` = ?', idAdmin, err => {
     if (err)
       res.status(500).send('Erreur lors de la supression')
     else

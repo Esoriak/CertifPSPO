@@ -32,11 +32,32 @@ class LogAdmin extends Component {
           this.setState({ login: true }, () => {
             setTimeout(() => this.setState({ login: false }), 1400)
             setTimeout(() => this.setState({ admin_connect: true }), 1400)
-            // setTimeout(() => this.protectedRoute(), 1400)
+            setTimeout(() => this.protectedRoute(), 1400)
           })
         })
     }
 
+    protectedRoute = () => {
+      // Storage for token //
+      const token = localStorage.getItem("token")
+      let pathApi = process.env.REACT_APP_PATH_API_DEV + '/auth/protected/'
+      if (process.env.NODE_ENV === 'production') {
+        pathApi = process.env.REACT_APP_PATH_API_PROD + '/auth/protected/'
+      }
+      axios({
+        method: 'POST',
+        url: pathApi,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      })
+        // Verified if a token is correct //
+        .then(res => {
+          this.setState({
+            verified: res.data.auth,
+          })
+        })
+    }
 
   render() {
 

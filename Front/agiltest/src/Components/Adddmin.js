@@ -60,7 +60,6 @@ class AddAdmin extends Component {
       this.setState({
         admins : adminsdata.data
       })
-      console.log("luluetcastagnette", this.state.admins)
     }
 
     protectedRoute = () => {

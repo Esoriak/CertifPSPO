@@ -14,9 +14,8 @@ class ListCandidat extends Component {
       { title: 'Entreprise', field: 'Company'}
     ],
     users : [],
-    listready : false,
   }
-
+//Récupère la liste des utilisateurs ayant accés à la plateforme
   GetUsers = async() => {
     let PathApi = process.env.REACT_APP_PATH_API_DEV + '/infos/candidat'
     if (process.env.NODE_ENV === 'production') {
@@ -29,25 +28,57 @@ class ListCandidat extends Component {
     console.log("users",users_data.data)
   }
 
-  // update = async(id) => {
+// Permet d'ajouter un candidat à la plateforme de test
+  addcandidat = async(Firstname, Lastname, Mail, Company) => {
+    let pathApi = process.env.REACT_APP_PATH_API_DEV + '/infos/candidat'
+    if (process.env.NODE_ENV === 'production') {
+      pathApi = process.env.REACT_APP_PATH_API_PROD + '/infos/candidat'
+    }
+    const token = localStorage.getItem("token")
+    await axios.post(pathApi, {
+        Firstname : Firstname,
+        Lastname: Lastname,
+        Mail: Mail,
+        Company: Company,
+    },
+    {headers: {
+      'x-access-token': `${token}`
+      }
+  }
+  )}
 
-  // }
 
+  update = async(id, Firstname, Lastname, Mail, Company) => {
+    let pathApi = process.env.REACT_APP_PATH_API_DEV + `/infos/candidat/${id}`
+    if (process.env.NODE_ENV === 'production') {
+      pathApi = process.env.REACT_APP_PATH_API_PROD + `/infos/candidat/${id}`
+    }
+    const token = localStorage.getItem("token")
+    await axios.put(pathApi, {
+      Firstname : Firstname,
+      Lastname: Lastname,
+      Mail : Mail,
+      Company : Company,
+    },
+  {headers: {
+    'x-access-token': `${token}`
+    }
+})
+  }
 
-  delete = (id) => {
+// Permet de supprimer l'accès d'un candidat à la plateforme
+  delete = async(id) => {
     console.log("lulu l'id", id)
     let pathApi = process.env.REACT_APP_PATH_API_DEV + `/infos/candidat/${id}`
     if (process.env.NODE_ENV === 'production') {
       pathApi = process.env.REACT_APP_PATH_API_PROD + `/infos/candidat/${id}`
     }
     const token = localStorage.getItem("token")
-      axios.delete(pathApi, 
-  //   {headers: {
-  //     'x-access-token': `${token}`
-  //     }
-  // }
-  )
-  }
+      await axios.delete(pathApi, 
+    {headers: {
+      'x-access-token': `${token}`
+      }
+  })}
 
 
   componentDidMount = () => {
@@ -56,10 +87,6 @@ class ListCandidat extends Component {
 
 
   render() {
-   const  {
-    users,
-    listready }
-    = this.state
 
     return (
       <>
@@ -73,24 +100,17 @@ class ListCandidat extends Component {
           editable={{
             onRowAdd: newData =>
               new Promise((resolve, reject) => {
+                this.addcandidat(newData.Firstname, newData.Lastname, newData.Mail, newData.Company)
                   setTimeout(() => {
-                      {
-                          /* const data = this.state.data;
-                          data.push(newData);
-                          this.setState({ data }, () => resolve()); */
-                      }
+                      { this.GetUsers()}
                       resolve();
                   }, 1000);
               }),
               onRowUpdate: (newData, oldData) =>
               new Promise((resolve, reject) => {
+                this.update(newData.idCandidat, newData.Firstname, newData.Lastname, newData.Mail, newData.Company)
                   setTimeout(() => {
-                      {
-                          /* const data = this.state.data;
-                          const index = data.indexOf(oldData);
-                          data[index] = newData;                
-                          this.setState({ data }, () => resolve()); */
-                      }
+                      {this.GetUsers()}
                       resolve();
                   }, 1000);
               }),
@@ -111,3 +131,4 @@ class ListCandidat extends Component {
 }
 
 export default ListCandidat
+ 

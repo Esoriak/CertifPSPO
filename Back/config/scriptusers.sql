@@ -26,4 +26,4 @@ INSERT INTO QCMpsmpo.Candidat (Lastname, Firstname, Mail, Company) VALUES ('De P
 INSERT INTO QCMpsmpo.Candidat (Lastname, Firstname, Mail, Company) VALUES ('Cavallaro','Alexandre','alexandre@monsieurguiz.fr', 'Monsieur Guiz');
 INSERT INTO QCMpsmpo.Candidat (Lastname, Firstname, Mail, Company) VALUES ('Serry','Valentin','valentin@monsieurguiz.fr', 'Monsieur Guiz');
 INSERT INTO QCMpsmpo.Candidat (Lastname, Firstname, Mail, Company) VALUES ('Berthon','Nicolas','nicolas.b@monsieurguiz.fr', 'Monsieur Guiz');
-
+INSERT INTO QCMpsmpo.Candidat (Lastname, Firstname, Mail, Company) VALUES ('Bouchet','Manuel','manuel@monsieurguiz.fr', 'Monsieur Guiz');

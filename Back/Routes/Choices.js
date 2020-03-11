@@ -26,8 +26,8 @@ router.post('/choices', (req, res) => {
 })
 
 // Modification d'un choix
-router.put('/choices/:id', (req, res) => {
-  const idChoice = req.params.idChoice
+router.put('/choice/:id', (req, res) => {
+  const idChoice = req.params.id
   const formData = req.body
   connection.query('UPDATE Choice SET ? WHERE idChoice = ?', [formData, idChoice], err => {
     if (err)
@@ -38,8 +38,8 @@ router.put('/choices/:id', (req, res) => {
 })
 
 // Suppression d'un choix
-router.delete('/choices/:id', (req, res) => {
-  const idChoice = req.params.idChoice
+router.delete('/choice/:id', (req, res) => {
+  const idChoice = req.params.id
   connection.query('DELETE FROM Choice WHERE idChoice = ?', idChoice, err => {
     if (err)
       res.status(500).send('Erreur lors de la suppression d\'un choix')

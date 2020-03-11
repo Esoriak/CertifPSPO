@@ -32,6 +32,8 @@ class Tests extends Component {
     multiple_answer: false,
     score: [],
     log : false,
+    minutes : 60,
+    seconds : 0,
   }
 
   //////////////////////// VERIFICATION DU LOG ////////////////////////////////////////////////////////////
@@ -555,13 +557,42 @@ ReloadTest = async() => {
    
   }
 
+  Runtimer =() => {
+    this.myInterval = setInterval(() => {
+      const { seconds, minutes } = this.state
+
+      if (seconds > 0) {
+          this.setState(({ seconds }) => ({
+              seconds: seconds - 1
+          }))
+      }
+      if (seconds === 0) {
+          if (minutes === 0) {
+              clearInterval(this.myInterval)
+          } else {
+              this.setState(({ minutes }) => ({
+                  minutes: minutes - 1,
+                  seconds: 59
+              }))
+          }
+      } 
+  }, 1000)
+  }
+
   componentDidMount = () => {
     this.GetDataTests()
     this.GetDataQuestions()
     this.GetDataChoices()
     this.VerifiedLog()
-
+    this.Runtimer()
   }
+
+
+
+  componentWillUnmount() {
+    clearInterval(this.myInterval)
+}
+
   render() {
 
     const {
@@ -573,6 +604,8 @@ ReloadTest = async() => {
       finish,
       welcome,
       log,
+      minutes,
+      seconds,
 
     } = this.state
 
@@ -599,8 +632,13 @@ ReloadTest = async() => {
         }
 
         <>
-        {ready && questionnaire.slice(previousQuestion, displayQuestion).map((obj, index) =>
+        
+            
+          
+        {ready && 
+        questionnaire.slice(previousQuestion, displayQuestion).map((obj, index) =>
           <div className="main_container questions_container" key="container">
+            <h1>Time Remaining: { minutes }:{ seconds < 10 ? `0${ seconds }` : seconds }</h1>
             <div className="card question_card question_current">
               <h1>Question {displayQuestion}</h1>
               

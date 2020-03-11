@@ -14,6 +14,7 @@ class ListCandidat extends Component {
       { title: 'Entreprise', field: 'Company'}
     ],
     users : [],
+    selectedRow : null,
   }
 
 //Récupère la liste des utilisateurs ayant accés à la plateforme
@@ -104,6 +105,15 @@ alert('Les modifications ont bien étés prises en compte.')
             columns={this.state.columns}
             data={this.state.users}
             id={this.state.users.idCandidat}
+            onRowClick={((evt, selectedRow) => this.setState({ selectedRow }))}
+            options={{
+              rowStyle: rowData => ({
+                backgroundColor: (this.state.selectedRow && this.state.selectedRow.tableData.id === rowData.tableData.id) ? '#EEE' : '#FFF'
+              }),
+              headerStyle :{
+                backgroundColor : '#20acad',
+              }
+            }}
             editable={{
               onRowAdd: newData =>
                 new Promise((resolve, reject) => {

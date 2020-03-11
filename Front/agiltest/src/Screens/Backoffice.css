@@ -36,17 +36,27 @@
 }
 .list-users{
   margin-top:50px;
-  min-width:100%;
+  min-width:1000px;
   display: flex;
   flex-direction: row;
   justify-content: center;
 }
 .list-admin{
   margin-top:50px;
-  min-width: 1150px;
+  min-width: 1000px;
   display: flex;
   flex-direction: row;
   justify-content: center;
+}
+.list-quizz {
+  margin-top:50px;
+  min-width: 650px;
+  max-width: 70%;
+  margin: 5% 15%;
+  display: flex;
+  justify-content: center;
+  background-color: red;
+  border: 2px solid #353B41;
 }
 .navbar {
   width:100%;

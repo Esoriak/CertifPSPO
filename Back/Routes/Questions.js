@@ -25,21 +25,21 @@ router.post('/questions', (req, res) => {
 })
 
 // Modification d'une question
-router.put('/questions/:id', (req, res) => {
-  const idQuestion = req.params.idQuestion
+router.put('/question/:id', (req, res) => {
+  const idQuestion = req.params.id
   const formData = req.body
-  connection.query('UPDATE Questions SET ? WHERE idQuestion = ?', [formData, idQuestion], err => {
+  connection.query('UPDATE Questions SET ? WHERE idQuestions = ?', [formData, idQuestion], err => {
     if (err)
-      res.status(500).send('Erreur lors de la modification d\'une question')
+      res.status(500).send(err)
     else
       res.sendStatus(200)
   })
 })
 
 // Suppression d'une question
-router.delete('/questions/:id', (req, res) => {
-  const idQuestion = req.params.idQuestion
-  connection.query('DELETE FROM Questions WHERE idQuestion = ?', idQuestion, err => {
+router.delete('/question/:id', (req, res) => {
+  const id = req.params.id
+  connection.query('DELETE FROM Questions WHERE idQuestions = ?', id, err => {
     if (err)
       res.status(500).send('Erreur lors de la suppression d\'une question')
     else  

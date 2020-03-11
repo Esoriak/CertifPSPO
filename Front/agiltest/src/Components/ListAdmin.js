@@ -9,9 +9,9 @@ class ListAdmin extends Component {
   state={
     columns: [
       { title: 'Id', field: 'idAdmin'},
-      { title: 'Prénom', field: 'Firstname' },
+      { title: 'Prénom', field: 'Firstname'},
       { title: 'Nom', field: 'Lastname'},
-      { title: 'Mail', field: 'Mail' },
+      { title: 'Mail', field: 'Mail'},
     ],
     verified: false,
     register : false,
@@ -21,6 +21,7 @@ class ListAdmin extends Component {
     lastname : "",
     success : false,
     admins : [],
+    selectedRow : null,
   }
 
   handleChange = (e) => {
@@ -158,6 +159,15 @@ update = async(id, Firstname, Lastname, Mail) => {
             title="Liste des administrateurs"
             columns={this.state.columns}
             data={this.state.admins}
+            onRowClick={((evt, selectedRow) => this.setState({ selectedRow }))}
+            options={{
+              rowStyle: rowData => ({
+                backgroundColor: (this.state.selectedRow && this.state.selectedRow.tableData.id === rowData.tableData.id) ? '#EEE' : '#FFF'
+              }),
+              headerStyle :{
+                backgroundColor : '#20acad',
+              }
+            }}
             editable={{
                 onRowUpdate: (newData, oldData) =>
                 new Promise((resolve, reject) => {

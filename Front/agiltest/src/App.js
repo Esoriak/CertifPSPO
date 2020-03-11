@@ -11,6 +11,7 @@ import LogAdmin from './Components/LogAdmin';
 import Backoffice from './Screens/BackofficeNavbar';
 import ListAdmin from './Components/ListAdmin';
 import ListCandidat from './Components/ListCandidat';
+import ListQuizz from './Components/ListQuizz';
 
 
 class App extends Component {
@@ -58,6 +59,7 @@ class App extends Component {
            <PrivateRoute path="/backoffice" component={Backoffice} />
            <PrivateRoute path="/users" component={ListCandidat} />
            <PrivateRoute path="/admin" component={ListAdmin} />
+           <PrivateRoute path="/dataquizz" component={ListQuizz} />
 
 
             {/* Section Candidats */}

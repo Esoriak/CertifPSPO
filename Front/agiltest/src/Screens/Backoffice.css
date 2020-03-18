@@ -65,9 +65,29 @@
   display: flex;
   justify-content: space-around;
   padding-top: 20px;
+  margin-bottom: 50px;
 }
 .link-navbar {
   text-decoration-line: none;
   color: #353B41;
   font-size: 1.2em;
+}
+.admin-space{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.Log-section{
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.logo-admin{
+  width: 50px;
+  height:45px;
+}
+.logout {
+  width: 15px;
+  height:15px;
 }

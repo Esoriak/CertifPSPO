@@ -154,7 +154,7 @@ update = async(id, Firstname, Lastname, Mail) => {
             </form>
           <br/>
 
-          <div className="list-admin">
+          {/* <div className="list-admin"> */}
             <MaterialTable
             title="Liste des administrateurs"
             columns={this.state.columns}
@@ -166,7 +166,9 @@ update = async(id, Firstname, Lastname, Mail) => {
               }),
               headerStyle :{
                 backgroundColor : '#20acad',
-              }
+                color: '#fff',
+              },
+              
             }}
             editable={{
                 onRowUpdate: (newData, oldData) =>
@@ -187,7 +189,7 @@ update = async(id, Firstname, Lastname, Mail) => {
                 })
         }}                                                                                         
           />
-          </div>
+          {/* </div> */}
         </div>
       </div>
 

@@ -8,10 +8,10 @@ import Tests from './Screens/Tests';
 import Login from './Screens/Login';
 import Footer from './Components/Footer';
 import LogAdmin from './Components/LogAdmin';
-import Backoffice from './Screens/BackofficeNavbar';
 import ListAdmin from './Components/ListAdmin';
 import ListCandidat from './Components/ListCandidat';
 import ListQuizz from './Components/ListQuizz';
+import Adminspace from './Components/Adminspace';
 
 
 class App extends Component {
@@ -56,10 +56,10 @@ class App extends Component {
         <Switch>
            {/* Section ADMIN */}
            <Route path="/login"  component={LogAdmin} />
-           <PrivateRoute path="/backoffice" component={Backoffice} />
-           <PrivateRoute path="/users" component={ListCandidat} />
+           <PrivateRoute path="/backoffice" component={ListCandidat} />
            <PrivateRoute path="/admin" component={ListAdmin} />
            <PrivateRoute path="/dataquizz" component={ListQuizz} />
+           <PrivateRoute path="/me-admin" component={Adminspace} />
 
 
             {/* Section Candidats */}

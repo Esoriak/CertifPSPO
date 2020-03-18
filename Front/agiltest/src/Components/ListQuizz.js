@@ -190,7 +190,10 @@ alert('Le choix a bien été supprimé de la base de données.')
                     backgroundColor: (this.state.selectedRow && this.state.selectedRow.tableData.id === rowData.tableData.id) ? '#EEE' : '#FFF'
                   }),
                   headerStyle :{
-                    backgroundColor : '#20acad',
+                    backgroundColor : '#20acad', color: '#fff',
+                  },
+                  cellStyle : {
+                    width: '600px;'
                   }
                 }}
                 editable={{
@@ -232,8 +235,12 @@ alert('Le choix a bien été supprimé de la base de données.')
                 rowStyle: rowData => ({
                   backgroundColor: (this.state.selectedRow && this.state.selectedRow.tableData.id === rowData.tableData.id) ? '#EEE' : '#FFF'
                 }),
+                
                 headerStyle :{
-                  backgroundColor : '#20acad',
+                  backgroundColor : '#20acad', color: '#fff',
+                },
+                cellStyle : {
+                  width: '300px;'
                 }
               }}
               editable={{

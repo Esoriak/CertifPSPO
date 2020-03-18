@@ -7,6 +7,8 @@ import axios from 'axios'
     home: true,
     redirection: false,
     accessdenied : false,
+    mail : "",
+    auth : null,
   }
 
 // //******* CONNEXION *********//
@@ -14,6 +16,9 @@ emailCheck = () => {
   // On récupère la donnée fournie par l'utilisateur
     const inputvalue = document.getElementsByClassName('input_email')
     const mail = inputvalue[0].value
+    this.setState({
+      mail : mail
+    })
 
     let pathApi = process.env.REACT_APP_PATH_API_DEV + '/auth/log/user'
       if (process.env.NODE_ENV === 'production') {
@@ -24,18 +29,23 @@ emailCheck = () => {
     })
     .then((res) => {
       localStorage.setItem("tokenmail", res.headers["x-access-token"])
+      localStorage.setItem("login", this.state.mail)
       this.setState({
-        redirection: true, accessdenied : false,
+        auth: res.data.auth, accessdenied : false,
+      }, () => {
+        // setTimeout(() => this.setState({ auth: false }), 1400)
+        setTimeout(() => this.setState({ redirection: true }), 1400)
       })
     })
     this.verify()
   }
 
+
   verify = () => {
-    const value = localStorage.getItem("tokenmail")
-    if (value === null) {
+    const log = localStorage.getItem("login")
+    if (log === null) {
       this.setState({
-        accessdenied : true,
+        auth : false
       })
     }
   }
@@ -49,7 +59,7 @@ emailCheck = () => {
                 <div className="card welcome_card">
                 <h1>Bienvenue sur notre plateforme d’entrainement à la certification PSPO !</h1>
                 <p>Veuillez entrer <b>votre adresse email</b> pour pouvoir accéder à notre questionnaire qui permettra de tester les connaissances requises afin d’obtenir la certification PSPO.</p>
-                {this.state.accessdenied && <small className="access_denied_message">Aucun compte ne correspond à cette adresse email.</small> }
+                {this.state.auth === false && <small className="access_denied_message">Aucun compte ne correspond à cette adresse email.</small> }
                 <div className="login-email">
                     <input type="email" className="input_email" placeholder="mail@mail.com"/>
                 </div>
@@ -59,7 +69,7 @@ emailCheck = () => {
             </div>
         }  
 
-      {this.state.redirection && <Redirect to="/test" /> }    
+      {this.state.auth && <Redirect to="/test" /> }    
         </div>
     )
   }

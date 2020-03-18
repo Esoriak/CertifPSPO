@@ -7,11 +7,12 @@ let Questionnaire = []
 let questions = []
 let choix = []
 let score = 0
+let index= 0
 let choixselection = []
 let nbquestion = 20
 let PointsQuestion = 500
 const nbminichoix = 1
-let countquestion = 0
+let idtest = 0
 
 
 
@@ -19,6 +20,7 @@ class Tests extends Component {
   state = {
     welcome: true,
     tests: [],
+    idtest: idtest,
     pointQuestions: PointsQuestion,
     questions: [],
     checked: false,
@@ -30,10 +32,11 @@ class Tests extends Component {
     displayQuestion: 1,
     previousQuestion: 0,
     multiple_answer: false,
-    score: [],
+    score: 0,
     log : false,
     minutes : 60,
     seconds : 0,
+    timeout : false,
   }
 
   //////////////////////// VERIFICATION DU LOG ////////////////////////////////////////////////////////////
@@ -92,20 +95,21 @@ class Tests extends Component {
   const newNbQuestion = 20
   nbquestion = newNbQuestion
   PointsQuestion = 500
+  idtest =4
   this.setState({
-    pointQuestions : PointsQuestion
+    pointQuestions : PointsQuestion, minutes : 1, seconds : 0, idtest : idtest,
   })
   const button_type_test = document.getElementById("quizz_choice_20")
   button_type_test.classList.toggle('quizz_active')
-  // button_type_test.classList.add("quizz_active")
  }
 
  UpdateLengthQuizz40 = () => {
   const newNbQuestion = 40
   nbquestion = newNbQuestion
   PointsQuestion = 250
+  idtest =5
   this.setState({
-    pointQuestions : PointsQuestion
+    pointQuestions : PointsQuestion, minutes: 2, seconds : 0, idtest :idtest,
   })
   const button_type_test = document.getElementById("quizz_choice_40")
   button_type_test.classList.toggle('quizz_active')
@@ -115,8 +119,9 @@ class Tests extends Component {
   const newNbQuestion = 80
   nbquestion = newNbQuestion
   PointsQuestion = 125
+  idtest =6
   this.setState({
-    pointQuestions : PointsQuestion
+    pointQuestions : PointsQuestion, minutes : 60, seconds : 0, idtest :idtest,
   })
   const button_type_test = document.getElementById("quizz_choice_80")
   button_type_test.classList.toggle('quizz_active')
@@ -242,7 +247,7 @@ ReloadTest = async() => {
     // on vide le tableau de choix pour la sélection de la prochaine question
     choix = []
     // Si la question affichée est la dernière du questionnaire on lance la fonction finish test
-    if (this.state.displayQuestion === nbquestion) {
+    if (this.state.displayQuestion === nbquestion || this.state.timeout === true) {
       this.FinishTest()
     }
     // Sinon on continue d'avancer dans l'affichage du questionnaire et la vérification des choix multiples ou unique
@@ -283,7 +288,12 @@ ReloadTest = async() => {
 
   FinishTest = () => {
     this.setState({ finish: true, ready: false })
+    clearInterval(this.myInterval)
+    this.setState({
+      timeout : true,
+    })
     score = score / 100
+    this.StockResult(this.state.idtest, score)
   }
 
   //////////////////////// VERIFICATION POUR QUE LE CANDIDAT CHOISISSE UNE REPONSE POUR PASSER A LA QUESTION SUIVANTE //////////////////////////
@@ -346,153 +356,200 @@ ReloadTest = async() => {
 
 
   ShowResultFinal = (obj) => {
+          // on incrémente de 1 a chaque tour pour afficher le numéro de la question
+    index = index +1
     /////// Si la question est à choix multiple :
     if (obj[0].Multiple === 1) {
-      // on initie un compteur de bonnes réponses
-      let count_good_response = 0
-      // on stock les resultats attendus dans un tableau
-      let array_expected = obj[1].filter(choices => choices.value === 1)
-      // on stock toutes les réponses envoyées qui comportent plus d'un choix dans un tableau
-      const array_send = choixselection.filter(choices => choices.length >1)
-      let results_array = array_send.reduce((acc, val) => acc.concat(val), [])
-      results_array = results_array.filter(choices => choices[0].idQuestions === obj[0].idQuestions)
-      results_array = results_array.reduce((acc, val) => acc.concat(val) )
-      //on incrémente de 1 a chaque tour pour afficher le numéro de la question
-      countquestion = countquestion +1
-       array_expected = array_expected.map(choice => choice.idChoice)
-      // SI le nombre de réponses attendues est le même que le nombres de réponses envoyées on va vérifier le contenu
-        if (array_expected.length === results_array.length) {
-          // ON VERIFIE LE CONTENU
-          for (let i =0 ; i < array_expected.length; i++){
-            // si le tableau des choix attendus comporte un choix envoyé, ajouter 1 au nombre de bonne réponse
-            if(array_expected.includes(results_array[i].idChoice)){
-              count_good_response = count_good_response +1
-            }
-          }
-          // Si le nb de bonnes réponses envoyées est de même longueur que le tableau des réponses attendues alors la carte affichée sera de couleur verte
-          if(count_good_response === array_expected.length) {
-            return <div className="card result_card result_true">
-            <h1>Question {countquestion}</h1>
-            <div key={obj[0].idQuestions} >
-              <p className="question"> {obj[0].Question} </p>
-              <div className="checkbox_question">
-              </div>
-            </div>
-              <ul className="answer_list" key={obj[1].idChoice}>
-              {obj[1].map(choices =>
-    
-              this.DisplayResultChoices(choices, obj[0])
-                )}
-              </ul>
-              <div>
-              <ul className="solution_list" key={questions.idChoice}>
-                {this.GoodChoices(obj[1])}
-              </ul>
-            </div>
-          </div>
-          }
-          // Si une des réponses attendues est manquante ou qu'il y a une réponse fausse dans le tableau des choix envoyés malgrès que le nb de choix faits soit le bon la carte sera de couleur rouge
-          else {
-            return <div className="card result_card result_false">
-            <h1>Question {countquestion}</h1>
-            <div key={obj[0].idQuestions} >
-              <p className="question"> {obj[0].Question} </p>
-              <div className="checkbox_question">
-              </div>
-            </div>
-              <ul className="answer_list" key={obj[1].idChoice}>
-              {obj[1].map(choices =>
-    
-              this.DisplayResultChoices(choices, obj[0])
-                )}
-              </ul>
-              <div>
-              <ul className="solution_list" key={questions.idChoice}>
-                {this.GoodChoices(obj[1])}
-              </ul>
-            </div>
-          </div>
-          }
 
-        }
-        // Si le nombre de bonnes reponses attendu est différent du nombre de réponses envoyées, le résultat est forcément faux
-        else if ( array_expected.length !== results_array.length) {
-          return <div className="card result_card result_false">
-          <h1>Question {countquestion}</h1>
-          <div key={obj[0].idQuestions} >
-            <p className="question"> {obj[0].Question} </p>
-            <div className="checkbox_question">
-            </div>
-          </div>
-            <ul className="answer_list" key={obj[1].idChoice}>
-            {obj[1].map(choices =>
-  
-            this.DisplayResultChoices(choices, obj[0])
-              )}
-            </ul>
-            <div>
-            <ul className="solution_list" key={questions.idChoice}>
-              {this.GoodChoices(obj[1])}
-            </ul>
-          </div>
-        </div>
-        }
+   // on initie un compteur de bonnes réponses
+   let count_good_response = 0
+   // on stock les resultats attendus dans un tableau
+   let array_expected = obj[1].filter(choices => choices.value === 1)
+   // on stock toutes les réponses envoyées qui comportent plus d'un choix dans un tableau
+   const array_send = choixselection.filter(choices => choices.length >1)
+   let results_array = array_send.reduce((acc, val) => acc.concat(val), [])
+   results_array = results_array.filter(choices => choices[0].idQuestions === obj[0].idQuestions)
+       if (results_array.length > 1 ) {
+           results_array = results_array.reduce((acc, val) => acc.concat(val) )
+       }
+    array_expected = array_expected.map(choice => choice.idChoice)
+   // SI le nombre de réponses attendues est le même que le nombres de réponses envoyées on va vérifier le contenu
+     if (array_expected.length === results_array.length) {
+       // ON VERIFIE LE CONTENU
+       for (let i =0 ; i < array_expected.length; i++){
+         // si le tableau des choix attendus comporte un choix envoyé, ajouter 1 au nombre de bonne réponse
+         if(array_expected.includes(results_array[i].idChoice)){
+           count_good_response = count_good_response +1
+         }
+       }
+       // Si le nb de bonnes réponses envoyées est de même longueur que le tableau des réponses attendues alors la carte affichée sera de couleur verte
+       if(count_good_response === array_expected.length) {
+         return <div className="card result_card result_true" key={obj[0].idQuestions}>
+         <h1>Question {}</h1>
+         <div key={obj[0].idQuestions} >
+           <p className="question"> {obj[0].Question} </p>
+           <div className="checkbox_question">
+           </div>
+         </div>
+           <ul className="answer_list" key={obj[1].idChoice}>
+           {obj[1].map(choices =>
+ 
+           this.DisplayResultChoices(choices, obj[0])
+             )}
+           </ul>
+           <div>
+           <ul className="solution_list" key={questions.idChoice}>
+             {this.GoodChoices(obj[1])}
+           </ul>
+         </div>
+       </div>
+       }
+       // Si une des réponses attendues est manquante ou qu'il y a une réponse fausse dans le tableau des choix envoyés malgrès que le nb de choix faits soit le bon la carte sera de couleur rouge
+       else {
+         return <div className="card result_card result_false" key={obj[0].idQuestions} >
+         <h1>Question {index}</h1>
+         <div key={obj[0].idQuestions} >
+           <p className="question"> {obj[0].Question} </p>
+           <div className="checkbox_question">
+           </div>
+         </div>
+           <ul className="answer_list" key={obj[1].idChoice}>
+           {obj[1].map(choices =>
+ 
+           this.DisplayResultChoices(choices, obj[0])
+             )}
+           </ul>
+           <div>
+           <ul className="solution_list" key={questions.idChoice}>
+             {this.GoodChoices(obj[1])}
+           </ul>
+         </div>
+       </div>
+       }
 
-      }
-        /// Si la question est a choix unique : 
-    else {
-      // On stock dans un tableau la réponse juste attendue
-      const res_expected = obj[1].filter(choices => choices.value === 1)
-      // On stock dans un tableau les choix faits pour l'id de la question que l'on est en train de traiter
-      const res_send = choixselection.filter(choices => choices.idQuestions === obj[0].idQuestions)
-      countquestion = countquestion +1
-      console.log("on test 1: ", res_expected[0])
-      console.log("la suite 2: ", res_send[0])
-      // Si l'id du choix attendu est le même que l'id du choix séléctionné on return une carte de couleur verte
-      if(res_expected[0].idChoice === res_send[0].idChoice){
-              return <div className="card result_card result_true" key={obj[0].idQuestions}>
-        <h1>Question {countquestion}</h1>
-        <div key={obj[0].idQuestions} >
-          <p className="question"> {obj[0].Question} </p>
-          <div className="checkbox_question">
-          </div>
-        </div>
-        <ul className="answer_list" key={questions.idChoice} >
-          {obj[1].map(choices =>
+     }
+     // Si le nombre de bonnes reponses attendu est différent du nombre de réponses envoyées, le résultat est forcément faux
+     else if ( array_expected.length !== results_array.length) {
+       return <div className="card result_card result_false" key={obj[0].idQuestions}>
+       <h1>Question {index}</h1>
+       <div key={obj[0].idQuestions} >
+         <p className="question"> {obj[0].Question} </p>
+         <div className="checkbox_question">
+         </div>
+       </div>
+         <ul className="answer_list" key={obj[1].idChoice}>
+         {obj[1].map(choices =>
 
-            this.DisplayResultChoices(choices, obj[0])
-          )}
-        </ul>
-        <div>
-          <ul className="solution_list" key={questions.idChoice}>
-            {this.GoodChoices(obj[1])}
-          </ul>
-        </div>
-      </div>
-      }
-      // Sinon on return une carte de couleur rouge
-      else {
-        return <div className="card result_card result_false" key={obj[0].idQuestions}>
-        <h1>Question {countquestion}</h1>
-        <div key={obj[0].idQuestions} >
-          <p className="question"> {obj[0].Question} </p>
-          <div className="checkbox_question">
-          </div>
-        </div>
-        <ul className="answer_list" key={questions.idChoice} >
-          {obj[1].map(choices =>
+         this.DisplayResultChoices(choices, obj[0])
+           )}
+         </ul>
+         <div>
+         <ul className="solution_list" key={questions.idChoice}>
+           {this.GoodChoices(obj[1])}
+         </ul>
+       </div>
+     </div>
+     }
+   else {
+     return <div className="card result_card result_false" key={obj[0].idQuestions}>
+     <h1>Question {index}</h1>
+     <div key={obj[0].idQuestions} >
+       <p className="question"> {obj[0].Question} </p>
+       <div className="checkbox_question">
+       </div>
+     </div>
+       <ul className="answer_list" key={obj[1].idChoice}>
+       {obj[1].map(choices =>
 
-            this.DisplayResultChoices(choices, obj[0])
-          )}
-        </ul>
-        <div>
-          <ul className="solution_list" key={questions.idChoice}>
-            {this.GoodChoices(obj[1])}
-          </ul>
-        </div>
-      </div>
-      }
-    }
+       this.DisplayResultChoices(choices, obj[0])
+         )}
+       </ul>
+       <div>
+       <ul className="solution_list" key={questions.idChoice}>
+         {this.GoodChoices(obj[1])}
+       </ul>
+     </div>
+   </div>
+   }
+   }
+
+     /// Si la question est a choix unique : 
+ else if (obj[0].Multiple === 0) {
+   // On stock dans un tableau la réponse juste attendue
+   const res_expected = obj[1].filter(choices => choices.value === 1)
+   // On stock dans un tableau les choix faits pour l'id de la question que l'on est en train de traiter
+   const res_send = choixselection.filter(choices => choices.idQuestions === obj[0].idQuestions)
+   if (typeof(res_send[0]) === 'undefined') {
+     return <div className="card result_card result_false" key={obj[0].idQuestions}>
+     <h1>Question {index}</h1>
+     <div key={obj[0].idQuestions} >
+       <p className="question"> {obj[0].Question} </p>
+       <div className="checkbox_question">
+       </div>
+     </div>
+     <ul className="answer_list" key={questions.idChoice} >
+       {obj[1].map(choices =>
+
+         this.DisplayResultChoices(choices, obj[0])
+       )}
+     </ul>
+     <div>
+       <ul className="solution_list" key={questions.idChoice}>
+         {this.GoodChoices(obj[1])}
+       </ul>
+     </div>
+   </div>
+   }
+    else if (typeof(res_send[0]) !== 'undefined') {
+     //test pour visualiser les resultats qui devraient s'afficher
+   // console.log("on test 1: ", res_expected[0])
+   // console.log("la suite 2: ", res_send[0])
+   // Si l'id du choix attendu est le même que l'id du choix séléctionné on return une carte de couleur verte
+   if(res_expected[0].idChoice === res_send[0].idChoice){
+           return <div className="card result_card result_true" key={obj[0].idQuestions}>
+     <h1>Question {index}</h1>
+     <div key={obj[0].idQuestions} >
+       <p className="question"> {obj[0].Question} </p>
+       <div className="checkbox_question">
+       </div>
+     </div>
+     <ul className="answer_list" key={questions.idChoice} >
+       {obj[1].map(choices =>
+
+         this.DisplayResultChoices(choices, obj[0])
+       )}
+     </ul>
+     <div>
+       <ul className="solution_list" key={questions.idChoice}>
+         {this.GoodChoices(obj[1])}
+       </ul>
+     </div>
+   </div>
+   }
+   // Sinon on return une carte de couleur rouge
+   else if (res_expected[0].idChoice !== res_send[0].idChoice) {
+     return <div className="card result_card result_false" key={obj[0].idQuestions}>
+     <h1>Question {index}</h1>
+     <div key={obj[0].idQuestions} >
+       <p className="question"> {obj[0].Question} </p>
+       <div className="checkbox_question">
+       </div>
+     </div>
+     <ul className="answer_list" key={questions.idChoice} >
+       {obj[1].map(choices =>
+
+         this.DisplayResultChoices(choices, obj[0])
+       )}
+     </ul>
+     <div>
+       <ul className="solution_list" key={questions.idChoice}>
+         {this.GoodChoices(obj[1])}
+       </ul>
+     </div>
+   </div>
+   }
+   }
+ } 
   }
 
 
@@ -524,6 +581,12 @@ ReloadTest = async() => {
  // Si la question est à choix multiple 
     else if (questions.Multiple === 1) {
       let selection = choixselection.filter(choices => choices.length > 1)
+      if (selection.length < 1) {
+        return <li className="answer answer_checkbox" key={choices.idChoice}>
+        <input type="checkbox" className="input input_checkbox" id={choices.idChoice} value={choices.value} name={questions.idQuestions} disabled={true} readOnly/>
+        <label htmlFor={choices.idChoice} className="answer_label">{choices.answer}</label>
+      </li >
+      }
       selection = selection.reduce((acc, val) => acc.concat(val))
       // fonction flat n'est pas supporté sur microsoft edge ( navigateur du client )
       // selection = selection.flat()
@@ -569,6 +632,9 @@ ReloadTest = async() => {
       if (seconds === 0) {
           if (minutes === 0) {
               clearInterval(this.myInterval)
+              this.setState({
+                timeout : true,
+              })
           } else {
               this.setState(({ minutes }) => ({
                   minutes: minutes - 1,
@@ -578,6 +644,28 @@ ReloadTest = async() => {
       } 
   }, 1000)
   }
+
+
+  StockResult =async (test, score ) => {
+    const idcandidat = 3
+    let pathApi = process.env.REACT_APP_PATH_API_DEV + '/infosres/resultats'
+    if (process.env.NODE_ENV === 'production') {
+      pathApi = process.env.REACT_APP_PATH_API_PROD + '/infosres/resultats'
+    }
+    const token = localStorage.getItem("token")
+    await axios.post(pathApi, {
+        idTests : test,
+        Score: score,
+        idcandidat: idcandidat,
+    },
+    {headers: {
+      'x-access-token': `${token}`
+      }
+  }
+  )
+  // alert('Le résultat de votre test à bien été stocké dans votre espace personnel.')
+}
+
 
   componentDidMount = () => {
     this.GetDataTests()
@@ -638,12 +726,12 @@ ReloadTest = async() => {
         {ready && 
         questionnaire.slice(previousQuestion, displayQuestion).map((obj, index) =>
           <div className="main_container questions_container" key="container">
-            <h1>Time Remaining: { minutes }:{ seconds < 10 ? `0${ seconds }` : seconds }</h1>
+            { <h1>Time Remaining: { minutes }:{ seconds < 10 ? `0${ seconds }` : seconds }</h1> }
             <div className="card question_card question_current">
               <h1>Question {displayQuestion}</h1>
               
 
-                <div key={index}>
+                <div id={index}>
                   <p className="question"> {obj[0].Question} </p>
                   <div className="checkbox_question" key={obj[0].idQuestions}>
 
@@ -702,8 +790,10 @@ ReloadTest = async() => {
             {/* //////// AFFICHAGE DES QUESTIONS POSEES LORS DU QUIZZ ///////// */}
 
 
-            {questionnaire.map(obj =>
-              this.ShowResultFinal(obj))}
+            {Questionnaire.map(obj =>
+              this.ShowResultFinal(obj)
+              )}
+             {/* <div> {this.ShowResultFinal(questionnaire) }</div> */}
           </div>
           }
           </div>

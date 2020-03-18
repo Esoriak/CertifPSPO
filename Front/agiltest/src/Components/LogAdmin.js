@@ -29,6 +29,7 @@ class LogAdmin extends Component {
       })
        .then((res) => {
           localStorage.setItem("token", res.headers["x-access-token"])
+          localStorage.setItem("login", this.state.mail) 
           this.setState({ login: true }, () => {
             setTimeout(() => this.setState({ login: false }), 1400)
             setTimeout(() => this.setState({ admin_connect: true }), 1400)
@@ -37,14 +38,14 @@ class LogAdmin extends Component {
         })
     }
 
-    protectedRoute = () => {
+    protectedRoute = async() => {
       // Storage for token //
       const token = localStorage.getItem("token")
       let pathApi = process.env.REACT_APP_PATH_API_DEV + '/auth/protected/'
       if (process.env.NODE_ENV === 'production') {
         pathApi = process.env.REACT_APP_PATH_API_PROD + '/auth/protected/'
       }
-      axios({
+      await axios({
         method: 'POST',
         url: pathApi,
         headers: {

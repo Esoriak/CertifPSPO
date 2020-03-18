@@ -11,6 +11,7 @@ class ListCandidat extends Component {
       { title: 'Prénom', field: 'Firstname' },
       { title: 'Nom', field: 'Lastname'},
       { title: 'Mail', field: 'Mail' },
+      { title: 'Date d\'ajout', field : 'Ajout'},
       { title: 'Entreprise', field: 'Company'}
     ],
     users : [],
@@ -28,10 +29,13 @@ class ListCandidat extends Component {
       users : users_data.data, listready: true
     })
     console.log("users",users_data.data)
+    this.formatageDate()
   }
 
+  formatageDate = () => {
+  }
 // Permet d'ajouter un candidat à la plateforme de test
-  addcandidat = async(Firstname, Lastname, Mail, Company) => {
+  addcandidat = async(Firstname, Lastname, Mail, Ajout, Company) => {
     let pathApi = process.env.REACT_APP_PATH_API_DEV + '/infos/candidat'
     if (process.env.NODE_ENV === 'production') {
       pathApi = process.env.REACT_APP_PATH_API_PROD + '/infos/candidat'
@@ -41,6 +45,7 @@ class ListCandidat extends Component {
         Firstname : Firstname,
         Lastname: Lastname,
         Mail: Mail,
+        Ajout : Ajout,
         Company: Company,
     },
     {headers: {
@@ -52,7 +57,7 @@ class ListCandidat extends Component {
 }
 
 //Permet de modifier des informations sur la fiche d'un candidat
-  update = async(id, Firstname, Lastname, Mail, Company) => {
+  update = async(id, Firstname, Lastname, Mail, Ajout, Company) => {
     let pathApi = process.env.REACT_APP_PATH_API_DEV + `/infos/candidat/${id}`
     if (process.env.NODE_ENV === 'production') {
       pathApi = process.env.REACT_APP_PATH_API_PROD + `/infos/candidat/${id}`
@@ -62,6 +67,7 @@ class ListCandidat extends Component {
       Firstname : Firstname,
       Lastname: Lastname,
       Mail : Mail,
+      Ajout : Ajout,
       Company : Company,
     },
   {headers: {
@@ -98,8 +104,8 @@ alert('Les modifications ont bien étés prises en compte.')
     return (
       <>
         <BackofficeNavbar />
-        <div className="main-container-bo">
-          <div className="list-users">
+        <div className="main_container-bo">
+          <div className="card-tall start_card list-users">
           <MaterialTable
             title="Liste des utilisateurs"
             columns={this.state.columns}
@@ -112,12 +118,13 @@ alert('Les modifications ont bien étés prises en compte.')
               }),
               headerStyle :{
                 backgroundColor : '#20acad',
+                color: '#fff',
               }
             }}
             editable={{
               onRowAdd: newData =>
                 new Promise((resolve, reject) => {
-                  this.addcandidat(newData.Firstname, newData.Lastname, newData.Mail, newData.Company)
+                  this.addcandidat(newData.Firstname, newData.Lastname, newData.Mail, newData.Ajout, newData.Company)
                     setTimeout(() => {
                         { this.GetUsers()}
                         resolve();
@@ -125,7 +132,7 @@ alert('Les modifications ont bien étés prises en compte.')
                 }),
                 onRowUpdate: (newData, oldData) =>
                 new Promise((resolve, reject) => {
-                  this.update(newData.idCandidat, newData.Firstname, newData.Lastname, newData.Mail, newData.Company)
+                  this.update(newData.idCandidat, newData.Firstname, newData.Lastname, newData.Mail,newData.Ajout, newData.Company)
                     setTimeout(() => {
                         {this.GetUsers()}
                         resolve();

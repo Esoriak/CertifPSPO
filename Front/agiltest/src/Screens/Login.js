@@ -28,12 +28,12 @@ emailCheck = () => {
         Mail: mail,
     })
     .then((res) => {
-      localStorage.setItem("tokenmail", res.headers["x-access-token"])
+      localStorage.setItem("id", res.headers["x-access-token"])
       localStorage.setItem("login", this.state.mail)
+
       this.setState({
         auth: res.data.auth, accessdenied : false,
       }, () => {
-        // setTimeout(() => this.setState({ auth: false }), 1400)
         setTimeout(() => this.setState({ redirection: true }), 1400)
       })
     })

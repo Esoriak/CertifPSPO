@@ -28,12 +28,9 @@ class ListCandidat extends Component {
     this.setState({
       users : users_data.data, listready: true
     })
-    console.log("users",users_data.data)
-    this.formatageDate()
   }
 
-  formatageDate = () => {
-  }
+
 // Permet d'ajouter un candidat à la plateforme de test
   addcandidat = async(Firstname, Lastname, Mail, Ajout, Company) => {
     let pathApi = process.env.REACT_APP_PATH_API_DEV + '/infos/candidat'

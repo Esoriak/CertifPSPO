@@ -97,11 +97,9 @@ router.post('/log/user',(req, res ) => {
       return res.status(401).send({ auth : false, tokenmail: null });
     }
 
-      const tokenmail = jwt.sign({ idCandidat: user[0].idCandidat }, config.secret, {
-        expiresIn: 86400 // expires in 24 hours
-         });
+      const id = user[0].idCandidat 
     res.header("Access-Control-Expose-Headers", "x-access-token")
-    res.set("x-access-token", tokenmail)
+    res.set("x-access-token", id)
     res.status(200).send({ auth : true })
   })
 })

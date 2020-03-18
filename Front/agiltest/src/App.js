@@ -12,6 +12,7 @@ import ListAdmin from './Components/ListAdmin';
 import ListCandidat from './Components/ListCandidat';
 import ListQuizz from './Components/ListQuizz';
 import Adminspace from './Components/Adminspace';
+import UserSpace from './Components/UserSpace';
 
 
 class App extends Component {
@@ -66,6 +67,8 @@ class App extends Component {
           <Route exact path="/" component={Login} />
           {/* Mettre en place la protection des routes après authentification, en attendant une redirection est faite à chaque fois qu'un utilisateur arrive sur la route /test sans s'être connecté au préalable */}
           <Route path="/test" component={Tests} /> 
+         {/*  Pour le moment l'espace des candidats n'est pas utilisable en l'état */}
+          {/* <Route path="/me" component={UserSpace} /> */}
         </Switch>
 
         <Footer />

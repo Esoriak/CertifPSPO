@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import {Link} from 'react-router-dom'
 
 import '../App.css'
 
@@ -13,6 +14,7 @@ let nbquestion = 20
 let PointsQuestion = 500
 const nbminichoix = 1
 let idtest = 0
+
 
 
 
@@ -99,8 +101,12 @@ class Tests extends Component {
   this.setState({
     pointQuestions : PointsQuestion, minutes : 1, seconds : 0, idtest : idtest,
   })
-  const button_type_test = document.getElementById("quizz_choice_20")
-  button_type_test.classList.toggle('quizz_active')
+  const button_type_test_small = document.getElementById("quizz_choice_20")
+  const button_type_test_medium = document.getElementById("quizz_choice_40")
+  const button_type_test_long = document.getElementById("quizz_choice_80")
+  button_type_test_small.classList.toggle('quizz_active')
+  button_type_test_medium.classList.remove('quizz_active')
+  button_type_test_long.classList.remove('quizz_active')
  }
 
  UpdateLengthQuizz40 = () => {
@@ -109,10 +115,14 @@ class Tests extends Component {
   PointsQuestion = 250
   idtest =5
   this.setState({
-    pointQuestions : PointsQuestion, minutes: 2, seconds : 0, idtest :idtest,
+    pointQuestions : PointsQuestion, minutes: 30, seconds : 0, idtest :idtest,
   })
-  const button_type_test = document.getElementById("quizz_choice_40")
-  button_type_test.classList.toggle('quizz_active')
+  const button_type_test_small = document.getElementById("quizz_choice_20")
+  const button_type_test_medium = document.getElementById("quizz_choice_40")
+  const button_type_test_long = document.getElementById("quizz_choice_80")
+  button_type_test_medium.classList.toggle('quizz_active')
+  button_type_test_long.classList.remove('quizz_active')
+  button_type_test_small.classList.remove('quizz_active')
  }
 
  UpdateLengthQuizz80 = () => {
@@ -123,8 +133,12 @@ class Tests extends Component {
   this.setState({
     pointQuestions : PointsQuestion, minutes : 60, seconds : 0, idtest :idtest,
   })
-  const button_type_test = document.getElementById("quizz_choice_80")
-  button_type_test.classList.toggle('quizz_active')
+  const button_type_test_small = document.getElementById("quizz_choice_20")
+  const button_type_test_medium = document.getElementById("quizz_choice_40")
+  const button_type_test_long = document.getElementById("quizz_choice_80")
+  button_type_test_long.classList.toggle('quizz_active')
+  button_type_test_medium.classList.remove('quizz_active')
+  button_type_test_small.classList.remove('quizz_active')
  }
 
   /////////////// CREATION D'UN QUESTIONNAIRE UNIQUE , RANDOM, SANS DOUBLONS, STOCKER EN STATE //////////////////////////
@@ -699,6 +713,7 @@ ReloadTest = async() => {
 
     return (
       <>
+      {/* <Link to="/me"><button className="input_button connect_button input_button__active"> Mon espace perso </button></Link> */}
       {log &&
       <div>
         {welcome &&

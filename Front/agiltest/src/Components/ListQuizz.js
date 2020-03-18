@@ -178,7 +178,7 @@ alert('Le choix a bien été supprimé de la base de données.')
       <>
         <BackofficeNavbar />
         <div className="main-container-bo">
-          <div className="list-quizz">
+          <div className="card-tall start_card list-quizz">
             <MaterialTable
                 title="Liste des questions"
                 columns={this.state.columnsQuestions}
@@ -224,7 +224,7 @@ alert('Le choix a bien été supprimé de la base de données.')
             }}                                                                                        
             />
         </div>
-          <div className="list-quizz">
+          <div className="card-tall start_card list-quizz">
             <MaterialTable
               title="Liste des choix"
               columns={this.state.columnsChoices}
@@ -240,7 +240,7 @@ alert('Le choix a bien été supprimé de la base de données.')
                   backgroundColor : '#20acad', color: '#fff',
                 },
                 cellStyle : {
-                  width: '300px;'
+                  width: '300px'
                 }
               }}
               editable={{

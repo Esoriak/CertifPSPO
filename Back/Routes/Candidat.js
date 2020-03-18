@@ -27,12 +27,13 @@ router.post('/candidat', (req, res) => {
 })
 // Informations d'un candidat avec son id
 router.get('/candidat/:id', (req, res) => {
+  const sql = 'SELECT * from Candidat WHERE idCandidat = ?'
   const id = req.params.id
-  connection.query('SELECT * from Candidat WHERE idCandidat = ?', id, err => {
+  connection.query(sql, id,  (err, user) => {
     if (err)
       res.status(500).send(`Erreur lors de la récupération des informations du candidat ${id}`)
     else 
-      res.status(200).send(`Requête éxécutée avec succés`)
+      res.json(user)
   })
 })
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {Link, Redirect} from 'react-router-dom'
 import LogoAdmin from '../imgs/login-admin.png'
-import Logout from '../imgs/logout.png'
+import Logout from '../imgs/logout2.png'
 
 import './Backoffice.css'
 import axios from 'axios'
@@ -49,7 +49,7 @@ class BackofficeNavbar extends Component {
             <Link to="/me-admin"><img src={LogoAdmin} className="logo-admin" alt="logo admin connect" /></Link>
             <p>{this.state.log}</p>
           </div>
-          <button onClick={this.LogOut}><img src={Logout} className="logout" alt="logo de deconnexion" /></button>
+          <div onClick={this.LogOut}><img src={Logout} className="logout" alt="logo de deconnexion" /></div>
         </div>
         
         <Link to="/admin" className="link-navbar">Gérer les administrateurs</Link>

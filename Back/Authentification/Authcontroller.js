@@ -28,7 +28,7 @@ router.post("/protected", (req, res, next) => {
 
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
-      return res.status(200).send({auth: false, mess: "n'a pas accès au données" })
+      return res.status(200).send({auth: false, mess: "n'a pas accès aux données" })
     }
     return res.status(200).send({auth: true, mess: 'Donne du user' })
   })
@@ -93,7 +93,8 @@ router.post('/log/user',(req, res ) => {
       return res.status(500).send('Error on the server.');
     }    
     if (!user[0]) {
-      return res.status(402).send('User not found.');
+      // return res.status(402).send('User not found.');
+      return res.status(401).send({ auth : false, tokenmail: null });
     }
 
       const tokenmail = jwt.sign({ idCandidat: user[0].idCandidat }, config.secret, {
@@ -101,7 +102,7 @@ router.post('/log/user',(req, res ) => {
          });
     res.header("Access-Control-Expose-Headers", "x-access-token")
     res.set("x-access-token", tokenmail)
-    res.status(200).send({ login : true })
+    res.status(200).send({ auth : true })
   })
 })
 

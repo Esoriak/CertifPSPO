@@ -18,7 +18,7 @@ router.post('/resultats', (req, res) => {
   const formData = req.body
   connection.query('INSERT INTO Resultats SET ?', formData, err => {
     if (err)
-      res.status(500).send('Erreur lors de l\'enregistrement d\'un resultat')
+      res.status(500).send(err)
     else
       res.sendStatus(200)
   })

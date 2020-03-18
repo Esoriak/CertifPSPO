@@ -5,7 +5,7 @@ const router = express.Router()
 
 // Récupération des informations des Candidats
 router.get('/candidat', (req, res) => {
-  connection.query('SELECT idCandidat, Firstname, Lastname, Mail, Company, Position FROM Candidat', (err, results) => {
+  connection.query('SELECT * FROM Candidat', (err, results) => {
     if(err) {
         res.status(500).send('Erreur lors de la reception des données du candidat')
     } else {
@@ -17,6 +17,7 @@ router.get('/candidat', (req, res) => {
 // enregistrement d'un candidat
 router.post('/candidat', (req, res) => {
   const formData = req.body
+  console.log(formData)
   connection.query('INSERT INTO Candidat SET ?', formData, err => {
     if (err)
       res.status(500).send('Erreur lors de l\'enregistrement')

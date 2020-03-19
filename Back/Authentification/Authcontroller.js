@@ -2,14 +2,19 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const connection = require('../conf');
+const cors = require('cors')
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const config = require('./config');
 const jwt = require('jsonwebtoken');
 const VerifyToken = require('./VerifyToken');
+
+const corsOptions = {
+  origin: '*'
+}
 
 const getToken = req => {
   if (
@@ -57,7 +62,7 @@ router.post('/register', (req, res) => {
 
 
 // Login admin //
-router.post('/login', (req, res) => {
+router.post('/login', (cors(corsOptions)),  (req, res) => {
 
   const values = [req.body.Mail]
 

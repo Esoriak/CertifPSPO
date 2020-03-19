@@ -10,7 +10,11 @@
     "@types/react-dom": "^16.9.5",
     "airtable": "^0.8.1",
     "axios": "^0.19.1",
+<<<<<<< HEAD
     "material-table": "^1.57.2",
+=======
+    "bcryptjs": "^2.4.3",
+>>>>>>> 534aec8ec5ddc9752ae023c936dc8e2005815ef5
     "react": "^16.11.0",
     "react-alert": "^6.0.1",
     "react-alert-template-basic": "^1.0.0",

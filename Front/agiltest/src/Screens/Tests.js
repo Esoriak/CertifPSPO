@@ -101,7 +101,7 @@ class Tests extends Component {
   PointsQuestion = 500
   idtest = 4
   this.setState({
-    pointQuestions : PointsQuestion, minutes : 1, seconds : 0, idtest : idtest, nametest : "Quizz PO 20 Anglais",
+    pointQuestions : PointsQuestion, minutes : 15, seconds : 0, idtest : idtest, nametest : "Quizz PO 20 Anglais",
   })
   const button_type_test_small = document.getElementById("quizz_choice_20")
   const button_type_test_medium = document.getElementById("quizz_choice_40")
@@ -117,7 +117,7 @@ class Tests extends Component {
   PointsQuestion = 250
   idtest =5
   this.setState({
-    pointQuestions : PointsQuestion, minutes: 1, seconds : 0, idtest :idtest, nametest : "Quizz PO 40 Anglais",
+    pointQuestions : PointsQuestion, minutes: 30, seconds : 0, idtest :idtest, nametest : "Quizz PO 40 Anglais",
   })
   const button_type_test_small = document.getElementById("quizz_choice_20")
   const button_type_test_medium = document.getElementById("quizz_choice_40")

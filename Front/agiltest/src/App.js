@@ -22,31 +22,31 @@ class App extends Component {
 
 
 
-  // protectedRoute = () => {
-  //   // Storage for token //
-  //   const token = sessionStorage.getItem("token")
-  //   let pathApi = process.env.REACT_APP_PATH_API_DEV + '/auth/protected/'
-  //   if (process.env.NODE_ENV === 'production') {
-  //     pathApi = process.env.REACT_APP_PATH_API_PROD + '/auth/protected/'
-  //   }
-  //   axios({
-  //     method: 'POST',
-  //     url: pathApi,
-  //     headers: {
-  //       'Authorization': `Bearer ${token}`,
-  //     },
-  //   })
-  //     // Verified if a token is correct //
-  //     .then(res => {
-  //       this.setState({
-  //         verified: res.data.auth,
-  //       })
-  //     })
-  // }
+  protectedRoute = () => {
+    // Storage for token //
+    const token = sessionStorage.getItem("token")
+    let pathApi = process.env.REACT_APP_PATH_API_DEV + '/auth/protected/'
+    if (process.env.NODE_ENV === 'production') {
+      pathApi = process.env.REACT_APP_PATH_API_PROD + '/auth/protected/'
+    }
+    axios({
+      method: 'POST',
+      url: pathApi,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    })
+      // Verified if a token is correct //
+      .then(res => {
+        this.setState({
+          verified: res.data.auth,
+        })
+      })
+  }
 
-  // componentDidMount = () => {
-  //   this.protectedRoute()
-  // }
+  componentDidMount = () => {
+    this.protectedRoute()
+  }
 
 
 
@@ -57,10 +57,10 @@ class App extends Component {
         <Switch>
            {/* Section ADMIN */}
            <Route path="/login"  component={LogAdmin} />
-           <Route path="/backoffice" component={ListCandidat} />
-           <Route path="/admin" component={ListAdmin} />
-           <Route path="/dataquizz" component={ListQuizz} />
-           <Route path="/me-admin" component={Adminspace} />
+           <PrivateRoute path="/backoffice" component={ListCandidat} />
+           <PrivateRoute path="/admin" component={ListAdmin} />
+           <PrivateRoute path="/dataquizz" component={ListQuizz} />
+           <PrivateRoute path="/me-admin" component={Adminspace} />
 
 
             {/* Section Candidats */}

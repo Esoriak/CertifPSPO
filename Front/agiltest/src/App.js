@@ -24,7 +24,7 @@ class App extends Component {
 
   protectedRoute = () => {
     // Storage for token //
-    const token = localStorage.getItem("token")
+    const token = sessionStorage.getItem("token")
     let pathApi = process.env.REACT_APP_PATH_API_DEV + '/auth/protected/'
     if (process.env.NODE_ENV === 'production') {
       pathApi = process.env.REACT_APP_PATH_API_PROD + '/auth/protected/'
@@ -68,7 +68,7 @@ class App extends Component {
           {/* Mettre en place la protection des routes après authentification, en attendant une redirection est faite à chaque fois qu'un utilisateur arrive sur la route /test sans s'être connecté au préalable */}
           <Route path="/test" component={Tests} /> 
          {/*  Pour le moment l'espace des candidats n'est pas utilisable en l'état */}
-          {/* <Route path="/me" component={UserSpace} /> */}
+          <Route path="/me" component={UserSpace} />
         </Switch>
 
         <Footer />

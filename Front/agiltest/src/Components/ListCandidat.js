@@ -37,7 +37,7 @@ class ListCandidat extends Component {
     if (process.env.NODE_ENV === 'production') {
       pathApi = process.env.REACT_APP_PATH_API_PROD + '/infos/candidat'
     }
-    const token = localStorage.getItem("token")
+    const token = sessionStorage.getItem("token")
     await axios.post(pathApi, {
         Firstname : Firstname,
         Lastname: Lastname,
@@ -59,7 +59,7 @@ class ListCandidat extends Component {
     if (process.env.NODE_ENV === 'production') {
       pathApi = process.env.REACT_APP_PATH_API_PROD + `/infos/candidat/${id}`
     }
-    const token = localStorage.getItem("token")
+    const token = sessionStorage.getItem("token")
     await axios.put(pathApi, {
       Firstname : Firstname,
       Lastname: Lastname,
@@ -80,7 +80,7 @@ alert('Les modifications ont bien étés prises en compte.')
     if (process.env.NODE_ENV === 'production') {
       pathApi = process.env.REACT_APP_PATH_API_PROD + `/infos/candidat/${id}`
     }
-    const token = localStorage.getItem("token")
+    const token = sessionStorage.getItem("token")
       await axios.delete(pathApi, 
     {headers: {
       'x-access-token': `${token}`
@@ -102,7 +102,7 @@ alert('Les modifications ont bien étés prises en compte.')
       <>
         <BackofficeNavbar />
         <div className="main_container-bo">
-          <div className="card-tall start_card list-users">
+          {/* <div className="card-tall start_card list-users"> */}
           <MaterialTable
             title="Liste des utilisateurs"
             columns={this.state.columns}
@@ -145,7 +145,7 @@ alert('Les modifications ont bien étés prises en compte.')
                 })
         }}                                                                                         
           />
-        </div>
+        {/* </div> */}
       </div>
       </>
     )

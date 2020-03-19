@@ -81,7 +81,7 @@ update = async(id, Firstname, Lastname, Mail) => {
     if (process.env.NODE_ENV === 'production') {
       pathApi = process.env.REACT_APP_PATH_API_PROD + `/bco/admin/${id}`
     }
-    const token = localStorage.getItem("token")
+    const token = sessionStorage.getItem("token")
       await axios.delete(pathApi, 
     {headers: {
       'x-access-token': `${token}`

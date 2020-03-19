@@ -14,8 +14,8 @@ class PrivateRoute extends Component {
     }
 
     verifyToken() {
-        // Getting localStorage data
-        const token = localStorage.getItem("token")
+        // Getting sessionStorage data
+        const token = sessionStorage.getItem("token")
         let pathApi = process.env.REACT_APP_PATH_API_DEV + '/auth/verify'
         if (process.env.NODE_ENV === 'production') {
           pathApi = process.env.REACT_APP_PATH_API_PROD + '/auth/verify'

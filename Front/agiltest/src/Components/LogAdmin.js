@@ -28,8 +28,8 @@ class LogAdmin extends Component {
           Password: event.target.password.value,
       })
        .then((res) => {
-          localStorage.setItem("token", res.headers["x-access-token"])
-          localStorage.setItem("login", this.state.mail) 
+          sessionStorage.setItem("token", res.headers["x-access-token"])
+          sessionStorage.setItem("login", this.state.mail) 
           this.setState({ login: true }, () => {
             setTimeout(() => this.setState({ login: false }), 1400)
             setTimeout(() => this.setState({ admin_connect: true }), 1400)
@@ -40,7 +40,7 @@ class LogAdmin extends Component {
 
     protectedRoute = async() => {
       // Storage for token //
-      const token = localStorage.getItem("token")
+      const token = sessionStorage.getItem("token")
       let pathApi = process.env.REACT_APP_PATH_API_DEV + '/auth/protected/'
       if (process.env.NODE_ENV === 'production') {
         pathApi = process.env.REACT_APP_PATH_API_PROD + '/auth/protected/'

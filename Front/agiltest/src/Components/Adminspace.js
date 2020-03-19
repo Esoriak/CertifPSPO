@@ -3,6 +3,8 @@ import BackofficeNavbar from '../Screens/BackofficeNavbar'
 import MaterialTable from "material-table";
 import axios from 'axios'
 
+import '../Screens/Backoffice.css'
+
 class Adminspace extends Component {
   state = {
       Resultats : [],
@@ -10,7 +12,6 @@ class Adminspace extends Component {
       selectedRow : null,
       columns: [
         { title: 'Id', field: 'idCandidat'},
-        // { title: 'Prénom', field: 'idCandidat' },
         { title: 'Test', field: 'idTests'},
         { title: 'Score', field: 'Score' },
       ],
@@ -26,7 +27,6 @@ class Adminspace extends Component {
     this.setState({
       Users : users_data.data
     })
-    console.log("users",users_data.data)
   }
 
 GetResultsUsers = async() => {
@@ -38,7 +38,6 @@ const results = await axios.get(PathApi)
   this.setState({
     Resultats : results.data
   })
-  console.log("les resultats", this.state.Resultats)
 }
 
 componentDidMount=() => {
@@ -50,13 +49,14 @@ componentDidMount=() => {
       <div>
         <BackofficeNavbar />
         {/* Permettre la modification de l'adresse mail, du mot de passe */}
-        <div className="card-tall">
+        {/* <div className="card-tall">
           <p>Vous pourrez bientôt modifier votre adresse email ainsi que votre mot de passe.</p>
-        </div>
-        <div className="card-tall">
-          <p>Ici vous aurez accès aux statistiques/ résultats des utilisateurs</p>
+        </div> */}
+      <div className="main_container-bo">
+        <div className="table-res">
+          {/* <p>Ici vous aurez accès aux statistiques/ résultats des utilisateurs</p> */}
           <MaterialTable
-            title="Liste des utilisateurs"
+            title="Résultats des utilisateurs"
             columns={this.state.columns}
             data={this.state.Resultats}
             onRowClick={((evt, selectedRow) => this.setState({ selectedRow }))}
@@ -71,8 +71,8 @@ componentDidMount=() => {
             }}
             />
         </div>
-        
       </div>
+    </div>
     )
   }
 }

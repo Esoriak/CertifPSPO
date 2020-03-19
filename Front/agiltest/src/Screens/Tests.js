@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import {Link} from 'react-router-dom'
 
 import '../App.css'
+import './Backoffice.css'
+import MenuUser from '../Components/MenuUser'
 
 let Questionnaire = []
 let questions = []
@@ -23,6 +24,7 @@ class Tests extends Component {
     welcome: true,
     tests: [],
     idtest: idtest,
+    nametest : "",
     pointQuestions: PointsQuestion,
     questions: [],
     checked: false,
@@ -36,7 +38,7 @@ class Tests extends Component {
     multiple_answer: false,
     score: 0,
     log : false,
-    minutes : 60,
+    minutes : 0,
     seconds : 0,
     timeout : false,
   }
@@ -44,7 +46,7 @@ class Tests extends Component {
   //////////////////////// VERIFICATION DU LOG ////////////////////////////////////////////////////////////
 
   VerifiedLog =() => {
-    const logvalue = localStorage.getItem('tokenmail')
+    const logvalue = sessionStorage.getItem('id')
     if (logvalue === null) {
       return
     }
@@ -97,9 +99,9 @@ class Tests extends Component {
   const newNbQuestion = 20
   nbquestion = newNbQuestion
   PointsQuestion = 500
-  idtest =4
+  idtest = 4
   this.setState({
-    pointQuestions : PointsQuestion, minutes : 1, seconds : 0, idtest : idtest,
+    pointQuestions : PointsQuestion, minutes : 1, seconds : 0, idtest : idtest, nametest : "Quizz PO 20 Anglais",
   })
   const button_type_test_small = document.getElementById("quizz_choice_20")
   const button_type_test_medium = document.getElementById("quizz_choice_40")
@@ -115,7 +117,7 @@ class Tests extends Component {
   PointsQuestion = 250
   idtest =5
   this.setState({
-    pointQuestions : PointsQuestion, minutes: 30, seconds : 0, idtest :idtest,
+    pointQuestions : PointsQuestion, minutes: 1, seconds : 0, idtest :idtest, nametest : "Quizz PO 40 Anglais",
   })
   const button_type_test_small = document.getElementById("quizz_choice_20")
   const button_type_test_medium = document.getElementById("quizz_choice_40")
@@ -131,7 +133,7 @@ class Tests extends Component {
   PointsQuestion = 125
   idtest =6
   this.setState({
-    pointQuestions : PointsQuestion, minutes : 60, seconds : 0, idtest :idtest,
+    pointQuestions : PointsQuestion, minutes : 60, seconds : 0, idtest :idtest, nametest : "Quizz PO 80 Anglais",
   })
   const button_type_test_small = document.getElementById("quizz_choice_20")
   const button_type_test_medium = document.getElementById("quizz_choice_40")
@@ -146,7 +148,10 @@ class Tests extends Component {
 ReloadTest = async() => {
   window.location.reload();
 }
-  
+
+Logout = () => {
+
+}
 
   RandomQuestionnaire = () => {
     // Tant que le tableau n'a pas 80 ( ou nb utilisé ) questions uniques on lance la requête
@@ -307,7 +312,7 @@ ReloadTest = async() => {
       timeout : true,
     })
     score = score / 100
-    this.StockResult(this.state.idtest, score)
+    this.StockResult(this.state.idtest,this.state.nametest, score)
   }
 
   //////////////////////// VERIFICATION POUR QUE LE CANDIDAT CHOISISSE UNE REPONSE POUR PASSER A LA QUESTION SUIVANTE //////////////////////////
@@ -657,27 +662,28 @@ ReloadTest = async() => {
           }
       } 
   }, 1000)
+  this.RandomQuestionnaire()
   }
 
 
-  StockResult =async (test, score ) => {
-    const idcandidat = 3
+  StockResult =async (test, name, score ) => {
+    const id = sessionStorage.getItem('id')
     let pathApi = process.env.REACT_APP_PATH_API_DEV + '/infosres/resultats'
     if (process.env.NODE_ENV === 'production') {
       pathApi = process.env.REACT_APP_PATH_API_PROD + '/infosres/resultats'
     }
-    const token = localStorage.getItem("token")
+    const token = sessionStorage.getItem("token")
     await axios.post(pathApi, {
         idTests : test,
+        Name : name,
         Score: score,
-        idcandidat: idcandidat,
+        idcandidat: id,
     },
     {headers: {
       'x-access-token': `${token}`
       }
   }
   )
-  // alert('Le résultat de votre test à bien été stocké dans votre espace personnel.')
 }
 
 
@@ -686,7 +692,6 @@ ReloadTest = async() => {
     this.GetDataQuestions()
     this.GetDataChoices()
     this.VerifiedLog()
-    this.Runtimer()
   }
 
 
@@ -713,9 +718,9 @@ ReloadTest = async() => {
 
     return (
       <>
-      {/* <Link to="/me"><button className="input_button connect_button input_button__active"> Mon espace perso </button></Link> */}
       {log &&
       <div>
+              <MenuUser />
         {welcome &&
           <div className="main_container">
             <div className="card start_card">
@@ -729,7 +734,7 @@ ReloadTest = async() => {
            <div className="quizz_choice" id="quizz_choice_80" onClick={this.UpdateLengthQuizz80} >60 min <br/><span className="minor_txt">(80 Questions)</span></div>
        </div>
 
-              <div className="input_button input_button__active start_button" type="button" onClick={this.RandomQuestionnaire}>Commencer le test</div>
+              <div className="input_button input_button__active start_button" type="button" onClick={this.Runtimer}>Commencer le test</div>
             </div>
           </div>
         }
@@ -808,7 +813,6 @@ ReloadTest = async() => {
             {Questionnaire.map(obj =>
               this.ShowResultFinal(obj)
               )}
-             {/* <div> {this.ShowResultFinal(questionnaire) }</div> */}
           </div>
           }
           </div>

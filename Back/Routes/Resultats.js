@@ -13,6 +13,18 @@ router.get('/resultats', (req, res) => {
   })
 })
 
+// Récupération des résultats d'un seul candidat
+router.get('/resultats/:id', (req, res) => {
+  const id = req.params.id
+  const sql =  'SELECT * FROM Resultats WHERE idCandidat = ?'
+  connection.query(sql,id, (err, results) => {
+    if (err)
+      res.status(500).send('Erreur lors de la récupération des résultats')
+    else 
+      res.json(results)
+  })
+})
+
 // Ajout d'un nouveau résultat
 router.post('/resultats', (req, res) => {
   const formData = req.body

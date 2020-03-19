@@ -14,7 +14,7 @@ class BackofficeNavbar extends Component {
   }
 
   Getlog =() => {
-    const mailvalue = localStorage.getItem("login")
+    const mailvalue = sessionStorage.getItem("login")
     this.setState({
       log : mailvalue
     })
@@ -30,7 +30,7 @@ class BackofficeNavbar extends Component {
       this.setState({
         verified : res.data.auth
       })
-      localStorage.clear()
+      sessionStorage.clear()
     })
   }
 

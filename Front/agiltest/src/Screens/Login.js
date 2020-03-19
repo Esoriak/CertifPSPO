@@ -12,7 +12,7 @@ import axios from 'axios'
   }
 
 // //******* CONNEXION *********//
-emailCheck = () => {
+emailCheck = async() => {
   // On récupère la donnée fournie par l'utilisateur
     const inputvalue = document.getElementsByClassName('input_email')
     const mail = inputvalue[0].value
@@ -24,25 +24,25 @@ emailCheck = () => {
       if (process.env.NODE_ENV === 'production') {
         pathApi = process.env.REACT_APP_PATH_API_PROD + '/auth/log/user'
       }
-      axios.post(pathApi, {
+     await axios.post(pathApi, {
         Mail: mail,
     })
     .then((res) => {
-      localStorage.setItem("id", res.headers["x-access-token"])
-      localStorage.setItem("login", this.state.mail)
+      sessionStorage.setItem("id", res.headers["x-access-token"])
+      sessionStorage.setItem("login", this.state.mail)
 
       this.setState({
         auth: res.data.auth, accessdenied : false,
       }, () => {
         setTimeout(() => this.setState({ redirection: true }), 1400)
+        setTimeout(() => this.verify(), 1400)
       })
     })
-    this.verify()
   }
 
 
   verify = () => {
-    const log = localStorage.getItem("login")
+    const log = sessionStorage.getItem("login")
     if (log === null) {
       this.setState({
         auth : false

@@ -9,8 +9,8 @@ class ListQuizz extends Component {
   state ={
     columnsQuestions: [
       { title: 'Id', field: 'idQuestions'},
-      { title: 'Question', field: 'Question' },
-      { title : 'Commentaire', field : 'Comment'},
+      { title: 'Question', field: 'Question'},
+      { title : 'Commentaire', field : 'Comment', cellStyle:{ width: '600px'}},
       { title: 'Choix multiple', field: 'Multiple'},
       { title: 'Catégorie', field: 'Categorie' },
       { title: 'Langue', field: 'Langue'}
@@ -55,7 +55,7 @@ class ListQuizz extends Component {
     if (process.env.NODE_ENV === 'production') {
       pathApi = process.env.REACT_APP_PATH_API_PROD + '/quizzquestions/questions'
     }
-    const token = localStorage.getItem("token")
+    const token = sessionStorage.getItem("token")
     await axios.post(pathApi, {
         Question : Question,
         Comment : Comment,
@@ -77,7 +77,7 @@ class ListQuizz extends Component {
     if (process.env.NODE_ENV === 'production') {
       pathApi = process.env.REACT_APP_PATH_API_PROD + `/quizzquestions/question/${id}`
     }
-    const token = localStorage.getItem("token")
+    const token = sessionStorage.getItem("token")
     await axios.put(pathApi, {
       Question : Question, 
       Comment: Comment,
@@ -98,7 +98,7 @@ alert('Les modifications de la question ont bien étés prises en compte.')
     if (process.env.NODE_ENV === 'production') {
       pathApi = process.env.REACT_APP_PATH_API_PROD + `/quizzquestions/question/${id}`
     }
-    const token = localStorage.getItem("token")
+    const token = sessionStorage.getItem("token")
       await axios.delete(pathApi, 
     {headers: {
       'x-access-token': `${token}`
@@ -114,7 +114,7 @@ addchoice = async(answer, idQuestions, value) => {
   if (process.env.NODE_ENV === 'production') {
     pathApi = process.env.REACT_APP_PATH_API_PROD + '/quizzchoices/choices'
   }
-  const token = localStorage.getItem("token")
+  const token = sessionStorage.getItem("token")
   await axios.post(pathApi, {
       answer : answer,
       idQuestions : idQuestions,
@@ -136,7 +136,7 @@ updatechoice = async(id, answer, idQuestions, value) => {
   if (process.env.NODE_ENV === 'production') {
     pathApi = process.env.REACT_APP_PATH_API_PROD + `/quizzchoices/choice/${id}`
   }
-  const token = localStorage.getItem("token")
+  const token = sessionStorage.getItem("token")
   await axios.put(pathApi, {
     idChoice : id,
     answer : answer, 
@@ -156,7 +156,7 @@ deletechoice = async(id) => {
   if (process.env.NODE_ENV === 'production') {
     pathApi = process.env.REACT_APP_PATH_API_PROD + `/quizzchoices/choice/${id}`
   }
-  const token = localStorage.getItem("token")
+  const token = sessionStorage.getItem("token")
     await axios.delete(pathApi, 
   {headers: {
     'x-access-token': `${token}`
@@ -177,8 +177,8 @@ alert('Le choix a bien été supprimé de la base de données.')
     return (
       <>
         <BackofficeNavbar />
-        <div className="main-container-bo">
-          <div className="card-tall start_card list-quizz">
+        <div className="main_container-quizz">
+          <div className="list-quizz">
             <MaterialTable
                 title="Liste des questions"
                 columns={this.state.columnsQuestions}
@@ -189,12 +189,10 @@ alert('Le choix a bien été supprimé de la base de données.')
                   rowStyle: rowData => ({
                     backgroundColor: (this.state.selectedRow && this.state.selectedRow.tableData.id === rowData.tableData.id) ? '#EEE' : '#FFF'
                   }),
+                  maxBodyHeight: 700,
                   headerStyle :{
                     backgroundColor : '#20acad', color: '#fff',
                   },
-                  cellStyle : {
-                    width: '600px;'
-                  }
                 }}
                 editable={{
                   onRowAdd: newData =>
@@ -224,7 +222,7 @@ alert('Le choix a bien été supprimé de la base de données.')
             }}                                                                                        
             />
         </div>
-          <div className="card-tall start_card list-quizz">
+          <div className=" list-quizz">
             <MaterialTable
               title="Liste des choix"
               columns={this.state.columnsChoices}

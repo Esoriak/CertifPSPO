@@ -28,7 +28,7 @@ const getToken = req => {
   return null;
 };
 
-router.post("/protected", (req, res, next) => {
+router.post("/protected", (cors(corsOptions)), (req, res, next) => {
   const token = getToken(req);
 
   jwt.verify(token, config.secret, (err, decoded) => {
@@ -80,7 +80,8 @@ router.post('/login', (cors(corsOptions)),  (req, res) => {
       const token = jwt.sign({ idAdmin: admin[0].idAdmin }, config.secret, {
         expiresIn: 86400 // expires in 24 hours
          });
-    res.header("Access-Control-Expose-Headers", "x-access-token")
+    res.header("Access-Control-Expose-Headers","Access-Control-Allow-Origin", "x-access-token")
+    res.set("Access-Control-Allow-Origin", corsOptions)
     res.set("x-access-token", token)
     res.status(200).send({ auth: true })
    });

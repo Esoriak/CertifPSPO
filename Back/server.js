@@ -13,8 +13,9 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json()) 
 
-
-app.use(cors())
+app.use(cors({
+  origin: 'http://training.monsieurguiz.fr'
+}));
 
 app.get('/', (request, response) => {
   response.send('Bienvenue à l\'entrainement');

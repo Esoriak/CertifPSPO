@@ -3,6 +3,7 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const connection = require('../conf');
 const cors = require('cors')
+const app = express();
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -80,9 +81,8 @@ router.post('/login',cors(), (req, res) => {
       const token = jwt.sign({ idAdmin: admin[0].idAdmin }, config.secret, {
         expiresIn: 86400 // expires in 24 hours
          });
-    res.header("Access-Control-Expose-Headers", 'Access-Control-Allow-Origin',"x-access-token")
-    res.set('Access-Control-Allow-Origin', origin);
-    res.set("x-access-token", token)
+    res.header("Access-Control-Expose-Headers","x-access-token")
+    res.set("x-access-token", token )
     res.status(200).send({ auth: true })
    });
   });
@@ -112,7 +112,7 @@ router.post('/log/user',(req, res ) => {
 
 
 // // Verify Token //
-router.get('/verify', VerifyToken, (req, res, next) => {
+router.get('/verify', cors(),VerifyToken, (req, res, next) => {
 
   const sql = "SELECT * FROM Admin WHERE idAdmin = ?"
   const token = req.headers['x-access-token'];

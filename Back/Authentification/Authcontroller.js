@@ -69,7 +69,7 @@ router.post('/login', (req, res) => {
 
   connection.query('SELECT * from Admin WHERE Mail = ?', values, (err, admin) => {
     if (err)
-      return res.status(500).send('Error on the server.');
+      return res.status(500).send(err);
     if (!admin[0])
       return res.status(402).send('Admin not found.');
 

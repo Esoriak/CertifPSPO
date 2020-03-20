@@ -81,10 +81,8 @@ router.post('/login', cors(), (req, res) => {
       const token = jwt.sign({ idAdmin: admin[0].idAdmin }, config.secret, {
         expiresIn: 86400 // expires in 24 hours
          });
-    res.header("Access-Control-Expose-Headers", "x-access-token")
-    res.header('Access-Control-Allow-Origin', origin);
-    res.header('Access-Control-Allow-Methods', 'POST');
-    res.header("Access-Control-Allow-Headers", "accept, content-type");
+    res.header("Access-Control-Expose-Headers", 'Access-Control-Allow-Origin',"x-access-token")
+    res.set('Access-Control-Allow-Origin', origin);
     res.set("x-access-token", token)
     res.status(200).send({ auth: true })
    });

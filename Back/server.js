@@ -20,13 +20,13 @@ app.get('/', (request, response) => {
   response.send('Bienvenue à l\'entrainement');
 });
 
-app.use('/auth', Routes.Auth)
-app.use('/infosres', Routes.Resultats)
-app.use('/bco', Routes.Admin)
-app.use('/infos', Routes.Candidat)
-app.use('/quizz', Routes.Tests)
-app.use('/quizzquestions', Routes.Questions)
-app.use('/quizzchoices', Routes.Choices)
+app.use('/auth', cors(),Routes.Auth)
+app.use('/infosres', cors(), Routes.Resultats)
+app.use('/bco',cors(), Routes.Admin)
+app.use('/infos',cors(), Routes.Candidat)
+app.use('/quizz', cors() , Routes.Tests)
+app.use('/quizzquestions',cors (), Routes.Questions)
+app.use('/quizzchoices',cors(), Routes.Choices)
 
 
 app.listen(port, (err) => {

@@ -12,9 +12,9 @@ const config = require('./config');
 const jwt = require('jsonwebtoken');
 const VerifyToken = require('./VerifyToken');
 
-const corsOptions = {
-  origin: '*'
-}
+// const corsOptions = {
+//   origin: '*'
+// }
 
 const getToken = req => {
   if (
@@ -28,7 +28,7 @@ const getToken = req => {
   return null;
 };
 
-router.post("/protected", (cors(corsOptions)), (req, res, next) => {
+router.post("/protected", (req, res, next) => {
   const token = getToken(req);
 
   jwt.verify(token, config.secret, (err, decoded) => {
@@ -62,7 +62,7 @@ router.post('/register', (req, res) => {
 
 
 // Login admin //
-router.post('/login', (cors(corsOptions)),  (req, res) => {
+router.post('/login',  (req, res) => {
 
   const values = [req.body.Mail]
 
@@ -80,8 +80,7 @@ router.post('/login', (cors(corsOptions)),  (req, res) => {
       const token = jwt.sign({ idAdmin: admin[0].idAdmin }, config.secret, {
         expiresIn: 86400 // expires in 24 hours
          });
-    res.header("Access-Control-Expose-Headers","Access-Control-Allow-Origin", "x-access-token")
-    res.set("Access-Control-Allow-Origin", corsOptions)
+    res.header("Access-Control-Expose-Headers", "x-access-token")
     res.set("x-access-token", token)
     res.status(200).send({ auth: true })
    });

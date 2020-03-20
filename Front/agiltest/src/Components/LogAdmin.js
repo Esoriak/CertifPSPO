@@ -50,6 +50,7 @@ class LogAdmin extends Component {
         url: pathApi,
         headers: {
           'Authorization': `Bearer ${token}`,
+          'Access-Control-Allow-Origin': '*',
         },
       })
         // Verified if a token is correct //

@@ -23,10 +23,16 @@ class LogAdmin extends Component {
       if (process.env.NODE_ENV === 'production') {
         pathApi = process.env.REACT_APP_PATH_API_PROD + '/auth/login'
       }
-       await axios.post(pathApi, {
+       await axios.({
+        method: 'POST',
+        url: pathApi,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+        body : {
           Mail: event.target.mail.value,
           Password: event.target.password.value,
-      })
+      }})
        .then((res) => {
           sessionStorage.setItem("token", res.headers["x-access-token"])
           sessionStorage.setItem("login", this.state.mail) 

@@ -62,7 +62,7 @@ router.post('/register', (req, res) => {
 
 
 // Login admin //
-router.post('/login', cors(), (req, res) => {
+router.post('/login', (req, res) => {
 
   const values = [req.body.Mail]
   const origin = '*'

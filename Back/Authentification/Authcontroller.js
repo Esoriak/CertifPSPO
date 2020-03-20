@@ -65,6 +65,7 @@ router.post('/register', (req, res) => {
 router.post('/login',  (req, res) => {
 
   const values = [req.body.Mail]
+  const origin = '*'
 
   connection.query('SELECT * from Admin WHERE Mail = ?', values, (err, admin) => {
     if (err)
@@ -81,6 +82,9 @@ router.post('/login',  (req, res) => {
         expiresIn: 86400 // expires in 24 hours
          });
     res.header("Access-Control-Expose-Headers", "x-access-token")
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Methods', 'POST');
+    res.header("Access-Control-Allow-Headers", "accept, content-type");
     res.set("x-access-token", token)
     res.status(200).send({ auth: true })
    });

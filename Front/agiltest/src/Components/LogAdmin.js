@@ -29,7 +29,7 @@ class LogAdmin extends Component {
         headers: {
           'Access-Control-Allow-Origin': '*',
         },
-        body : {
+        data : {
           Mail: event.target.mail.value,
           Password: event.target.password.value,
       }})

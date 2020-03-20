@@ -12,9 +12,8 @@ const config = require('./config');
 const jwt = require('jsonwebtoken');
 const VerifyToken = require('./VerifyToken');
 
-// const corsOptions = {
-//   origin: '*'
-// }
+app.options('*', cors())
+
 
 const getToken = req => {
   if (
@@ -62,14 +61,14 @@ router.post('/register', (req, res) => {
 
 
 // Login admin //
-router.post('/login', (req, res) => {
+router.post('/login',cors(), (req, res) => {
 
   const values = [req.body.Mail]
   const origin = '*'
 
   connection.query('SELECT * from Admin WHERE Mail = ?', values, (err, admin) => {
     if (err)
-      return res.status(500).send(err);
+      return res.status(500).send('Error internal server');
     if (!admin[0])
       return res.status(402).send('Admin not found.');
 

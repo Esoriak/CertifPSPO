@@ -23,7 +23,7 @@ class LogAdmin extends Component {
       if (process.env.NODE_ENV === 'production') {
         pathApi = process.env.REACT_APP_PATH_API_PROD + '/auth/login'
       }
-       await axios.({
+       await axios({
         method: 'POST',
         url: pathApi,
         headers: {

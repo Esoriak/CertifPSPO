@@ -15,7 +15,7 @@ app.use(bodyParser.json())
 
 
 // app.options('*', cors())
-app.use(cors({origin:true,credentials: true}));
+app.use(cors({origin: false,credentials: true}));
 
 app.get('/', cors(), (request, response) => {
   response.send('Bienvenue à l\'entrainement');
